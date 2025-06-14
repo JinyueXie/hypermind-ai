@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HyperMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="bg-black text-white page-transition">
+    <!-- Header -->
+    <header class="glass-card border-0 border-b border-white/10 p-4 sticky top-0 z-50">
+        <div class="flex justify-between items-center">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-4">
+                <a href="../index.html" class="flex items-center space-x-3 hover-lift">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center glow-purple">
+                        <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                        <p class="text-sm text-purple-400">Neural Trading Terminal</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Status & Portfolio -->
+            <div class="flex items-center space-x-6">
+                <!-- AI Status -->
+                <div class="glass-card px-4 py-2 rounded-xl glow-green">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                        <span class="text-sm font-semibold text-green-400">Alith AI: ACTIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Value -->
+                <div class="text-right">
+                    <div class="text-sm text-gray-400">Total Portfolio</div>
+                    <div class="text-2xl font-bold text-gradient" id="portfolio-value">$127,834.92</div>
+                    <div class="text-sm text-green-400 flex items-center justify-end">
+                        <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                        <span id="portfolio-change">+$8,247.35 (6.89%)</span>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <button class="md:hidden glass-card p-3 rounded-xl hover-lift" id="mobile-menu-btn">
+                    <i data-lucide="menu" class="w-5 h-5 text-gray-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 min-h-screen p-6 border-r border-white/10" id="sidebar">
+            <nav class="space-y-3">
+                <a href="dashboard.html" class="nav-item active flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="signals.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    <span>AI Signals</span>
+                </a>
+                <a href="portfolio.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                    <span>Portfolio</span>
+                </a>
+                <a href="settings.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="../index.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Home</span>
+                </a>
+            </nav>
+            
+            <!-- Quick Actions -->
+            <div class="mt-8 space-y-3">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Neural Commands</h3>
+                <button class="w-full btn-primary py-3 rounded-xl font-semibold hover-lift glow-purple" id="execute-all-btn">
+                    <i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>
+                    Execute All Signals
+                </button>
+                <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift glow-red" id="emergency-btn">
+                    <i data-lucide="shield-alert" class="w-4 h-4 inline mr-2"></i>
+                    Emergency Stop
+                </button>
+                <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift glow-blue" id="rebalance-btn">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                    Auto Rebalance
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 space-y-6">
+            <!-- Top Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Performance Card -->
+                <div class="glass-card p-6 hover-lift glow-green">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">24h Performance</p>
+                            <p class="text-3xl font-bold text-green-400" id="daily-performance">+$8,247</p>
+                            <p class="text-green-400 text-sm flex items-center mt-1">
+                                <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                                <span id="daily-percentage">+6.89% (+$2.3k AI)</span>
+                            </p>
+                        </div>
+                        <div class="glass-card glow-green p-3 rounded-xl pulse-dot">
+                            <i data-lucide="trending-up" class="w-6 h-6 text-green-500"></i>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2">
+                        <div class="loading-bar h-2 rounded-full w-3/4"></div>
+                    </div>
+                </div>
+                
+                <!-- Active Trades Card -->
+                <div class="glass-card p-6 hover-lift glow-blue">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Active AI Trades</p>
+                            <p class="text-3xl font-bold text-blue-400" id="active-trades">17</p>
+                            <p class="text-blue-400 text-sm flex items-center mt-1">
+                                <i data-lucide="brain" class="w-3 h-3 mr-1"></i>
+                                <span id="profitable-trades">14 Profitable</span>
+                            </p>
+                        </div>
+                        <div class="glass-card glow-blue p-3 rounded-xl pulse-dot">
+                            <i data-lucide="activity" class="w-6 h-6 text-blue-500"></i>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot" style="animation-delay: 0.2s;"></div>
+                        <div class="w-3 h-3 bg-blue-500 rounded-full pulse-dot" style="animation-delay: 0.4s;"></div>
+                        <div class="w-3 h-3 bg-red-500 rounded-full pulse-dot" style="animation-delay: 0.6s;"></div>
+                    </div>
+                </div>
+                
+                <!-- Win Rate Card -->
+                <div class="glass-card p-6 hover-lift glow-purple">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">AI Win Rate</p>
+                            <p class="text-3xl font-bold text-purple-400" id="win-rate">94.7%</p>
+                            <p class="text-purple-400 text-sm flex items-center mt-1">
+                                <i data-lucide="target" class="w-3 h-3 mr-1"></i>
+                                This Month
+                            </p>
+                        </div>
+                        <div class="glass-card glow-purple p-3 rounded-xl pulse-dot">
+                            <i data-lucide="target" class="w-6 h-6 text-purple-500"></i>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400">Hyperion Alith Intelligence</div>
+                </div>
+                
+                <!-- Risk Level Card -->
+                <div class="glass-card p-6 hover-lift glow-yellow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Risk Level</p>
+                            <p class="text-3xl font-bold text-yellow-400" id="risk-level">Medium</p>
+                            <p class="text-yellow-400 text-sm flex items-center mt-1">
+                                <i data-lucide="shield" class="w-3 h-3 mr-1"></i>
+                                AI Optimized
+                            </p>
+                        </div>
+                        <div class="glass-card glow-yellow p-3 rounded-xl animate-float">
+                            <i data-lucide="shield" class="w-6 h-6 text-yellow-500"></i>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400">Auto-adjusted by AI</div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Live Signals Preview -->
+                <div class="lg:col-span-2 glass-card p-6 hover-lift">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gradient">Live AI Signals</h2>
+                            <p class="text-sm text-gray-400">Real-time analysis by Hyperion Alith</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="glass-card px-3 py-1 rounded-full glow-green">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                                    <span class="text-xs text-green-400 font-semibold">ANALYZING</span>
+                                </div>
+                            </div>
+                            <a href="signals.html" class="btn-secondary px-4 py-2 rounded-lg text-sm hover-lift">
+                                View All
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Signal Cards -->
+                    <div class="space-y-4" id="signals-preview">
+                        <!-- Strong Buy Signal -->
+                        <div class="signal-card glass-card border border-green-500/30 p-4 hover-lift glow-green">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
+                                        <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-green-400">STRONG BUY</h3>
+                                        <p class="text-sm text-gray-400">ETH/USDC • Uniswap V4</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-green-400">+27.8%</div>
+                                    <div class="text-xs text-gray-400">97.3% confidence</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hold Signal -->
+                        <div class="signal-card glass-card border border-blue-500/30 p-4 hover-lift glow-blue">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+                                        <i data-lucide="eye" class="w-5 h-5 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-blue-400">MONITOR</h3>
+                                        <p class="text-sm text-gray-400">BTC/USDT • Cross-chain</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-blue-400">+14.7%</div>
+                                    <div class="text-xs text-gray-400">91.8% confidence</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Portfolio & Actions -->
+                <div class="space-y-6">
+                    <!-- Portfolio Breakdown -->
+                    <div class="glass-card p-6 hover-lift">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gradient">Portfolio Overview</h3>
+                            <a href="portfolio.html" class="btn-secondary px-3 py-1 rounded-lg text-xs hover-lift">
+                                Details
+                            </a>
+                        </div>
+                        <div class="space-y-3" id="portfolio-preview">
+                            <div class="flex justify-between items-center portfolio-item">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-4 h-4 bg-orange-500 rounded-full pulse-dot"></div>
+                                    <div>
+                                        <div class="text-sm font-semibold">Bitcoin</div>
+                                        <div class="text-xs text-gray-400">₿1.24</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold">42.3%</div>
+                                    <div class="text-xs text-green-400">+12.7%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center portfolio-item">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-4 h-4 bg-blue-500 rounded-full pulse-dot"></div>
+                                    <div>
+                                        <div class="text-sm font-semibold">Ethereum</div>
+                                        <div class="text-xs text-gray-400">Ξ12.7</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold">31.7%</div>
+                                    <div class="text-xs text-green-400">+18.3%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center portfolio-item">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-4 h-4 bg-purple-500 rounded-full animate-float"></div>
+                                    <div>
+                                        <div class="text-sm font-semibold">Others</div>
+                                        <div class="text-xs text-gray-400">MATIC, USDC</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold">26.0%</div>
+                                    <div class="text-xs text-gray-400">Mixed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Insights -->
+                    <div class="glass-card p-6 hover-lift">
+                        <h3 class="text-lg font-bold mb-4 text-gradient">AI Insights</h3>
+                        <div class="space-y-3">
+                            <div class="glass-card border border-purple-500/30 p-3 hover-lift">
+                                <div class="flex items-start space-x-2">
+                                    <i data-lucide="brain" class="w-4 h-4 text-purple-400 mt-1 pulse-dot"></i>
+                                    <div>
+                                        <div class="text-sm font-semibold text-purple-400">Pattern Detected</div>
+                                        <div class="text-xs text-gray-300">Bull flag forming on ETH/BTC. 89% success rate.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card border border-yellow-500/30 p-3 hover-lift">
+                                <div class="flex items-start space-x-2">
+                                    <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-400 mt-1 animate-float"></i>
+                                    <div>
+                                        <div class="text-sm font-semibold text-yellow-400">Market Alert</div>
+                                        <div class="text-xs text-gray-300">Increased volatility expected. Adjust positions.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Chart -->
+            <div class="glass-card p-6 hover-lift">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gradient">Performance Analytics</h2>
+                        <p class="text-sm text-gray-400">Real-time portfolio tracking</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 btn-primary rounded-xl text-sm font-semibold glow-purple chart-period active" data-period="24h">24H</button>
+                        <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift chart-period" data-period="7d">7D</button>
+                        <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift chart-period" data-period="30d">30D</button>
+                        <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift chart-period" data-period="3m">3M</button>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/chart.js"></script>
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Initialize dashboard features
+            initDashboard();
+            initChart();
+            startLiveUpdates();
+        });
+    </script>
+</body>
+</html>

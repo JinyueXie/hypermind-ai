@@ -1,0 +1,14 @@
+{
+  "name": "hypermind-ai",
+  "version": "1.0.0",
+  "description": "Revolutionary Web3 Trading Intelligence powered by Hyperion Alith AI",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "build": "echo 'Build complete'",
+    "deploy": "git add . && git commit -m 'Deploy update' && git push"
+  },
+  "keywords": ["AI", "Trading", "Web3", "Hyperion", "Alith", "DeFi"],
+  "author": "HyperMind AI Team",
+  "license": "MIT"
+}

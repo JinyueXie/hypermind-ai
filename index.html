@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyperMind AI - Revolutionary Web3 Trading Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center glow-purple">
+                        <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                        <p class="text-xs text-purple-400">Powered by Hyperion Alith</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#demo" class="nav-link">Demo</a>
+                    <a href="#ai" class="nav-link">Alith AI</a>
+                </div>
+                
+                <!-- CTA Button -->
+                <a href="pages/dashboard.html" class="btn-primary px-6 py-2 rounded-xl font-semibold hover-lift">
+                    Launch Terminal
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-6 pt-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Content -->
+                <div class="text-center lg:text-left">
+                    <!-- Badge -->
+                    <div class="inline-flex items-center glass-card px-4 py-2 rounded-full mb-8 animate-fade-in">
+                        <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot mr-3"></div>
+                        <i data-lucide="zap" class="w-4 h-4 mr-2 text-yellow-400"></i>
+                        <span class="text-sm font-medium text-gradient">HyperHack 2025 • Alith Integration Track</span>
+                    </div>
+                    
+                    <!-- Main Headline -->
+                    <h1 class="text-5xl lg:text-7xl font-black leading-tight mb-8 animate-slide-up">
+                        Trade with
+                        <span class="text-gradient block">AI Precision</span>
+                    </h1>
+                    
+                    <!-- Subtitle -->
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed animate-slide-up" style="animation-delay: 0.2s;">
+                        Revolutionary DeFi trading intelligence powered by 
+                        <span class="text-purple-400 font-semibold">Hyperion's Alith AI</span>. 
+                        Transform market chaos into profitable opportunities.
+                    </p>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-12 animate-slide-up" style="animation-delay: 0.4s;">
+                        <a href="pages/dashboard.html" class="btn-primary px-8 py-4 rounded-xl text-lg font-bold hover-lift glow-purple">
+                            <i data-lucide="play" class="w-5 h-5 inline mr-3"></i>
+                            Experience the Future
+                        </a>
+                        <a href="https://github.com/yourusername/hypermind-ai" target="_blank" class="btn-secondary px-8 py-4 rounded-xl text-lg font-semibold hover-lift">
+                            <i data-lucide="github" class="w-5 h-5 inline mr-3"></i>
+                            View Source Code
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-8 animate-slide-up" style="animation-delay: 0.6s;">
+                        <div class="text-center hover-lift">
+                            <div class="text-3xl font-black text-gradient mb-2 counter" data-target="95.7">0</div>
+                            <div class="text-sm text-gray-400">AI Accuracy %</div>
+                        </div>
+                        <div class="text-center hover-lift">
+                            <div class="text-3xl font-black text-gradient mb-2 counter" data-target="50">0</div>
+                            <div class="text-sm text-gray-400">Million Volume</div>
+                        </div>
+                        <div class="text-center hover-lift">
+                            <div class="text-3xl font-black text-gradient mb-2">24/7</div>
+                            <div class="text-sm text-gray-400">AI Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Live Dashboard Preview -->
+                <div class="relative animate-float" style="animation-delay: 0.8s;">
+                    <!-- Main Dashboard Card -->
+                    <div class="glass-card p-8 hover-lift glow-blue">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center glow-green">
+                                    <i data-lucide="trending-up" class="w-4 h-4 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold">AI Trading Signals</h3>
+                                    <p class="text-xs text-gray-400">Hyperion Alith Neural Network</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                                <span class="text-xs text-green-400 font-semibold">LIVE</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Live Signal Cards -->
+                        <div class="space-y-3">
+                            <!-- Buy Signal -->
+                            <div class="glass-card border border-green-500/30 p-4 hover-lift glow-green signal-update">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="arrow-up" class="w-3 h-3 text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-green-400">STRONG BUY</div>
+                                            <div class="text-xs text-gray-400">ETH/USDC</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold text-green-400 price-update">+23.7%</div>
+                                        <div class="text-xs text-gray-400 confidence-update">97.3%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Hold Signal -->
+                            <div class="glass-card border border-blue-500/30 p-4 hover-lift glow-blue signal-update">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="eye" class="w-3 h-3 text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-blue-400">MONITOR</div>
+                                            <div class="text-xs text-gray-400">BTC/USDT</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold text-blue-400 price-update">+12.4%</div>
+                                        <div class="text-xs text-gray-400 confidence-update">91.8%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mini Chart -->
+                        <div class="mt-6 glass-card p-4">
+                            <h4 class="text-sm font-semibold mb-3">Portfolio Performance</h4>
+                            <div class="h-16 flex items-end justify-around">
+                                <div class="bg-gradient-to-t from-purple-500 to-purple-300 w-2 h-6 rounded-t animate-bar" style="animation-delay: 0.1s;"></div>
+                                <div class="bg-gradient-to-t from-blue-500 to-blue-300 w-2 h-8 rounded-t animate-bar" style="animation-delay: 0.2s;"></div>
+                                <div class="bg-gradient-to-t from-green-500 to-green-300 w-2 h-12 rounded-t animate-bar" style="animation-delay: 0.3s;"></div>
+                                <div class="bg-gradient-to-t from-yellow-500 to-yellow-300 w-2 h-10 rounded-t animate-bar" style="animation-delay: 0.4s;"></div>
+                                <div class="bg-gradient-to-t from-purple-500 to-purple-300 w-2 h-14 rounded-t animate-bar" style="animation-delay: 0.5s;"></div>
+                                <div class="bg-gradient-to-t from-blue-500 to-blue-300 w-2 h-16 rounded-t animate-bar" style="animation-delay: 0.6s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Status Cards -->
+                    <div class="absolute -top-4 -right-4 glass-card p-3 hover-lift animate-float" style="animation-delay: 2s;">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                            <span class="text-xs font-semibold text-green-400">AI Active</span>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute -bottom-4 -left-4 glass-card p-3 hover-lift animate-float" style="animation-delay: 4s;">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-blue-400"></i>
+                            <span class="text-xs font-semibold text-blue-400">Protected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black mb-6 text-gradient">Powered by Hyperion Alith</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Revolutionary trading intelligence with quantum-level pattern recognition
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature Cards -->
+                <div class="feature-card glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-6 glow-purple">
+                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Neural Pattern Recognition</h3>
+                    <p class="text-gray-400">
+                        Advanced AI algorithms identify market patterns with 97.3% accuracy, 
+                        powered by Hyperion's native intelligence.
+                    </p>
+                </div>
+                
+                <div class="feature-card glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-6 glow-green">
+                        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Risk Management</h3>
+                    <p class="text-gray-400">
+                        AI-powered position sizing and dynamic stop-loss automation 
+                        protects your portfolio from volatility.
+                    </p>
+                </div>
+                
+                <div class="feature-card glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-6 glow-blue">
+                        <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Lightning Execution</h3>
+                    <p class="text-gray-400">
+                        Millisecond trade execution across 50+ DEXs with MEV protection 
+                        and optimal gas management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-black mb-8">
+                Ready to <span class="text-gradient">Dominate</span> DeFi?
+            </h2>
+            <p class="text-xl text-gray-300 mb-12">
+                Join the revolution of intelligent trading with Hyperion's Alith AI.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="pages/dashboard.html" class="btn-primary px-10 py-4 rounded-xl text-xl font-bold hover-lift glow-purple">
+                    <i data-lucide="rocket" class="w-6 h-6 inline mr-3"></i>
+                    Launch HyperMind AI
+                </a>
+                <a href="pages/signals.html" class="btn-secondary px-10 py-4 rounded-xl text-xl font-semibold hover-lift">
+                    <i data-lucide="activity" class="w-6 h-6 inline mr-3"></i>
+                    View Live Signals
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-3 mb-6">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                    <i data-lucide="brain" class="w-4 h-4 text-white"></i>
+                </div>
+                <span class="text-xl font-bold text-gradient">HyperMind AI</span>
+            </div>
+            <p class="text-gray-400 mb-4">
+                &copy; 2025 HyperMind AI. Built for HyperHack 2025. Powered by Hyperion Alith AI.
+            </p>
+            <div class="flex justify-center space-x-6">
+                <a href="pages/dashboard.html" class="text-gray-400 hover:text-white">Dashboard</a>
+                <a href="pages/signals.html" class="text-gray-400 hover:text-white">Signals</a>
+                <a href="pages/portfolio.html" class="text-gray-400 hover:text-white">Portfolio</a>
+                <a href="pages/settings.html" class="text-gray-400 hover:text-white">Settings</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Initialize landing page features
+            initLandingPage();
+        });
+    </script>
+</body>
+</html>
