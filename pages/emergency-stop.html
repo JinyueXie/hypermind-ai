@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Stop - HyperMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-nav {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glow-red {
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+            animation: danger-pulse 2s infinite;
+        }
+        @keyframes danger-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(239, 68, 68, 0.8);
+                transform: scale(1.02);
+            }
+        }
+        .emergency-bg {
+            background: radial-gradient(circle at center, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+        .status-indicator {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .status-stopped {
+            background: radial-gradient(circle, #ef4444 0%, #dc2626 100%);
+            animation: danger-pulse 2s infinite;
+        }
+        .status-active {
+            background: radial-gradient(circle, #10b981 0%, #059669 100%);
+            animation: success-pulse 2s infinite;
+        }
+        @keyframes success-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(16, 185, 129, 0.8);
+                transform: scale(1.02);
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen emergency-bg">
+    <!-- Header -->
+    <header class="glass-nav fixed w-full top-0 z-50 p-4">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                        <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                        <p class="text-sm text-red-400">Emergency Control Panel</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4 inline mr-1"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="pt-24 min-h-screen flex items-center justify-center p-6">
+        <div class="max-w-4xl w-full space-y-8">
+            <!-- Emergency Status -->
+            <div class="text-center">
+                <div class="status-indicator status-stopped glow-red" id="emergency-status">
+                    <div class="text-center">
+                        <i data-lucide="shield-alert" class="w-16 h-16 text-white mb-2"></i>
+                        <div class="text-2xl font-bold text-white">STOPPED</div>
+                    </div>
+                </div>
+                <h1 class="text-4xl font-bold text-red-400 mt-6 mb-2">Emergency Stop Activated</h1>
+                <p class="text-gray-300 text-lg">All AI trading activities have been halted immediately</p>
+            </div>
+
+            <!-- Emergency Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Current Status -->
+                <div class="glass-card p-6 border border-red-500/30">
+                    <h2 class="text-xl font-bold text-red-400 mb-4 flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                        System Status
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">AI Trading</span>
+                            <span class="text-red-400 font-semibold flex items-center">
+                                <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                                HALTED
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Open Positions</span>
+                            <span class="text-yellow-400 font-semibold" id="open-positions">17</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Pending Orders</span>
+                            <span class="text-red-400 font-semibold">CANCELLED</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Risk Level</span>
+                            <span class="text-green-400 font-semibold">PROTECTED</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="glass-card p-6">
+                    <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                        <i data-lucide="settings" class="w-5 h-5 mr-2"></i>
+                        Emergency Actions
+                    </h2>
+                    <div class="space-y-4">
+                        <button class="w-full btn-danger py-3 rounded-xl font-semibold" onclick="closeAllPositions()">
+                            <i data-lucide="x-circle" class="w-4 h-4 inline mr-2"></i>
+                            Close All Positions
+                        </button>
+                        <button class="w-full btn-success py-3 rounded-xl font-semibold" onclick="resumeTrading()">
+                            <i data-lucide="play" class="w-4 h-4 inline mr-2"></i>
+                            Resume AI Trading
+                        </button>
+                        <button class="w-full bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-semibold text-white transition-colors" onclick="window.location.href='dashboard.html'">
+                            <i data-lucide="arrow-left" class="w-4 h-4 inline mr-2"></i>
+                            Return to Dashboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Log -->
+            <div class="glass-card p-6">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <i data-lucide="file-text" class="w-5 h-5 mr-2"></i>
+                    Emergency Log
+                </h2>
+                <div class="space-y-3 max-h-64 overflow-y-auto">
+                    <div class="flex items-start space-x-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-red-400 mt-1"></i>
+                        <div>
+                            <div class="text-sm font-semibold text-red-400">Emergency Stop Activated</div>
+                            <div class="text-xs text-gray-400">All trading activities halted - Manual trigger</div>
+                            <div class="text-xs text-gray-500">Just now</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-400 mt-1"></i>
+                        <div>
+                            <div class="text-sm font-semibold text-yellow-400">Pending Orders Cancelled</div>
+                            <div class="text-xs text-gray-400">23 pending orders cancelled automatically</div>
+                            <div class="text-xs text-gray-500">2 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <i data-lucide="info" class="w-4 h-4 text-blue-400 mt-1"></i>
+                        <div>
+                            <div class="text-sm font-semibold text-blue-400">Positions Secured</div>
+                            <div class="text-xs text-gray-400">All open positions moved to manual control</div>
+                            <div class="text-xs text-gray-500">3 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Impact -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 text-center">
+                    <i data-lucide="dollar-sign" class="w-8 h-8 text-green-400 mx-auto mb-2"></i>
+                    <div class="text-2xl font-bold text-green-400">$127,834.92</div>
+                    <div class="text-sm text-gray-400">Portfolio Value</div>
+                    <div class="text-xs text-green-400 mt-1">Protected</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <i data-lucide="trending-up" class="w-8 h-8 text-blue-400 mx-auto mb-2"></i>
+                    <div class="text-2xl font-bold text-blue-400">+$8,247.35</div>
+                    <div class="text-sm text-gray-400">Today's P&L</div>
+                    <div class="text-xs text-blue-400 mt-1">Locked In</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <i data-lucide="shield" class="w

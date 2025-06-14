@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Signals - HyperMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-nav {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        .glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+        .glow-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        .glow-yellow {
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(55, 65, 81, 0.8);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(75, 85, 99, 0.8);
+            color: white;
+        }
+        .nav-item {
+            color: #9ca3af;
+            transition: all 0.3s ease;
+        }
+        .nav-item:hover {
+            color: white;
+            background: rgba(139, 92, 246, 0.2);
+        }
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        }
+        .sidebar {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+        }
+        .signal-card {
+            transition: all 0.3s ease;
+        }
+        .signal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .confidence-bar {
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            background: rgba(55, 65, 81, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    <!-- Header -->
+    <header class="glass-nav fixed w-full top-0 z-50 p-4">
+        <div class="flex justify-between items-center">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-4">
+                <a href="../index.html" class="flex items-center space-x-3 hover-lift">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center glow-purple">
+                        <i data-lucide="brain" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                        <p class="text-sm text-purple-400">Neural Trading Intelligence</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                <a href="signals.html" class="text-purple-400 font-semibold">AI Signals</a>
+                <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="login.html" class="text-gray-300 hover:text-white transition-colors">
+                    <i data-lucide="user" class="w-4 h-4 inline mr-1"></i>Account
+                </a>
+            </div>
+            
+            <!-- Status & Portfolio -->
+            <div class="flex items-center space-x-6">
+                <!-- AI Status -->
+                <div class="glass-card px-4 py-2 rounded-xl glow-green">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                        <span class="text-sm font-semibold text-green-400">Alith AI: ANALYZING</span>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Value -->
+                <div class="text-right">
+                    <div class="text-sm text-gray-400">Total Portfolio</div>
+                    <div class="text-2xl font-bold text-gradient">$128,036.51</div>
+                    <div class="text-sm text-green-400 flex items-center justify-end">
+                        <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                        <span>+$8,247.35 (6.89%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-20">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 min-h-screen p-6 border-r border-white/10">
+            <nav class="space-y-3">
+                <a href="dashboard.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="signals.html" class="nav-item active flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    <span>AI Signals</span>
+                </a>
+                <a href="portfolio.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                    <span>Portfolio</span>
+                </a>
+                <a href="../index.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Home</span>
+                </a>
+                <a href="login.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Account</span>
+                </a>
+            </nav>
+            
+            <!-- Signal Filters -->
+            <div class="mt-8 space-y-4">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Signal Filters</h3>
+                
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" checked class="rounded bg-gray-700 border-gray-600 text-purple-600">
+                        <span class="text-sm text-gray-300">Strong Buy</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" checked class="rounded bg-gray-700 border-gray-600 text-blue-600">
+                        <span class="text-sm text-gray-300">Buy</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" checked class="rounded bg-gray-700 border-gray-600 text-yellow-600">
+                        <span class="text-sm text-gray-300">Monitor</span>
+                    </label>
+                </div>
+
+                <div class="border-t border-gray-700 pt-4">
+                    <h4 class="text-sm font-semibold text-gray-400 mb-3">Confidence Level</h4>
+                    <input type="range" min="70" max="100" value="85" class="w-full">
+                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                        <span>70%</span>
+                        <span>85%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 space-y-6">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-gradient mb-2">Live AI Signals</h1>
+                    <p class="text-gray-300 text-lg">Real-time analysis by Hyperion Alith neural networks</p>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="glass-card px-4 py-2 rounded-xl glow-green">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                            <span class="text-xs text-green-400 font-semibold">ANALYZING</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary px-6 py-3 rounded-xl font-semibold hover-lift" onclick="refreshSignals()">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                        Refresh Signals
+                    </button>
+                </div>
+            </div>
+
+            <!-- Signal Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass-card p-6 hover-lift glow-green">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-green-400">12</div>
+                            <div class="text-sm text-gray-400">Active Signals</div>
+                        </div>
+                        <i data-lucide="trending-up" class="w-8 h-8 text-green-400"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-blue">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-blue-400">94.7%</div>
+                            <div class="text-sm text-gray-400">Avg Confidence</div>
+                        </div>
+                        <i data-lucide="brain" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-purple">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-purple-400">+18.4%</div>
+                            <div class="text-sm text-gray-400">Today's P&L</div>
+                        </div>
+                        <i data-lucide="zap" class="w-8 h-8 text-purple-400"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-yellow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-400">2.4ms</div>
+                            <div class="text-sm text-gray-400">AI Latency</div>
+                        </div>
+                        <i data-lucide="clock" class="w-8 h-8 text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Signals Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Strong Buy Signal -->
+                <div class="signal-card glass-card border border-green-500/30 p-6 hover-lift glow-green">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-green-400">STRONG BUY</h3>
+                                <p class="text-sm text-gray-400">ETH/USDC • Uniswap V4</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-400">+8.2%</div>
+                            <div class="text-xs text-gray-400">Expected Return</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-400">Entry</div>
+                            <div class="text-lg font-semibold text-white">$2,847.56</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Target</div>
+                            <div class="text-lg font-semibold text-green-400">$3,127.67</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Stop Loss</div>
+                            <div class="text-lg font-semibold text-red-400">$2,698.31</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">AI Confidence</span>
+                            <span class="text-green-400 font-semibold">97.3%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="bg-gradient-to-r from-green-500 to-green-400 h-full" style="width: 97.3%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-4">
+                        <div class="text-sm text-green-300">
+                            <i data-lucide="brain" class="w-3 h-3 inline mr-1"></i>
+                            AI Analysis: Bull flag pattern detected with volume confirmation
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            <i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>
+                            Signal generated 2 minutes ago
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button class="flex-1 btn-primary py-2 rounded-lg font-semibold hover-lift">
+                            <i data-lucide="play" class="w-4 h-4 inline mr-1"></i>
+                            Execute
+                        </button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg hover-lift">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Monitor Signal -->
+                <div class="signal-card glass-card border border-blue-500/30 p-6 hover-lift glow-blue">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                                <i data-lucide="eye" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-blue-400">MONITOR</h3>
+                                <p class="text-sm text-gray-400">BTC/USDT • Cross-chain</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-blue-400">0.0%</div>
+                            <div class="text-xs text-gray-400">Pending Signal</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-400">Current</div>
+                            <div class="text-lg font-semibold text-white">$43,247.12</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Target</div>
+                            <div class="text-lg font-semibold text-blue-400">$47,654</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Support</div>
+                            <div class="text-lg font-semibold text-yellow-400">$41,200</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">AI Confidence</span>
+                            <span class="text-blue-400 font-semibold">91.8%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-400 h-full" style="width: 91.8%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-4">
+                        <div class="text-sm text-blue-300">
+                            <i data-lucide="brain" class="w-3 h-3 inline mr-1"></i>
+                            AI Analysis: Support level holding, waiting for breakout confirmation
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            <i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>
+                            Signal updated 5 minutes ago
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button class="flex-1 btn-secondary py-2 rounded-lg font-semibold hover-lift">
+                            <i data-lucide="eye" class="w-4 h-4 inline mr-1"></i>
+                            Monitor
+                        </button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg hover-lift">
+                            <i data-lucide="bell" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Buy Signal -->
+                <div class="signal-card glass-card border border-purple-500/30 p-6 hover-lift glow-purple">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                                <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-purple-400">BUY</h3>
+                                <p class="text-sm text-gray-400">MATIC/USDC • 1H</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-purple-400">+12.6%</div>
+                            <div class="text-xs text-gray-400">Expected Return</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-400">Entry</div>
+                            <div class="text-lg font-semibold text-white">$0.847</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Target</div>
+                            <div class="text-lg font-semibold text-purple-400">$0.978</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Stop Loss</div>
+                            <div class="text-lg font-semibold text-red-400">$0.798</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">AI Confidence</span>
+                            <span class="text-purple-400 font-semibold">89.4%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-400 h-full" style="width: 89.4%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-4">
+                        <div class="text-sm text-purple-300">
+                            <i data-lucide="brain" class="w-3 h-3 inline mr-1"></i>
+                            AI Analysis: Oversold RSI with bullish divergence forming
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            <i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>
+                            Signal generated 8 minutes ago
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button class="flex-1 btn-primary py-2 rounded-lg font-semibold hover-lift">
+                            <i data-lucide="play" class="w-4 h-4 inline mr-1"></i>
+                            Execute
+                        </button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg hover-lift">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Additional Signal -->
+                <div class="signal-card glass-card border border-yellow-500/30 p-6 hover-lift glow-yellow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 text-black"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-yellow-400">HOLD</h3>
+                                <p class="text-sm text-gray-400">ADA/USDT • 4H</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-yellow-400">+2.1%</div>
+                            <div class="text-xs text-gray-400">Expected Return</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-400">Current</div>
+                            <div class="text-lg font-semibold text-white">$0.524</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">Support</div>
+                            <div class="text-lg font-semibold text-red-400">$0.498</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">AI Confidence</span>
+                            <span class="text-yellow-400 font-semibold">87.2%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="bg-gradient-to-r from-yellow-500 to-yellow-400 h-full" style="width: 87.2%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-4">
+                        <div class="text-sm text-yellow-300">
+                            <i data-lucide="brain" class="w-3 h-3 inline mr-1"></i>
+                            AI Analysis: Consolidation pattern, awaiting market direction
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            <i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>
+                            Signal updated 12 minutes ago
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button class="flex-1 btn-secondary py-2 rounded-lg font-semibold hover-lift">
+                            <i data-lucide="pause" class="w-4 h-4 inline mr-1"></i>
+                            Hold
+                        </button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg hover-lift">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signal History -->
+            <div class="glass-card p-6 hover-lift">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gradient">Signal Performance History</h2>
+                    <div class="flex space-x-2">
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm">24H</button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg text-sm">7D</button>
+                        <button class="btn-secondary px-4 py-2 rounded-lg text-sm">30D</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="text-left py-3 text-gray-400">Time</th>
+                                <th class="text-left py-3 text-gray-400">Signal</th>
+                                <th class="text-left py-3 text-gray-400">Asset</th>
+                                <th class="text-left py-3 text-gray-400">Entry</th>
+                                <th class="text-left py-3 text-gray-400">Exit</th>
+                                <th class="text-left py-3 text-gray-400">P&L</th>
+                                <th class="text-left py-3 text-gray-400">Confidence</th>
+                                <th class="text-left py-3 text-gray-400">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-gray-300">14:32</td>
+                                <td class="py-3">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">STRONG BUY</span>
+                                </td>
+                                <td class="py-3 text-white">ETH/USDC</td>
+                                <td class="py-3 text-gray-300">$2,847.32</td>
+                                <td class="py-3 text-gray-300">$3,089.45</td>
+                                <td class="py-3 text-green-400 font-semibold">+8.5%</td>
+                                <td class="py-3 text-purple-400">97.3%</td>
+                                <td class="py-3">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">COMPLETED</span>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-gray-300">12:18</td>
+                                <td class="py-3">
+                                    <span class="bg-purple-500/20 text-purple-400 px-2 py-1 rounded text-xs">BUY</span>
+                                </td>
+                                <td class="py-3 text-white">MATIC/USDC</td>
+                                <td class="py-3 text-gray-300">$0.847</td>
+                                <td class="py-3 text-gray-300">$0.963</td>
+                                <td class="py-3 text-green-400 font-semibold">+13.7%</td>
+                                <td class="py-3 text-purple-400">89.4%</td>
+                                <td class="py-3">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">COMPLETED</span>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-gray-300">09:45</td>
+                                <td class="py-3">
+                                    <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">MONITOR</span>
+                                </td>
+                                <td class="py-3 text-white">BTC/USDT</td>
+                                <td class="py-3 text-gray-300">$43,247.12</td>
+                                <td class="py-3 text-gray-300">-</td>
+                                <td class="py-3 text-blue-400">Pending</td>
+                                <td class="py-3 text-purple-400">91.8%</td>
+                                <td class="py-3">
+                                    <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">ACTIVE</span>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-gray-300">08:23</td>
+                                <td class="py-3">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">STRONG BUY</span>
+                                </td>
+                                <td class="py-3 text-white">SOL/USDT</td>
+                                <td class="py-3 text-gray-300">$142.67</td>
+                                <td class="py-3 text-gray-300">$156.23</td>
+                                <td class="py-3 text-green-400 font-semibold">+9.5%</td>
+                                <td class="py-3 text-purple-400">95.1%</td>
+                                <td class="py-3">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">COMPLETED</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Performance Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 hover-lift">
+                    <h3 class="text-lg font-bold text-gradient mb-4">AI Accuracy</h3>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-green-400 mb-2">94.7%</div>
+                        <div class="text-sm text-gray-400">Success Rate (30 days)</div>
+                        <div class="text-xs text-green-400 mt-2">+2.3% from last month</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 hover-lift">
+                    <h3 class="text-lg font-bold text-gradient mb-4">Average Return</h3>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-blue-400 mb-2">+11.2%</div>
+                        <div class="text-sm text-gray-400">Per Successful Signal</div>
+                        <div class="text-xs text-blue-400 mt-2">Consistent performance</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 hover-lift">
+                    <h3 class="text-lg font-bold text-gradient mb-4">Response Time</h3>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-purple-400 mb-2">2.4ms</div>
+                        <div class="text-sm text-gray-400">Neural Processing</div>
+                        <div class="text-xs text-purple-400 mt-2">Ultra-low latency</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function refreshSignals() {
+            const btn = event.target;
+            const icon = btn.querySelector('i');
+            
+            // Animate refresh
+            icon.classList.add('animate-spin');
+            btn.disabled = true;
+            btn.classList.add('opacity-75');
+            
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                btn.disabled = false;
+                btn.classList.remove('opacity-75');
+                
+                // Show notification
+                showNotification('Signals Updated', 'Latest AI analysis complete', 'success');
+            }, 2000);
+        }
+
+        function showNotification(title, message, type) {
+            const colors = {
+                success: 'green',
+                info: 'blue',
+                warning: 'yellow',
+                error: 'red'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-6 bg-${colors[type]}-500/20 border border-${colors[type]}-500/50 rounded-xl p-4 max-w-sm z-50 transform translate-x-full transition-transform duration-300`;
+            notification.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-${colors[type]}-400 mt-0.5"></i>
+                    <div>
+                        <div class="font-semibold text-${colors[type]}-400">${title}</div>
+                        <div class="text-sm text-gray-300 mt-1">${message}</div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Real-time signal updates
+        setInterval(() => {
+            // Update confidence levels with slight variations
+            document.querySelectorAll('.confidence-bar > div').forEach(bar => {
+                const currentWidth = parseFloat(bar.style.width);
+                const variation = (Math.random() - 0.5) * 2; // ±1%
+                const newWidth = Math.max(85, Math.min(99, currentWidth + variation));
+                bar.style.width = newWidth + '%';
+                
+                // Update corresponding text
+                const confidenceText = bar.parentElement.previousElementSibling.querySelector('.font-semibold');
+                if (confidenceText) {
+                    confidenceText.textContent = newWidth.toFixed(1) + '%';
+                }
+            });
+        }, 5000);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

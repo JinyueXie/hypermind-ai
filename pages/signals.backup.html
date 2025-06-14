@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Signals - HyperMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c1426 0%, #1a1f3a 50%, #2d1b69 100%);
+            background-attachment: fixed;
+        }
+        .signals-bg {
+            background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?w=1920&h=1080&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        .neural-bg {
+            background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=600&fit=crop');
+            background-size: cover;
+            background-blend-mode: overlay;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Header -->
+    <nav class="fixed w-full top-0 z-50 glass-nav">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">HyperMind AI</h1>
+                        <p class="text-xs text-gray-400">Neural Trading Intelligence</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button onclick="navigateTo('dashboard')" class="text-gray-300 hover:text-white transition-colors">Dashboard</button>
+                    <button class="text-purple-400 font-semibold">AI Signals</button>
+                    <button onclick="navigateTo('portfolio')" class="text-gray-300 hover:text-white transition-colors">Portfolio</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 min-h-screen">
+        <!-- Signals Header -->
+        <div class="signals-bg relative">
+            <div class="absolute inset-0 bg-black/70"></div>
+            <div class="relative container mx-auto px-6 py-16">
+                <div class="text-center">
+                    <div class="inline-flex items-center space-x-2 bg-green-500/20 px-4 py-2 rounded-full mb-6">
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span class="text-green-400 font-semibold">AI ANALYZING</span>
+                    </div>
+                    <h1 class="text-5xl font-bold mb-4">Live AI Signals</h1>
+                    <p class="text-xl text-gray-300 mb-8">Real-time analysis by Hyperion Alith Neural Network</p>
+                    
+                    <!-- Execute Button -->
+                    <button id="execute-all-btn" onclick="executeAllSignals()" 
+                            class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 
+                                   px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 
+                                   shadow-lg shadow-purple-500/25 hover:shadow-purple-500/50">
+                        <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
+                        Execute All Signals
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signals Content -->
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Active Signals -->
+                <div class="lg:col-span-2">
+                    <div class="glass-card p-6 rounded-xl">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold">Active Trading Signals</h2>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-green-400 text-sm">LIVE</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4" id="signals-list">
+                            <!-- Signals will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Neural Network Status -->
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-xl neural-bg">
+                        <div class="absolute inset-0 bg-black/80 rounded-xl"></div>
+                        <div class="relative">
+                            <h3 class="text-xl font-bold mb-4">Hyperion Alith Status</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span>Neural Processing</span>
+                                    <span class="text-green-400 font-semibold" id="processing-rate">10.2k/sec</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>Confidence Level</span>
+                                    <span class="text-purple-400 font-semibold" id="confidence-level">97.3%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>Network Uptime</span>
+                                    <span class="text-blue-400 font-semibold" id="uptime">99.97%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4">AI Insights</h3>
+                        <div class="space-y-3" id="ai-insights">
+                            <!-- AI insights will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/signals.js"></script>
+</body>
+</html>
