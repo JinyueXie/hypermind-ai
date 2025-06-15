@@ -8,7 +8,7 @@
 
 **Revolutionary DeFi trading intelligence powered by Hyperion's Alith AI**
 
-[🚀 Live Demo](https://jinyuexie.github.io/hypermind-ai/) | [📊 Dashboard](https://jinyuexie.github.io/hypermind-ai/pages/dashboard.html) | [🧠 AI Signals](https://jinyuexie.github.io/hypermind-ai/pages/signals.html)
+[🚀 Live Demo](https://www.youtube.com/watch?v=TVCFpXDk1e4) | [📊 Dashboard](https://jinyuexie.github.io/hypermind-ai/pages/dashboard.html) | [🧠 AI Signals](https://jinyuexie.github.io/hypermind-ai/pages/signals.html)
 
 </div>
 
