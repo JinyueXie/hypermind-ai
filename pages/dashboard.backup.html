@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Dashboard - HyperMind AI</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>   
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <link rel="stylesheet" href="../assets/css/styles.css">
+   <style>
+       .hyperion-glow {
+           animation: hyperionPulse 2s ease-in-out infinite;
+       }
+       @keyframes hyperionPulse {
+           0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+           50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+       }
+       .ai-brain-animation {
+           animation: brainPulse 1.5s ease-in-out infinite;
+       }
+       @keyframes brainPulse {
+           0%, 100% { opacity: 0.8; filter: brightness(1); }
+           50% { opacity: 1; filter: brightness(1.2); }
+       }
+       .glass-card {
+           background: rgba(17, 24, 39, 0.8);
+           backdrop-filter: blur(16px);
+           border: 1px solid rgba(255, 255, 255, 0.1);
+       }
+       .glass-nav {
+           background: rgba(17, 24, 39, 0.95);
+           backdrop-filter: blur(20px);
+           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+       }
+       .text-gradient {
+           background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+       .hover-lift {
+           transition: transform 0.3s ease;
+       }
+       .hover-lift:hover {
+           transform: translateY(-2px);
+       }
+       .pulse-dot {
+           animation: pulse 2s infinite;
+       }
+       .animate-float {
+           animation: float 3s ease-in-out infinite;
+       }
+       @keyframes float {
+           0%, 100% { transform: translateY(0px); }
+           50% { transform: translateY(-10px); }
+       }
+       .glow-purple {
+           box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+       }
+       .glow-green {
+           box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+       }
+       .glow-blue {
+           box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+       }
+       .glow-yellow {
+           box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+       }
+       .glow-red {
+           box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+       }
+       .chart-container {
+           position: relative;
+           height: 300px;
+       }
+       .btn-primary {
+           background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+           color: white;
+           border: none;
+           transition: all 0.3s ease;
+       }
+       .btn-primary:hover {
+           transform: translateY(-2px);
+           box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+       }
+       .btn-secondary {
+           background: rgba(55, 65, 81, 0.8);
+           color: #d1d5db;
+           border: 1px solid rgba(255, 255, 255, 0.1);
+           transition: all 0.3s ease;
+       }
+       .btn-secondary:hover {
+           background: rgba(75, 85, 99, 0.8);
+           color: white;
+       }
+       .btn-danger {
+           background: linear-gradient(135deg, #ef4444, #dc2626);
+           color: white;
+           border: none;
+           transition: all 0.3s ease;
+       }
+       .btn-danger:hover {
+           transform: translateY(-2px);
+           box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+       }
+       .nav-item {
+           color: #9ca3af;
+           transition: all 0.3s ease;
+       }
+       .nav-item:hover {
+           color: white;
+           background: rgba(139, 92, 246, 0.2);
+       }
+       .nav-item.active {
+           color: white;
+           background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+       }
+       .sidebar {
+           background: rgba(17, 24, 39, 0.95);
+           backdrop-filter: blur(20px);
+       }
+       .loading-bar {
+           background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+           animation: loading 2s ease-in-out infinite;
+       }
+       @keyframes loading {
+           0%, 100% { opacity: 0.6; }
+           50% { opacity: 1; }
+       }
+       .neural-pulse {
+           animation: neural-pulse 2s ease-in-out infinite;
+       }
+       @keyframes neural-pulse {
+           0%, 100% { 
+               transform: scale(1);
+               box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+           }
+           50% { 
+               transform: scale(1.05);
+               box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+           }
+       }
+       .market-ticker {
+           background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+           animation: ticker-move 30s linear infinite;
+       }
+       @keyframes ticker-move {
+           0% { transform: translateX(100%); }
+           100% { transform: translateX(-100%); }
+       }
+       .risk-meter {
+           background: conic-gradient(from 0deg, #10b981 0deg 120deg, #f59e0b 120deg 240deg, #ef4444 240deg 360deg);
+           border-radius: 50%;
+           position: relative;
+       }
+       .risk-needle {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           width: 3px;
+           height: 40%;
+           background: white;
+           transform-origin: bottom center;
+           transform: translate(-50%, -100%) rotate(60deg);
+           border-radius: 2px;
+       }
+   </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+   <!-- Header -->
+   <header class="glass-nav fixed w-full top-0 z-50 p-4">
+       <div class="flex justify-between items-center">
+           <!-- Logo & Title -->
+           <div class="flex items-center space-x-4">
+              <a href="../index.html" class="flex items-center space-x-3 hover-lift">
+                 <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center hyperion-glow">
+                     <i data-lucide="brain" class="w-5 h-5 text-white ai-brain-animation"></i>
+                 </div>
+                 <div>
+                     <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                     <p class="text-sm text-purple-400">Powered by Hyperion Alith</p>
+                 </div>
+              </a>
+           </div>           
+           
+           <!-- Navigation -->
+           <div class="hidden md:flex items-center space-x-6">
+               <a href="dashboard.html" class="text-purple-400 font-semibold">Dashboard</a>
+               <a href="signals.html" class="text-gray-300 hover:text-white transition-colors">AI Signals</a>
+               <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+               <a href="login.html" class="text-gray-300 hover:text-white transition-colors">
+                   <i data-lucide="user" class="w-4 h-4 inline mr-1"></i>Account
+               </a>
+           </div>
+           
+           <!-- Status & Portfolio -->
+           <div class="flex items-center space-x-6">
+               <!-- AI Status -->
+               <div class="glass-card px-4 py-2 rounded-xl glow-green">
+                   <div class="flex items-center space-x-2">
+                       <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                       <span class="text-sm font-semibold text-green-400">Alith AI: ACTIVE</span>
+                   </div>
+               </div>
+               
+               <!-- Portfolio Value -->
+               <div class="text-right">
+                   <div class="text-sm text-gray-400">Total Portfolio</div>
+                   <div class="text-2xl font-bold text-gradient" id="portfolio-value">$127,834.92</div>
+                   <div class="text-sm text-green-400 flex items-center justify-end">
+                       <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                       <span id="portfolio-change">+$8,247.35 (6.89%)</span>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </header>
+
+   <!-- Market Ticker -->
+   <div class="fixed top-20 w-full bg-black/50 border-y border-purple-500/20 py-1 z-40 overflow-hidden">
+       <div class="market-ticker whitespace-nowrap">
+           <span class="text-green-400 mx-8">ETH/USDC: +8.24% | AI CONFIDENCE: 97.3%</span>
+           <span class="text-blue-400 mx-8">BTC/USDT: +4.67% | NEURAL PROCESSING: 11.2k/s</span>
+           <span class="text-purple-400 mx-8">TOTAL PROFIT: +$8,247.35 | ALITH STATUS: ACTIVE</span>
+           <span class="text-yellow-400 mx-8">RISK LEVEL: OPTIMIZED | WIN RATE: 94.7%</span>
+       </div>
+   </div>
+
+   <div class="flex pt-24">
+       <!-- Sidebar -->
+       <aside class="sidebar w-64 min-h-screen p-6 border-r border-white/10">
+           <nav class="space-y-3">
+               <a href="dashboard.html" class="nav-item active flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold">
+                   <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                   <span>Dashboard</span>
+               </a>
+               <a href="signals.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                   <i data-lucide="trending-up" class="w-5 h-5"></i>
+                   <span>AI Signals</span>
+               </a>
+               <a href="portfolio.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                   <i data-lucide="wallet" class="w-5 h-5"></i>
+                   <span>Portfolio</span>
+               </a>
+               <a href="../index.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                   <i data-lucide="home" class="w-5 h-5"></i>
+                   <span>Home</span>
+               </a>
+               <a href="login.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                   <i data-lucide="user" class="w-5 h-5"></i>
+                   <span>Account</span>
+               </a>
+           </nav>
+           
+           <!-- Quick Actions -->
+           <div class="mt-8 space-y-3">
+               <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Neural Commands</h3>
+               <button class="w-full btn-primary py-3 rounded-xl font-semibold hover-lift glow-purple" id="execute-all-btn" onclick="executeAllSignals()">
+                   <i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>
+                   Execute All Signals
+               </button>
+               <button class="w-full btn-danger py-3 rounded-xl font-semibold hover-lift" id="emergency-btn" onclick="window.location.href='emergency-stop.html'">
+                   <i data-lucide="shield-alert" class="w-4 h-4 inline mr-2"></i>
+                   Emergency Stop
+               </button>
+               <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift" id="rebalance-btn" onclick="window.location.href='auto-rebalance.html'">
+                   <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                   Auto Rebalance
+               </button>
+           </div>
+
+           <!-- AI Status Panel -->
+           <div class="mt-8 glass-card p-4 rounded-xl">
+               <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Hyperion Alith Status</h3>
+               <div class="space-y-3">
+                   <div class="flex justify-between items-center">
+                       <span class="text-sm text-gray-300">Neural Processing</span>
+                       <span class="text-sm text-green-400 font-semibold" id="ai-processing-count">11.2k/sec</span>
+                   </div>
+                   <div class="flex justify-between items-center">
+                       <span class="text-sm text-gray-300">Confidence Level</span>
+                       <span class="text-sm text-purple-400 font-semibold" id="ai-confidence">95.5%</span>
+                   </div>
+                   <div class="flex justify-between items-center">
+                       <span class="text-sm text-gray-300">Network Uptime</span>
+                       <span class="text-sm text-blue-400 font-semibold">99.96%</span>
+                   </div>
+               </div>
+           </div>
+       </aside>
+
+       <!-- Main Content -->
+       <main class="flex-1 p-6 space-y-6">
+           <!-- Top Stats Row -->
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+               <!-- Performance Card -->
+               <div class="glass-card p-6 hover-lift glow-green">
+                   <div class="flex justify-between items-start mb-4">
+                       <div>
+                           <p class="text-gray-400 text-sm font-medium">24h Performance</p>
+                           <p class="text-3xl font-bold text-green-400" id="daily-performance">+$8,247</p>
+                           <p class="text-green-400 text-sm flex items-center mt-1">
+                               <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                               <span id="daily-percentage">+6.89% (+$2.3k AI)</span>
+                           </p>
+                       </div>
+                       <div class="glass-card glow-green p-3 rounded-xl pulse-dot">
+                           <i data-lucide="trending-up" class="w-6 h-6 text-green-500"></i>
+                       </div>
+                   </div>
+                   <div class="w-full bg-gray-800 rounded-full h-2">
+                       <div class="loading-bar h-2 rounded-full w-3/4"></div>
+                   </div>
+               </div>
+               
+               <!-- Active Trades Card -->
+               <div class="glass-card p-6 hover-lift glow-blue">
+                   <div class="flex justify-between items-start mb-4">
+                       <div>
+                           <p class="text-gray-400 text-sm font-medium">Active AI Trades</p>
+                           <p class="text-3xl font-bold text-blue-400" id="active-trades">17</p>
+                           <p class="text-blue-400 text-sm flex items-center mt-1">
+                               <i data-lucide="brain" class="w-3 h-3 mr-1"></i>
+                               <span id="profitable-trades">14 Profitable</span>
+                           </p>
+                       </div>
+                       <div class="glass-card glow-blue p-3 rounded-xl pulse-dot">
+                           <i data-lucide="activity" class="w-6 h-6 text-blue-500"></i>
+                       </div>
+                   </div>
+                   <div class="flex space-x-2">
+                       <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                       <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot" style="animation-delay: 0.2s;"></div>
+                       <div class="w-3 h-3 bg-blue-500 rounded-full pulse-dot" style="animation-delay: 0.4s;"></div>
+                       <div class="w-3 h-3 bg-red-500 rounded-full pulse-dot" style="animation-delay: 0.6s;"></div>
+                   </div>
+               </div>
+               
+               <!-- Win Rate Card -->
+               <div class="glass-card p-6 hover-lift glow-purple">
+                   <div class="flex justify-between items-start mb-4">
+                       <div>
+                           <p class="text-gray-400 text-sm font-medium">AI Win Rate</p>
+                           <p class="text-3xl font-bold text-purple-400" id="win-rate">94.7%</p>
+                           <p class="text-purple-400 text-sm flex items-center mt-1">
+                               <i data-lucide="target" class="w-3 h-3 mr-1"></i>
+                               This Month
+                           </p>
+                       </div>
+                       <div class="glass-card glow-purple p-3 rounded-xl pulse-dot">
+                           <i data-lucide="target" class="w-6 h-6 text-purple-500"></i>
+                       </div>
+                   </div>
+                   <div class="text-xs text-gray-400">Hyperion Alith Intelligence</div>
+               </div>
+               
+               <!-- Risk Level Card -->
+               <div class="glass-card p-6 hover-lift glow-yellow">
+                   <div class="flex justify-between items-start mb-4">
+                       <div>
+                           <p class="text-gray-400 text-sm font-medium">Risk Level</p>
+                           <p class="text-3xl font-bold text-yellow-400" id="risk-level">Medium</p>
+                           <p class="text-yellow-400 text-sm flex items-center mt-1">
+                               <i data-lucide="shield" class="w-3 h-3 mr-1"></i>
+                               AI Optimized
+                           </p>
+                       </div>
+                       <div class="relative w-12 h-12">
+                           <div class="risk-meter w-12 h-12">
+                               <div class="risk-needle"></div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="text-xs text-gray-400">Auto-adjusted by AI</div>
+               </div>
+           </div>
+
+           <!-- Advanced Analytics Section -->
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+               <!-- Neural Network Activity -->
+               <div class="glass-card p-6 hover-lift">
+                   <h3 class="text-lg font-bold text-gradient mb-4">Neural Network Activity</h3>
+                   <div class="space-y-4">
+                       <div class="flex items-center justify-between">
+                           <div class="flex items-center space-x-3">
+                               <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                               <span class="text-sm">Pattern Recognition</span>
+                           </div>
+                           <span class="text-sm text-green-400">Active</span>
+                       </div>
+                       <div class="flex items-center justify-between">
+                           <div class="flex items-center space-x-3">
+                               <div class="w-3 h-3 bg-blue-500 rounded-full pulse-dot"></div>
+                               <span class="text-sm">Sentiment Analysis</span>
+                           </div>
+                           <span class="text-sm text-blue-400">Processing</span>
+                       </div>
+                       <div class="flex items-center justify-between">
+                           <div class="flex items-center space-x-3">
+                               <div class="w-3 h-3 bg-purple-500 rounded-full pulse-dot"></div>
+                               <span class="text-sm">Risk Assessment</span>
+                           </div>
+                           <span class="text-sm text-purple-400">Optimizing</span>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Market Sentiment -->
+               <div class="glass-card p-6 hover-lift">
+                   <h3 class="text-lg font-bold text-gradient mb-4">Market Sentiment</h3>
+                   <div class="space-y-4">
+                       <div class="flex justify-between items-center">
+                           <span class="text-sm text-gray-300">Fear & Greed Index</span>
+                           <span class="text-sm text-green-400 font-semibold">72 (Greed)</span>
+                       </div>
+                       <div class="flex justify-between items-center">
+                           <span class="text-sm text-gray-300">Social Sentiment</span>
+                           <span class="text-sm text-blue-400 font-semibold">Bullish</span>
+                       </div>
+                       <div class="flex justify-between items-center">
+                           <span class="text-sm text-gray-300">Institutional Flow</span>
+                           <span class="text-sm text-green-400 font-semibold">+$2.4B</span>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- Main Dashboard Grid -->
+           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+               <!-- Live Signals Preview -->
+               <div class="lg:col-span-2 glass-card p-6 hover-lift">
+                   <div class="flex justify-between items-center mb-6">
+                       <div>
+                           <h2 class="text-2xl font-bold text-gradient">Live AI Signals</h2>
+                           <p class="text-sm text-gray-400">Real-time analysis by Hyperion Alith</p>
+                       </div>
+                       <div class="flex items-center space-x-3">
+                           <div class="glass-card px-3 py-1 rounded-full glow-green">
+                               <div class="flex items-center space-x-2">
+                                   <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                                   <span class="text-xs text-green-400 font-semibold">ANALYZING</span>
+                               </div>
+                           </div>
+                           <a href="signals.html" class="btn-secondary px-4 py-2 rounded-lg text-sm hover-lift">
+                               View All
+                           </a>
+                       </div>
+                   </div>
+                   
+                   <!-- Signal Cards -->
+                   <div class="space-y-4" id="dashboard-signals">
+                       <!-- Strong Buy Signal -->
+                       <div class="glass-card border border-green-500/30 p-4 hover-lift glow-green">
+                           <div class="flex justify-between items-center mb-3">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
+                                       <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+                                   </div>
+                                   <div>
+                                       <h3 class="font-bold text-green-400">STRONG BUY</h3>
+                                       <p class="text-sm text-gray-400">ETH/USDC • Uniswap V4</p>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-xl font-bold text-green-400">+8.2%</div>
+                                   <div class="text-xs text-gray-400">97.3% confidence</div>
+                               </div>
+                           </div>
+                           <div class="text-xs text-gray-300">
+                               Entry: $2,847.56 | Target: $3,127.67 | Stop Loss: $2,698.31
+                           </div>
+                           <div class="mt-2 text-xs text-green-300">
+                               AI Analysis: Bull flag pattern detected with volume confirmation
+                           </div>
+                       </div>
+                       
+                       <!-- Monitor Signal -->
+                       <div class="glass-card border border-blue-500/30 p-4 hover-lift glow-blue">
+                           <div class="flex justify-between items-center mb-3">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+                                       <i data-lucide="eye" class="w-5 h-5 text-white"></i>
+                                   </div>
+                                   <div>
+                                       <h3 class="font-bold text-blue-400">MONITOR</h3>
+                                       <p class="text-sm text-gray-400">BTC/USDT • Cross-chain</p>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-xl font-bold text-blue-400">0.0%</div>
+                                   <div class="text-xs text-gray-400">91.8% confidence</div>
+                               </div>
+                           </div>
+                           <div class="text-xs text-gray-300">
+                               Entry: $43,247.12 | Target: $47,654 | Stop Loss: $41,200
+                           </div>
+                           <div class="mt-2 text-xs text-blue-300">
+                               AI Analysis: Support level holding, waiting for breakout confirmation
+                           </div>
+                       </div>
+
+                       <!-- Additional Signal -->
+                       <div class="glass-card border border-purple-500/30 p-4 hover-lift glow-purple">
+                           <div class="flex justify-between items-center mb-3">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
+                                       <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+                                   </div>
+                                   <div>
+                                       <h3 class="font-bold text-purple-400">BUY</h3>
+                                       <p class="text-sm text-gray-400">MATIC/USDC • 1H</p>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-xl font-bold text-purple-400">+12.6%</div>
+                                   <div class="text-xs text-gray-400">89.4% confidence</div>
+                               </div>
+                           </div>
+                           <div class="text-xs text-gray-300">
+                               Entry: $0.847 | Target: $0.978 | Stop Loss: $0.798
+                           </div>
+                           <div class="mt-2 text-xs text-purple-300">
+                               AI Analysis: Oversold RSI with bullish divergence forming
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Right Column -->
+               <div class="space-y-6">
+                   <!-- Portfolio Overview -->
+                   <div class="glass-card p-6 hover-lift">
+                       <div class="flex justify-between items-center mb-4">
+                           <h3 class="text-lg font-bold text-gradient">Portfolio Overview</h3>
+                           <a href="portfolio.html" class="btn-secondary px-3 py-1 rounded-lg text-xs hover-lift">
+                               Details
+                           </a>
+                       </div>
+                       <div class="space-y-3" id="portfolio-overview">
+                           <div class="flex justify-between items-center">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-8 h-8 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center">
+                                       <span class="text-white font-bold text-xs">BT</span>
+                                   </div>
+                                   <div>
+                                       <div class="font-semibold text-white text-sm">Bitcoin</div>
+                                       <div class="text-xs text-gray-400">31.7%</div>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-sm text-green-400 font-semibold">+8.23%</div>
+                               </div>
+                           </div>
+                           
+                           <div class="flex justify-between items-center">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                       <span class="text-white font-bold text-xs">OT</span>
+                                   </div>
+                                   <div>
+                                       <div class="font-semibold text-white text-sm">Other Assets</div>
+                                       <div class="text-xs text-gray-400">26.0%</div>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-sm text-green-400 font-semibold">+5.12%</div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <!-- AI Insights -->
+                   <div class="glass-card p-6 hover-lift">
+                       <h3 class="text-lg font-bold mb-4 text-gradient">AI Insights</h3>
+                       <div class="space-y-3" id="ai-insights-dashboard">
+                           <div class="glass-card border border-purple-500/30 p-3 hover-lift">
+                               <div class="flex items-start space-x-2">
+                                   <i data-lucide="brain" class="w-4 h-4 text-purple-400 mt-1 pulse-dot"></i>
+                                   <div>
+                                       <div class="text-sm font-semibold text-purple-400">Pattern Detected</div>
+                                       <div class="text-xs text-gray-300">Bull flag on ETH/USDC with 89% success rate</div>
+                                   </div>
+                               </div>
+                           </div>
+                           
+                           <div class="glass-card border border-yellow-500/30 p-3 hover-lift">
+                               <div class="flex items-start space-x-2">
+                                   <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-400 mt-1 animate-float"></i>
+                                   <div>
+                                       <div class="text-sm font-semibold text-yellow-400">Market Alert</div>
+                                       <div class="text-xs text-gray-300">Increased volatility expected. Adjust positions.</div>
+                                   </div>
+                               </div>
+                           </div>
+                           
+                           <div class="glass-card border border-blue-500/30 p-3 hover-lift">
+                               <div class="flex items-start space-x-2">
+                                   <i data-lucide="zap" class="w-4 h-4 text-blue-400 mt-1 pulse-dot"></i>
+                                   <div>
+                                       <div class="text-sm font-semibold text-blue-400">AI Recommendation</div>
+                                       <div class="text-xs text-gray-300">Portfolio rebalancing suggested in 2h</div>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div class="glass-card border border-green-500/30 p-3 hover-lift">
+                               <div class="flex items-start space-x-2">
+                                   <i data-lucide="trending-up" class="w-4 h-4 text-green-400 mt-1 pulse-dot"></i>
+                                   <div>
+                                       <div class="text-sm font-semibold text-green-400">Profit Opportunity</div>
+                                       <div class="text-xs text-gray-300">Cross-chain arbitrage detected: +2.3% potential</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Quick Stats -->
+                   <div class="glass-card p-6 hover-lift">
+                       <h3 class="text-lg font-bold mb-4 text-gradient">Quick Stats</h3>
+                       <div class="space-y-3">
+                           <div class="flex justify-between items-center">
+                               <span class="text-sm text-gray-300">Today's Trades</span>
+                               <span class="text-sm text-blue-400 font-semibold">23</span>
+                           </div>
+                           <div class="flex justify-between items-center">
+                               <span class="text-sm text-gray-300">Success Rate</span>
+                               <span class="text-sm text-green-400 font-semibold">91.3%</span>
+                           </div>
+                           <div class="flex justify-between items-center">
+                               <span class="text-sm text-gray-300">Avg. Hold Time</span>
+                               <span class="text-sm text-purple-400 font-semibold">4.7h</span>
+                           </div>
+                           <div class="flex justify-between items-center">
+                               <span class="text-sm text-gray-300">Best Performer</span>
+                               <span class="text-sm text-green-400 font-semibold">ETH +12.4%</span>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           
+           <!-- Performance Chart -->
+           <div class="glass-card p-6 hover-lift">
+               <div class="flex justify-between items-center mb-6">
+                   <div>
+                       <h2 class="text-2xl font-bold text-gradient">Performance Analytics</h2>
+                       <p class="text-sm text-gray-400">Real-time portfolio tracking</p>
+                   </div>
+                   <div class="flex space-x-2">
+                       <button class="px-4 py-2 btn-primary rounded-xl text-sm font-semibold glow-purple" onclick="updateChart('24h')">24H</button>
+                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('7d')">7D</button>
+                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('30d')">30D</button>
+                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('3m')">3M</button>
+                   </div>
+               </div>
+               
+               <div class="chart-container">
+                   <canvas id="performanceChart"></canvas>
+               </div>
+           </div>
+
+           <!-- Advanced Metrics Grid -->
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               <!-- Trading Volume -->
+               <div class="glass-card p-6 hover-lift">
+                   <div class="flex items-center justify-between mb-4">
+                       <h3 class="text-sm font-semibold text-gray-400">24H Volume</h3>
+                       <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
+                   </div>
+                   <div class="text-2xl font-bold text-blue-400">$2.47M</div>
+                   <div class="text-sm text-green-400 mt-1">+18.2% from yesterday</div>
+               </div>
+
+               <!-- Sharpe Ratio -->
+               <div class="glass-card p-6 hover-lift">
+                   <div class="flex items-center justify-between mb-4">
+                       <h3 class="text-sm font-semibold text-gray-400">Sharpe Ratio</h3>
+                       <i data-lucide="trending-up" class="w-5 h-5 text-green-400"></i>
+                   </div>
+                   <div class="text-2xl font-bold text-green-400">2.34</div>
+                   <div class="text-sm text-gray-400 mt-1">Risk-adjusted returns</div>
+               </div>
+
+               <!-- Max Drawdown -->
+               <div class="glass-card p-6 hover-lift">
+                   <div class="flex items-center justify-between mb-4">
+                       <h3 class="text-sm font-semibold text-gray-400">Max Drawdown</h3>
+                       <i data-lucide="trending-down" class="w-5 h-5 text-red-400"></i>
+                   </div>
+                   <div class="text-2xl font-bold text-red-400">-8.2%</div>
+                   <div class="text-sm text-gray-400 mt-1">Last 30 days</div>
+               </div>
+           </div>
+
+           <!-- AI Model Performance -->
+           <div class="glass-card p-6 hover-lift">
+               <div class="flex justify-between items-center mb-6">
+                   <div>
+                       <h2 class="text-2xl font-bold text-gradient">AI Model Performance</h2>
+                       <p class="text-sm text-gray-400">Hyperion Alith neural network metrics</p>
+                   </div>
+               </div>
+               
+               <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                   <div class="text-center">
+                       <div class="text-3xl font-bold text-purple-400">97.3%</div>
+                       <div class="text-sm text-gray-400">Accuracy</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="text-3xl font-bold text-blue-400">11.2k</div>
+                       <div class="text-sm text-gray-400">Predictions/sec</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="text-3xl font-bold text-green-400">0.92</div>
+                       <div class="text-sm text-gray-400">F1 Score</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="text-3xl font-bold text-yellow-400">2.4ms</div>
+                       <div class="text-sm text-gray-400">Latency</div>
+                   </div>
+               </div>
+           </div>
+       </main>
+   </div>
+
+   <!-- Scripts -->
+   <script>
+       // Enhanced Dashboard Functions
+       function executeAllSignals() {
+           const btn = document.getElementById('execute-all-btn');
+           btn.disabled = true;
+           btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Executing...';
+           btn.classList.add('glow-blue');
+           
+           // Simulate execution process
+           setTimeout(() => {
+               btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Executed!';
+               btn.classList.remove('glow-blue');
+               btn.classList.add('glow-green');
+               
+               setTimeout(() => {
+                   btn.disabled = false;
+                   btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
+                   btn.classList.remove('glow-green');
+                   btn.classList.add('glow-purple');
+               }, 2000);
+           }, 3000);
+           
+           lucide.createIcons();
+       }
+
+       function updateChart(period) {
+           // Update chart based on period
+           console.log('Updating chart for period:', period);
+           
+           // Update button states
+           document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+               if (btn.onclick && btn.onclick.toString().includes(period)) {
+                   btn.className = btn.className.replace('btn-secondary', 'btn-primary');
+                   btn.classList.add('glow-purple');
+               } else if (btn.onclick) {
+                   btn.className = btn.className.replace('btn-primary', 'btn-secondary');
+                   btn.classList.remove('glow-purple');
+               }
+           });
+       }
+
+       // Initialize dashboard
+       document.addEventListener('DOMContentLoaded', function() {
+           if (typeof lucide !== 'undefined') {
+               lucide.createIcons();
+           }
+           
+           // Initialize performance chart
+           const ctx = document.getElementById('performanceChart');
+           if (ctx) {
+               const hours = Array.from({length: 24}, (_, i) => {
+                   const now = new Date();
+                   now.setHours(now.getHours() - (23 - i));
+                   return now.getHours().toString().padStart(2, '0') + ':00';
+               });
+               let baseValue = 127000;
+               const performanceData = hours.map(() => {
+                   baseValue += (Math.random() - 0.3) * 2000; // Slight upward bias
+                   return baseValue;
+               });
+               
+               new Chart(ctx, {
+                   type: 'line',
+                   data: {
+                       labels: hours,
+                       datasets: [{
+                           label: 'Portfolio Value',
+                           data: performanceData,
+                           borderColor: 'rgb(139, 92, 246)',
+                           backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                           tension: 0.4,
+                           fill: true,
+                           pointRadius: 0,
+                           pointHoverRadius: 6,
+                           borderWidth: 3
+                       }]
+                   },
+                   options: {
+                       responsive: true,
+                       maintainAspectRatio: false,
+                       interaction: {
+                           intersect: false,
+                           mode: 'index'
+                       },
+                       plugins: {
+                           legend: {
+                               display: false
+                           },
+                           tooltip: {
+                               backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                               titleColor: '#ffffff',
+                               bodyColor: '#d1d5db',
+                               borderColor: 'rgba(139, 92, 246, 0.5)',
+                               borderWidth: 1,
+                               cornerRadius: 8,
+                               displayColors: false
+                           }
+                       },
+                       scales: {
+                           y: {
+                               display: true,
+                               grid: {
+                                   color: 'rgba(255, 255, 255, 0.1)',
+                                   drawBorder: false
+                               },
+                               ticks: {
+                                   color: 'rgba(156, 163, 175, 0.6)',
+                                   callback: function(value) {
+                                       return '42.3%</div>
+                                   </div>
+                               </div>
+                               <div class="text-right">
+                                   <div class="text-sm text-green-400 font-semibold">+4.67%</div>
+                               </div>
+                           </div>
+                           
+                           <div class="flex justify-between items-center">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                       <span class="text-white font-bold text-xs">ET</span>
+                                   </div>
+                                   <div>
+                                       <div class="font-semibold text-white text-sm">Ethereum</div>
+                                       <div class="text-xs text-gray-400"> + (value / 1000).toFixed(0) + 'k';
+                                   },
+                                   padding: 10
+                               }
+                           },
+                           x: {
+                               display: true,
+                               grid: {
+                                   display: false
+                               },
+                               ticks: {
+                                   color: 'rgba(156, 163, 175, 0.6)',
+                                   maxTicksLimit: 6,
+                                   padding: 10
+                               }
+                           }
+                       }
+                   }
+               });
+           }
+           
+           // Start real-time updates
+           setInterval(() => {
+               // Update portfolio value
+               const portfolioEl = document.getElementById('portfolio-value');
+               if (portfolioEl) {
+                   let currentValue = parseFloat(portfolioEl.textContent.replace(/[$,]/g, ''));
+                   const change = (Math.random() - 0.4) * 500; // Slight upward bias
+                   currentValue += change;
+                   portfolioEl.textContent = `${currentValue.toLocaleString(undefined, {
+                       minimumFractionDigits: 2,
+                       maximumFractionDigits: 2
+                   })}`;
+               }
+
+               // Update AI processing count
+               const processingEl = document.getElementById('ai-processing-count');
+               if (processingEl) {
+                   const rate = (10.8 + Math.random() * 1.4).toFixed(1);
+                   processingEl.textContent = `${rate}k/sec`;
+               }
+
+               // Update AI confidence
+               const confidenceEl = document.getElementById('ai-confidence');
+               if (confidenceEl) {
+                   const confidence = (94.5 + Math.random() * 4.5).toFixed(1);
+                   confidenceEl.textContent = `${confidence}%`;
+               }
+           }, 3000);
+
+           // Add sparkle effects to profit indicators
+           setInterval(() => {
+               document.querySelectorAll('.text-green-400').forEach(el => {
+                   if (el.textContent.includes('+')) {
+                       el.style.textShadow = '0 0 10px rgba(34, 197, 94, 0.5)';
+                       setTimeout(() => {
+                           el.style.textShadow = 'none';
+                       }, 1000);
+                   }
+               });
+           }, 5000);
+       });
+   </script>
+   <script src="../components/web3-config.js"></script>
+</body>

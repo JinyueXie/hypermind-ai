@@ -8,7 +8,6 @@
    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>   
    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <link rel="stylesheet" href="../assets/css/styles.css">
    <style>
        .hyperion-glow {
            animation: hyperionPulse 2s ease-in-out infinite;
@@ -166,6 +165,66 @@
            transform: translate(-50%, -100%) rotate(60deg);
            border-radius: 2px;
        }
+       .execute-btn {
+           background: linear-gradient(135deg, #10b981, #059669);
+           color: white;
+           border: none;
+           padding: 6px 12px;
+           border-radius: 6px;
+           font-size: 12px;
+           font-weight: 600;
+           transition: all 0.3s ease;
+           cursor: pointer;
+       }
+       .execute-btn:hover {
+           transform: translateY(-1px);
+           box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+       }
+       .execute-btn:disabled {
+           opacity: 0.6;
+           cursor: not-allowed;
+       }
+       .notification {
+           position: fixed;
+           top: 20px;
+           right: 20px;
+           padding: 16px 24px;
+           border-radius: 8px;
+           color: white;
+           font-weight: 600;
+           z-index: 1000;
+           max-width: 400px;
+           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+           animation: slideIn 0.3s ease-out;
+       }
+       .notification.success {
+           background: linear-gradient(135deg, #10b981, #059669);
+       }
+       .notification.error {
+           background: linear-gradient(135deg, #ef4444, #dc2626);
+       }
+       .notification.info {
+           background: linear-gradient(135deg, #3b82f6, #2563eb);
+       }
+       @keyframes slideIn {
+           from {
+               transform: translateX(100%);
+               opacity: 0;
+           }
+           to {
+               transform: translateX(0);
+               opacity: 1;
+           }
+       }
+       .wallet-status {
+           transition: all 0.3s ease;
+       }
+       .wallet-status.connected {
+           background: linear-gradient(135deg, #10b981, #059669);
+       }
+       .wallet-status.disconnected {
+           background: linear-gradient(135deg, #667eea, #764ba2);
+       }
    </style>
 </head>
 <body class="bg-black text-white min-h-screen">
@@ -204,6 +263,11 @@
                        <span class="text-sm font-semibold text-green-400">Alith AI: ACTIVE</span>
                    </div>
                </div>
+               
+               <!-- Wallet Status -->
+               <button id="connect-wallet-btn" class="wallet-status disconnected px-4 py-2 rounded-xl font-semibold text-sm">
+                   Connect Wallet
+               </button>
                
                <!-- Portfolio Value -->
                <div class="text-right">
@@ -257,15 +321,15 @@
            <!-- Quick Actions -->
            <div class="mt-8 space-y-3">
                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Neural Commands</h3>
-               <button class="w-full btn-primary py-3 rounded-xl font-semibold hover-lift glow-purple" id="execute-all-btn" onclick="executeAllSignals()">
+               <button class="w-full btn-primary py-3 rounded-xl font-semibold hover-lift glow-purple" id="execute-all-btn">
                    <i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>
                    Execute All Signals
                </button>
-               <button class="w-full btn-danger py-3 rounded-xl font-semibold hover-lift" id="emergency-btn" onclick="window.location.href='emergency-stop.html'">
+               <button class="w-full btn-danger py-3 rounded-xl font-semibold hover-lift" id="emergency-btn">
                    <i data-lucide="shield-alert" class="w-4 h-4 inline mr-2"></i>
                    Emergency Stop
                </button>
-               <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift" id="rebalance-btn" onclick="window.location.href='auto-rebalance.html'">
+               <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift" id="rebalance-btn">
                    <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
                    Auto Rebalance
                </button>
@@ -377,56 +441,6 @@
                </div>
            </div>
 
-           <!-- Advanced Analytics Section -->
-           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-               <!-- Neural Network Activity -->
-               <div class="glass-card p-6 hover-lift">
-                   <h3 class="text-lg font-bold text-gradient mb-4">Neural Network Activity</h3>
-                   <div class="space-y-4">
-                       <div class="flex items-center justify-between">
-                           <div class="flex items-center space-x-3">
-                               <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
-                               <span class="text-sm">Pattern Recognition</span>
-                           </div>
-                           <span class="text-sm text-green-400">Active</span>
-                       </div>
-                       <div class="flex items-center justify-between">
-                           <div class="flex items-center space-x-3">
-                               <div class="w-3 h-3 bg-blue-500 rounded-full pulse-dot"></div>
-                               <span class="text-sm">Sentiment Analysis</span>
-                           </div>
-                           <span class="text-sm text-blue-400">Processing</span>
-                       </div>
-                       <div class="flex items-center justify-between">
-                           <div class="flex items-center space-x-3">
-                               <div class="w-3 h-3 bg-purple-500 rounded-full pulse-dot"></div>
-                               <span class="text-sm">Risk Assessment</span>
-                           </div>
-                           <span class="text-sm text-purple-400">Optimizing</span>
-                       </div>
-                   </div>
-               </div>
-
-               <!-- Market Sentiment -->
-               <div class="glass-card p-6 hover-lift">
-                   <h3 class="text-lg font-bold text-gradient mb-4">Market Sentiment</h3>
-                   <div class="space-y-4">
-                       <div class="flex justify-between items-center">
-                           <span class="text-sm text-gray-300">Fear & Greed Index</span>
-                           <span class="text-sm text-green-400 font-semibold">72 (Greed)</span>
-                       </div>
-                       <div class="flex justify-between items-center">
-                           <span class="text-sm text-gray-300">Social Sentiment</span>
-                           <span class="text-sm text-blue-400 font-semibold">Bullish</span>
-                       </div>
-                       <div class="flex justify-between items-center">
-                           <span class="text-sm text-gray-300">Institutional Flow</span>
-                           <span class="text-sm text-green-400 font-semibold">+$2.4B</span>
-                       </div>
-                   </div>
-               </div>
-           </div>
-
            <!-- Main Dashboard Grid -->
            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                <!-- Live Signals Preview -->
@@ -449,82 +463,9 @@
                        </div>
                    </div>
                    
-                   <!-- Signal Cards -->
+                   <!-- Signal Cards Container -->
                    <div class="space-y-4" id="dashboard-signals">
-                       <!-- Strong Buy Signal -->
-                       <div class="glass-card border border-green-500/30 p-4 hover-lift glow-green">
-                           <div class="flex justify-between items-center mb-3">
-                               <div class="flex items-center space-x-3">
-                                   <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
-                                       <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
-                                   </div>
-                                   <div>
-                                       <h3 class="font-bold text-green-400">STRONG BUY</h3>
-                                       <p class="text-sm text-gray-400">ETH/USDC • Uniswap V4</p>
-                                   </div>
-                               </div>
-                               <div class="text-right">
-                                   <div class="text-xl font-bold text-green-400">+8.2%</div>
-                                   <div class="text-xs text-gray-400">97.3% confidence</div>
-                               </div>
-                           </div>
-                           <div class="text-xs text-gray-300">
-                               Entry: $2,847.56 | Target: $3,127.67 | Stop Loss: $2,698.31
-                           </div>
-                           <div class="mt-2 text-xs text-green-300">
-                               AI Analysis: Bull flag pattern detected with volume confirmation
-                           </div>
-                       </div>
-                       
-                       <!-- Monitor Signal -->
-                       <div class="glass-card border border-blue-500/30 p-4 hover-lift glow-blue">
-                           <div class="flex justify-between items-center mb-3">
-                               <div class="flex items-center space-x-3">
-                                   <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-                                       <i data-lucide="eye" class="w-5 h-5 text-white"></i>
-                                   </div>
-                                   <div>
-                                       <h3 class="font-bold text-blue-400">MONITOR</h3>
-                                       <p class="text-sm text-gray-400">BTC/USDT • Cross-chain</p>
-                                   </div>
-                               </div>
-                               <div class="text-right">
-                                   <div class="text-xl font-bold text-blue-400">0.0%</div>
-                                   <div class="text-xs text-gray-400">91.8% confidence</div>
-                               </div>
-                           </div>
-                           <div class="text-xs text-gray-300">
-                               Entry: $43,247.12 | Target: $47,654 | Stop Loss: $41,200
-                           </div>
-                           <div class="mt-2 text-xs text-blue-300">
-                               AI Analysis: Support level holding, waiting for breakout confirmation
-                           </div>
-                       </div>
-
-                       <!-- Additional Signal -->
-                       <div class="glass-card border border-purple-500/30 p-4 hover-lift glow-purple">
-                           <div class="flex justify-between items-center mb-3">
-                               <div class="flex items-center space-x-3">
-                                   <div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
-                                       <i data-lucide="zap" class="w-5 h-5 text-white"></i>
-                                   </div>
-                                   <div>
-                                       <h3 class="font-bold text-purple-400">BUY</h3>
-                                       <p class="text-sm text-gray-400">MATIC/USDC • 1H</p>
-                                   </div>
-                               </div>
-                               <div class="text-right">
-                                   <div class="text-xl font-bold text-purple-400">+12.6%</div>
-                                   <div class="text-xs text-gray-400">89.4% confidence</div>
-                               </div>
-                           </div>
-                           <div class="text-xs text-gray-300">
-                               Entry: $0.847 | Target: $0.978 | Stop Loss: $0.798
-                           </div>
-                           <div class="mt-2 text-xs text-purple-300">
-                               AI Analysis: Oversold RSI with bullish divergence forming
-                           </div>
-                       </div>
+                       <!-- Signals will be populated by JavaScript -->
                    </div>
                </div>
 
@@ -604,331 +545,535 @@
                                    </div>
                                </div>
                            </div>
-
-                           <div class="glass-card border border-green-500/30 p-3 hover-lift">
-                               <div class="flex items-start space-x-2">
-                                   <i data-lucide="trending-up" class="w-4 h-4 text-green-400 mt-1 pulse-dot"></i>
-                                   <div>
-                                       <div class="text-sm font-semibold text-green-400">Profit Opportunity</div>
-                                       <div class="text-xs text-gray-300">Cross-chain arbitrage detected: +2.3% potential</div>
-                                   </div>
-                               </div>
-                           </div>
                        </div>
-                   </div>
-
-                   <!-- Quick Stats -->
-                   <div class="glass-card p-6 hover-lift">
-                       <h3 class="text-lg font-bold mb-4 text-gradient">Quick Stats</h3>
-                       <div class="space-y-3">
-                           <div class="flex justify-between items-center">
-                               <span class="text-sm text-gray-300">Today's Trades</span>
-                               <span class="text-sm text-blue-400 font-semibold">23</span>
-                           </div>
-                           <div class="flex justify-between items-center">
-                               <span class="text-sm text-gray-300">Success Rate</span>
-                               <span class="text-sm text-green-400 font-semibold">91.3%</span>
-                           </div>
-                           <div class="flex justify-between items-center">
-                               <span class="text-sm text-gray-300">Avg. Hold Time</span>
-                               <span class="text-sm text-purple-400 font-semibold">4.7h</span>
-                           </div>
-                           <div class="flex justify-between items-center">
-                               <span class="text-sm text-gray-300">Best Performer</span>
-                               <span class="text-sm text-green-400 font-semibold">ETH +12.4%</span>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           
-           <!-- Performance Chart -->
-           <div class="glass-card p-6 hover-lift">
-               <div class="flex justify-between items-center mb-6">
-                   <div>
-                       <h2 class="text-2xl font-bold text-gradient">Performance Analytics</h2>
-                       <p class="text-sm text-gray-400">Real-time portfolio tracking</p>
-                   </div>
-                   <div class="flex space-x-2">
-                       <button class="px-4 py-2 btn-primary rounded-xl text-sm font-semibold glow-purple" onclick="updateChart('24h')">24H</button>
-                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('7d')">7D</button>
-                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('30d')">30D</button>
-                       <button class="px-4 py-2 btn-secondary rounded-xl text-sm hover-lift" onclick="updateChart('3m')">3M</button>
-                   </div>
-               </div>
-               
-               <div class="chart-container">
-                   <canvas id="performanceChart"></canvas>
-               </div>
-           </div>
-
-           <!-- Advanced Metrics Grid -->
-           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               <!-- Trading Volume -->
-               <div class="glass-card p-6 hover-lift">
-                   <div class="flex items-center justify-between mb-4">
-                       <h3 class="text-sm font-semibold text-gray-400">24H Volume</h3>
-                       <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
-                   </div>
-                   <div class="text-2xl font-bold text-blue-400">$2.47M</div>
-                   <div class="text-sm text-green-400 mt-1">+18.2% from yesterday</div>
-               </div>
-
-               <!-- Sharpe Ratio -->
-               <div class="glass-card p-6 hover-lift">
-                   <div class="flex items-center justify-between mb-4">
-                       <h3 class="text-sm font-semibold text-gray-400">Sharpe Ratio</h3>
-                       <i data-lucide="trending-up" class="w-5 h-5 text-green-400"></i>
-                   </div>
-                   <div class="text-2xl font-bold text-green-400">2.34</div>
-                   <div class="text-sm text-gray-400 mt-1">Risk-adjusted returns</div>
-               </div>
-
-               <!-- Max Drawdown -->
-               <div class="glass-card p-6 hover-lift">
-                   <div class="flex items-center justify-between mb-4">
-                       <h3 class="text-sm font-semibold text-gray-400">Max Drawdown</h3>
-                       <i data-lucide="trending-down" class="w-5 h-5 text-red-400"></i>
-                   </div>
-                   <div class="text-2xl font-bold text-red-400">-8.2%</div>
-                   <div class="text-sm text-gray-400 mt-1">Last 30 days</div>
-               </div>
-           </div>
-
-           <!-- AI Model Performance -->
-           <div class="glass-card p-6 hover-lift">
-               <div class="flex justify-between items-center mb-6">
-                   <div>
-                       <h2 class="text-2xl font-bold text-gradient">AI Model Performance</h2>
-                       <p class="text-sm text-gray-400">Hyperion Alith neural network metrics</p>
-                   </div>
-               </div>
-               
-               <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                   <div class="text-center">
-                       <div class="text-3xl font-bold text-purple-400">97.3%</div>
-                       <div class="text-sm text-gray-400">Accuracy</div>
-                   </div>
-                   <div class="text-center">
-                       <div class="text-3xl font-bold text-blue-400">11.2k</div>
-                       <div class="text-sm text-gray-400">Predictions/sec</div>
-                   </div>
-                   <div class="text-center">
-                       <div class="text-3xl font-bold text-green-400">0.92</div>
-                       <div class="text-sm text-gray-400">F1 Score</div>
-                   </div>
-                   <div class="text-center">
-                       <div class="text-3xl font-bold text-yellow-400">2.4ms</div>
-                       <div class="text-sm text-gray-400">Latency</div>
                    </div>
                </div>
            </div>
        </main>
    </div>
 
-   <!-- Scripts -->
+   <!-- Web3 Configuration -->
    <script>
-       // Enhanced Dashboard Functions
-       function executeAllSignals() {
-           const btn = document.getElementById('execute-all-btn');
-           btn.disabled = true;
-           btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Executing...';
-           btn.classList.add('glow-blue');
-           
-           // Simulate execution process
-           setTimeout(() => {
-               btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Executed!';
-               btn.classList.remove('glow-blue');
-               btn.classList.add('glow-green');
+       // Hyperion Testnet Configuration
+       const HYPERION_TESTNET_CONFIG = {
+           chainId: '0x12BB',
+           chainName: 'Hyperion Testnet',
+           nativeCurrency: {
+               name: 'Hyperion',
+               symbol: 'HYP',
+               decimals: 18
+           },
+           rpcUrls: ['https://testnet-rpc.hyperion.network'],
+           blockExplorerUrls: ['https://testnet-explorer.hyperion.network']
+       };
+
+       const CONTRACT_ADDRESS = '0x742d35Cc6634C0532925a3b8d1eb3c51c0f2';
+       const CONTRACT_ABI = [
+           "function createSignal(string pair, string signalType, uint256 entryPrice, uint256 targetPrice, uint256 stopLoss, uint256 confidence) external",
+           "function executeSignal(uint256 signalId) external",
+           "function getSignalCount() external view returns (uint256)",
+           "event SignalCreated(uint256 indexed signalId, address indexed trader, string pair, string signalType)"
+       ];
+
+       // =========================================
+       // Wallet Connection Class
+       // =========================================
+       class WalletConnection {
+           constructor() {
+               this.provider = null;
+               this.signer = null;
+               this.contract = null;
+               this.userAddress = null;
+               this.isConnected = false;
+           }
+
+           async connectWallet() {
+               try {
+                   if (!window.ethereum) {
+                       throw new Error('MetaMask not detected. Please install MetaMask.');
+                   }
+
+                   const accounts = await window.ethereum.request({
+                       method: 'eth_requestAccounts'
+                   });
+
+                   if (accounts.length === 0) {
+                       throw new Error('No accounts found. Please connect your wallet.');
+                   }
+
+                   // Add/Switch to Hyperion Testnet
+                   try {
+                       await window.ethereum.request({
+                           method: 'wallet_switchEthereumChain',
+                           params: [{ chainId: HYPERION_TESTNET_CONFIG.chainId }]
+                       });
+                   } catch (switchError) {
+                       if (switchError.code === 4902) {
+                           await window.ethereum.request({
+                               method: 'wallet_addEthereumChain',
+                               params: [HYPERION_TESTNET_CONFIG]
+                           });
+                       } else {
+                           throw switchError;
+                       }
+                   }
+
+                   this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                   this.signer = this.provider.getSigner();
+                   this.userAddress = accounts[0];
+                   this.isConnected = true;
+                   this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.signer);
+
+                   console.log('🚀 Wallet connected successfully:', this.userAddress);
+                   this.updateUI();
+                   
+                   return {
+                       success: true,
+                       address: this.userAddress,
+                       contractAddress: CONTRACT_ADDRESS
+                   };
+
+               } catch (error) {
+                   console.error('❌ Wallet connection failed:', error);
+                   return {
+                       success: false,
+                       error: error.message
+                   };
+               }
+           }
+
+           updateUI() {
+               const connectButton = document.getElementById('connect-wallet-btn');
+               
+               if (this.isConnected) {
+                   if (connectButton) {
+                       connectButton.textContent = `Connected: ${this.userAddress.slice(0, 6)}...${this.userAddress.slice(-4)}`;
+                       connectButton.className = connectButton.className.replace('disconnected', 'connected');
+                   }
+               } else {
+                   if (connectButton) {
+                       connectButton.textContent = 'Connect Wallet';
+                       connectButton.className = connectButton.className.replace('connected', 'disconnected');
+                   }
+               }
+           }
+
+           async createSignal(signalData) {
+               if (!this.isConnected || !this.contract) {
+                   throw new Error('Wallet not connected');
+               }
+
+               try {
+                   console.log('🤖 Creating signal on-chain:', signalData);
+
+                   const entryPrice = ethers.utils.parseEther(signalData.entryPrice.toString());
+                   const targetPrice = ethers.utils.parseEther(signalData.targetPrice.toString());
+                   const stopLoss = ethers.utils.parseEther(signalData.stopLoss.toString());
+
+                   const tx = await this.contract.createSignal(
+                       signalData.pair,
+                       signalData.signalType,
+                       entryPrice,
+                       targetPrice,
+                       stopLoss,
+                       signalData.confidence
+                   );
+
+                   console.log('📋 Transaction sent:', tx.hash);
+                   const receipt = await tx.wait();
+                   console.log('✅ Signal created successfully:', receipt);
+
+                   return {
+                       success: true,
+                       txHash: tx.hash,
+                       blockNumber: receipt.blockNumber
+                   };
+
+               } catch (error) {
+                   console.error('❌ Transaction failed:', error);
+                   return {
+                       success: false,
+                       error: error.message
+                   };
+               }
+           }
+
+           async executeSignal(signalId) {
+               if (!this.isConnected || !this.contract) {
+                   throw new Error('Wallet not connected');
+               }
+
+               try {
+                   console.log('⚡ Executing signal:', signalId);
+                   
+                   const tx = await this.contract.executeSignal(signalId);
+                   console.log('📋 Execution transaction sent:', tx.hash);
+                   
+                   const receipt = await tx.wait();
+                   console.log('✅ Signal executed successfully:', receipt);
+
+                   return {
+                       success: true,
+                       txHash: tx.hash,
+                       blockNumber: receipt.blockNumber
+                   };
+
+               } catch (error) {
+                   console.error('❌ Execution failed:', error);
+                   return {
+                       success: false,
+                       error: error.message
+                   };
+               }
+           }
+       }
+
+       // =========================================
+       // AI Signal Generator (Mock)
+       // =========================================
+       class AlithMock {
+           static generateSignal() {
+               const pairs = ['ETH/USDC', 'BTC/USDT', 'MATIC/USDC', 'LINK/ETH', 'AVAX/USDT', 'UNI/ETH'];
+               const types = ['STRONG_BUY', 'BUY', 'MONITOR', 'HOLD'];
+               const pair = pairs[Math.floor(Math.random() * pairs.length)];
+               const signalType = types[Math.floor(Math.random() * types.length)];
+               const basePrice = Math.random() * 3000 + 1000;
+               const confidence = Math.floor(Math.random() * 30) + 70; // 70-100%
+               
+               return {
+                   id: Date.now() + Math.random(),
+                   pair: pair,
+                   signalType: signalType,
+                   entryPrice: Number(basePrice.toFixed(2)),
+                   targetPrice: Number((basePrice * (1 + Math.random() * 0.15)).toFixed(2)),
+                   stopLoss: Number((basePrice * (0.85 + Math.random() * 0.1)).toFixed(2)),
+                   confidence: confidence,
+                   analysis: `AI Analysis: ${signalType} signal detected with ${confidence}% confidence`,
+                   timestamp: Date.now(),
+                   executed: false
+               };
+           }
+
+           static startSignalGeneration(callback, interval = 15000) {
+               callback(this.generateSignal());
+               return setInterval(() => {
+                   callback(this.generateSignal());
+               }, interval);
+           }
+       }
+
+       // =========================================
+       // Main Application
+       // =========================================
+       class HyperMindApp {
+           constructor() {
+               this.wallet = new WalletConnection();
+               this.signalInterval = null;
+               this.signals = [];
+           }
+
+           async init() {
+               console.log('🚀 Initializing HyperMind AI...');
+               
+               this.setupEventListeners();
+               this.startSignalGeneration();
+               this.startRealtimeUpdates();
+               
+               console.log('✅ HyperMind AI initialized');
+           }
+
+           setupEventListeners() {
+               const connectBtn = document.getElementById('connect-wallet-btn');
+               if (connectBtn) {
+                   connectBtn.addEventListener('click', () => this.connectWallet());
+               }
+
+               const executeAllBtn = document.getElementById('execute-all-btn');
+               if (executeAllBtn) {
+                   executeAllBtn.addEventListener('click', () => this.executeAllSignals());
+               }
+
+               // Event delegation for dynamic execute buttons
+               document.addEventListener('click', (e) => {
+                   if (e.target.classList.contains('execute-signal-btn') || 
+                       e.target.closest('.execute-signal-btn')) {
+                       const btn = e.target.classList.contains('execute-signal-btn') ? 
+                                  e.target : e.target.closest('.execute-signal-btn');
+                       const signalId = btn.dataset.signalId;
+                       this.executeSignal(signalId);
+                   }
+               });
+           }
+
+           async connectWallet() {
+               const result = await this.wallet.connectWallet();
+               
+               if (result.success) {
+                   this.showNotification('✅ Wallet connected to Hyperion!', 'success');
+               } else {
+                   this.showNotification(`❌ Connection failed: ${result.error}`, 'error');
+               }
+           }
+
+           startSignalGeneration() {
+               this.signalInterval = AlithMock.startSignalGeneration((signal) => {
+                   this.handleNewSignal(signal);
+               });
+           }
+
+           async handleNewSignal(signal) {
+               console.log('🤖 New AI signal:', signal);
+               
+               // Auto-create high confidence signals on-chain
+               if (this.wallet.isConnected && signal.confidence > 85) {
+                   try {
+                       const result = await this.wallet.createSignal(signal);
+                       if (result.success) {
+                           signal.onChain = true;
+                           signal.txHash = result.txHash;
+                           this.showNotification('📊 High-confidence signal created on-chain!', 'success');
+                       }
+                   } catch (error) {
+                       console.error('Failed to create on-chain signal:', error);
+                   }
+               }
+               
+               this.signals.unshift(signal);
+               if (this.signals.length > 10) {
+                   this.signals.pop();
+               }
+               
+               this.updateSignalsDisplay();
+           }
+
+           updateSignalsDisplay() {
+               const container = document.getElementById('dashboard-signals');
+               if (!container) return;
+
+               const signalsToShow = this.signals.slice(0, 3); // Show top 3 signals
+               
+               container.innerHTML = signalsToShow.map(signal => {
+                   const colorClass = this.getSignalColorClass(signal.signalType);
+                   const iconName = this.getSignalIcon(signal.signalType);
+                   const percentage = ((signal.targetPrice - signal.entryPrice) / signal.entryPrice * 100).toFixed(1);
+                   
+                   return `
+                       <div class="glass-card border border-${colorClass}-500/30 p-4 hover-lift glow-${colorClass}">
+                           <div class="flex justify-between items-center mb-3">
+                               <div class="flex items-center space-x-3">
+                                   <div class="w-10 h-10 bg-${colorClass}-500 rounded-xl flex items-center justify-center">
+                                       <i data-lucide="${iconName}" class="w-5 h-5 text-white"></i>
+                                   </div>
+                                   <div>
+                                       <h3 class="font-bold text-${colorClass}-400">${signal.signalType}</h3>
+                                       <p class="text-sm text-gray-400">${signal.pair} • AI Generated</p>
+                                   </div>
+                               </div>
+                               <div class="flex items-center space-x-3">
+                                   <div class="text-right">
+                                       <div class="text-xl font-bold text-${colorClass}-400">${percentage > 0 ? '+' : ''}${percentage}%</div>
+                                       <div class="text-xs text-gray-400">${signal.confidence}% confidence</div>
+                                   </div>
+                                   <button class="execute-signal-btn execute-btn" data-signal-id="${signal.id}">
+                                       Execute
+                                   </button>
+                               </div>
+                           </div>
+                           <div class="text-xs text-gray-300 mb-2">
+                               Entry: ${signal.entryPrice} | Target: ${signal.targetPrice} | Stop: ${signal.stopLoss}
+                           </div>
+                           <div class="text-xs text-${colorClass}-300">
+                               ${signal.analysis}
+                           </div>
+                           ${signal.onChain ? `
+                               <div class="mt-2 flex items-center space-x-2">
+                                   <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+                                   <span class="text-xs text-green-400">On-chain • TX: ${signal.txHash?.slice(0, 10)}...</span>
+                               </div>
+                           ` : ''}
+                       </div>
+                   `;
+               }).join('');
+
+               // Re-initialize Lucide icons for the new content
+               if (typeof lucide !== 'undefined') {
+                   lucide.createIcons();
+               }
+           }
+
+           getSignalColorClass(signalType) {
+               switch (signalType) {
+                   case 'STRONG_BUY': return 'green';
+                   case 'BUY': return 'purple';
+                   case 'MONITOR': return 'blue';
+                   case 'HOLD': return 'yellow';
+                   default: return 'gray';
+               }
+           }
+
+           getSignalIcon(signalType) {
+               switch (signalType) {
+                   case 'STRONG_BUY': return 'trending-up';
+                   case 'BUY': return 'zap';
+                   case 'MONITOR': return 'eye';
+                   case 'HOLD': return 'hand';
+                   default: return 'activity';
+               }
+           }
+
+           async executeSignal(signalId) {
+               if (!this.wallet.isConnected) {
+                   this.showNotification('❌ Please connect wallet first', 'error');
+                   return;
+               }
+
+               const signal = this.signals.find(s => s.id == signalId);
+               if (!signal) {
+                   this.showNotification('❌ Signal not found', 'error');
+                   return;
+               }
+
+               const btn = document.querySelector(`[data-signal-id="${signalId}"]`);
+               if (btn) {
+                   btn.disabled = true;
+                   btn.textContent = 'Executing...';
+               }
+
+               try {
+                   const result = await this.wallet.createSignal(signal);
+                   
+                   if (result.success) {
+                       signal.executed = true;
+                       signal.txHash = result.txHash;
+                       this.showNotification('✅ Signal executed successfully!', 'success');
+                       
+                       if (btn) {
+                           btn.textContent = 'Executed ✅';
+                           btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                       }
+                   } else {
+                       this.showNotification(`❌ Execution failed: ${result.error}`, 'error');
+                       if (btn) {
+                           btn.disabled = false;
+                           btn.textContent = 'Execute';
+                       }
+                   }
+                   
+               } catch (error) {
+                   console.error('Execute signal error:', error);
+                   this.showNotification('❌ Transaction failed', 'error');
+                   if (btn) {
+                       btn.disabled = false;
+                       btn.textContent = 'Execute';
+                   }
+               }
+           }
+
+           async executeAllSignals() {
+               if (!this.wallet.isConnected) {
+                   this.showNotification('❌ Please connect wallet first', 'error');
+                   return;
+               }
+
+               const btn = document.getElementById('execute-all-btn');
+               if (btn) {
+                   btn.disabled = true;
+                   btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Processing...';
+                   
+                   try {
+                       let executed = 0;
+                       for (let signal of this.signals) {
+                           if (signal.confidence > 85 && !signal.executed) {
+                               await this.wallet.createSignal(signal);
+                               executed++;
+                               signal.executed = true;
+                               await new Promise(resolve => setTimeout(resolve, 1000));
+                           }
+                       }
+                       
+                       this.showNotification(`✅ Executed ${executed} signals successfully!`, 'success');
+                       btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Completed!';
+                       
+                       setTimeout(() => {
+                           btn.disabled = false;
+                           btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
+                           if (typeof lucide !== 'undefined') {
+                               lucide.createIcons();
+                           }
+                       }, 3000);
+                       
+                   } catch (error) {
+                       this.showNotification('❌ Execution failed: ' + error.message, 'error');
+                       btn.disabled = false;
+                       btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
+                   }
+                   
+                   if (typeof lucide !== 'undefined') {
+                       lucide.createIcons();
+                   }
+               }
+           }
+
+           showNotification(message, type = 'info') {
+               console.log(`${type.toUpperCase()}: ${message}`);
+               
+               const notification = document.createElement('div');
+               notification.className = `notification ${type}`;
+               notification.textContent = message;
+               
+               document.body.appendChild(notification);
                
                setTimeout(() => {
-                   btn.disabled = false;
-                   btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
-                   btn.classList.remove('glow-green');
-                   btn.classList.add('glow-purple');
-               }, 2000);
-           }, 3000);
-           
-           lucide.createIcons();
+                   if (notification.parentNode) {
+                       notification.parentNode.removeChild(notification);
+                   }
+               }, 5000);
+           }
+
+           startRealtimeUpdates() {
+               setInterval(() => {
+                   // Update portfolio value
+                   const portfolioEl = document.getElementById('portfolio-value');
+                   if (portfolioEl) {
+                       let currentValue = parseFloat(portfolioEl.textContent.replace(/[$,]/g, ''));
+                       const change = (Math.random() - 0.4) * 500;
+                       currentValue += change;
+                       portfolioEl.textContent = `${currentValue.toLocaleString(undefined, {
+                           minimumFractionDigits: 2,
+                           maximumFractionDigits: 2
+                       })}`;
+                   }
+
+                   // Update AI processing count
+                   const processingEl = document.getElementById('ai-processing-count');
+                   if (processingEl) {
+                       const rate = (10.8 + Math.random() * 1.4).toFixed(1);
+                       processingEl.textContent = `${rate}k/sec`;
+                   }
+
+                   // Update AI confidence
+                   const confidenceEl = document.getElementById('ai-confidence');
+                   if (confidenceEl) {
+                       const confidence = (94.5 + Math.random() * 4.5).toFixed(1);
+                       confidenceEl.textContent = `${confidence}%`;
+                   }
+               }, 3000);
+           }
        }
 
-       function updateChart(period) {
-           // Update chart based on period
-           console.log('Updating chart for period:', period);
-           
-           // Update button states
-           document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
-               if (btn.onclick && btn.onclick.toString().includes(period)) {
-                   btn.className = btn.className.replace('btn-secondary', 'btn-primary');
-                   btn.classList.add('glow-purple');
-               } else if (btn.onclick) {
-                   btn.className = btn.className.replace('btn-primary', 'btn-secondary');
-                   btn.classList.remove('glow-purple');
-               }
-           });
-       }
+       // Initialize when DOM is loaded
+       document.addEventListener('DOMContentLoaded', () => {
+           window.hyperMindApp = new HyperMindApp();
+           window.hyperMindApp.init();
 
-       // Initialize dashboard
-       document.addEventListener('DOMContentLoaded', function() {
+           // Initialize Lucide icons
            if (typeof lucide !== 'undefined') {
                lucide.createIcons();
            }
-           
-           // Initialize performance chart
-           const ctx = document.getElementById('performanceChart');
-           if (ctx) {
-               const hours = Array.from({length: 24}, (_, i) => {
-                   const now = new Date();
-                   now.setHours(now.getHours() - (23 - i));
-                   return now.getHours().toString().padStart(2, '0') + ':00';
-               });
-               let baseValue = 127000;
-               const performanceData = hours.map(() => {
-                   baseValue += (Math.random() - 0.3) * 2000; // Slight upward bias
-                   return baseValue;
-               });
-               
-               new Chart(ctx, {
-                   type: 'line',
-                   data: {
-                       labels: hours,
-                       datasets: [{
-                           label: 'Portfolio Value',
-                           data: performanceData,
-                           borderColor: 'rgb(139, 92, 246)',
-                           backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                           tension: 0.4,
-                           fill: true,
-                           pointRadius: 0,
-                           pointHoverRadius: 6,
-                           borderWidth: 3
-                       }]
-                   },
-                   options: {
-                       responsive: true,
-                       maintainAspectRatio: false,
-                       interaction: {
-                           intersect: false,
-                           mode: 'index'
-                       },
-                       plugins: {
-                           legend: {
-                               display: false
-                           },
-                           tooltip: {
-                               backgroundColor: 'rgba(17, 24, 39, 0.95)',
-                               titleColor: '#ffffff',
-                               bodyColor: '#d1d5db',
-                               borderColor: 'rgba(139, 92, 246, 0.5)',
-                               borderWidth: 1,
-                               cornerRadius: 8,
-                               displayColors: false
-                           }
-                       },
-                       scales: {
-                           y: {
-                               display: true,
-                               grid: {
-                                   color: 'rgba(255, 255, 255, 0.1)',
-                                   drawBorder: false
-                               },
-                               ticks: {
-                                   color: 'rgba(156, 163, 175, 0.6)',
-                                   callback: function(value) {
-                                       return '42.3%</div>
-                                   </div>
-                               </div>
-                               <div class="text-right">
-                                   <div class="text-sm text-green-400 font-semibold">+4.67%</div>
-                               </div>
-                           </div>
-                           
-                           <div class="flex justify-between items-center">
-                               <div class="flex items-center space-x-3">
-                                   <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                                       <span class="text-white font-bold text-xs">ET</span>
-                                   </div>
-                                   <div>
-                                       <div class="font-semibold text-white text-sm">Ethereum</div>
-                                       <div class="text-xs text-gray-400"> + (value / 1000).toFixed(0) + 'k';
-                                   },
-                                   padding: 10
-                               }
-                           },
-                           x: {
-                               display: true,
-                               grid: {
-                                   display: false
-                               },
-                               ticks: {
-                                   color: 'rgba(156, 163, 175, 0.6)',
-                                   maxTicksLimit: 6,
-                                   padding: 10
-                               }
-                           }
-                       }
-                   }
-               });
-           }
-           
-           // Start real-time updates
-           setInterval(() => {
-               // Update portfolio value
-               const portfolioEl = document.getElementById('portfolio-value');
-               if (portfolioEl) {
-                   let currentValue = parseFloat(portfolioEl.textContent.replace(/[$,]/g, ''));
-                   const change = (Math.random() - 0.4) * 500; // Slight upward bias
-                   currentValue += change;
-                   portfolioEl.textContent = `${currentValue.toLocaleString(undefined, {
-                       minimumFractionDigits: 2,
-                       maximumFractionDigits: 2
-                   })}`;
-               }
 
-               // Update AI processing count
-               const processingEl = document.getElementById('ai-processing-count');
-               if (processingEl) {
-                   const rate = (10.8 + Math.random() * 1.4).toFixed(1);
-                   processingEl.textContent = `${rate}k/sec`;
-               }
-
-               // Update AI confidence
-               const confidenceEl = document.getElementById('ai-confidence');
-               if (confidenceEl) {
-                   const confidence = (94.5 + Math.random() * 4.5).toFixed(1);
-                   confidenceEl.textContent = `${confidence}%`;
-               }
-           }, 3000);
-
-           // Add sparkle effects to profit indicators
-           setInterval(() => {
-               document.querySelectorAll('.text-green-400').forEach(el => {
-                   if (el.textContent.includes('+')) {
-                       el.style.textShadow = '0 0 10px rgba(34, 197, 94, 0.5)';
-                       setTimeout(() => {
-                           el.style.textShadow = 'none';
-                       }, 1000);
-                   }
-               });
-           }, 5000);
+           console.log('🔥 HyperMind AI Web3 Integration Loaded!');
        });
    </script>
    <script src="../components/web3-config.js"></script>
 </body>
-</html>42.3%</div>
-                                   </div>
-                               </div>
-                               <div class="text-right">
-                                   <div class="text-sm text-green-400 font-semibold">+4.67%</div>
-                               </div>
-                           </div>
-                           
-                           <div class="flex justify-between items-center">
-                               <div class="flex items-center space-x-3">
-                                   <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                                       <span class="text-white font-bold text-xs">ET</span>
-                                   </div>
-                                   <div>
-                                       <div class="font-semibold text-white text-sm">Ethereum</div>
-                                       <div class="text-xs text-gray-400">O
-
+</html>
