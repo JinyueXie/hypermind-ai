@@ -141,13 +141,13 @@
         </div>
 
         <div class="network-card">
-            <h3>🌐 Option 3: Your Current Network (Chain ID: 4795)</h3>
+            <h3>🌐 Option 3: Your Current Network (Chain ID: 133717)</h3>
             <div class="network-details">
                 Network Name: Hyperion Testnet<br>
-                Chain ID: 4795<br>
-                RPC URL: https://testnet-rpc.hyperion.network<br>
+                Chain ID: 133717<br>
+                RPC URL: https://hyperion-testnet.metisdevops.link<br>
                 Currency: HYP<br>
-                Explorer: https://testnet-explorer.hyperion.network
+                Explorer: https://hyperion-testnet-explorer.metisdevops.link
             </div>
             <button class="btn btn-danger" onclick="deployToCurrentNetwork()">
                 🚀 Deploy Contract Here Instead
@@ -194,15 +194,15 @@
                 blockExplorerUrls: ['https://hyperion-explorer.metis.io']
             },
             CURRENT_HYPERION: {
-                chainId: '0x12BB', // 4795
+                chainId: '0x20A55', // 133717
                 chainName: 'Hyperion Testnet',
                 nativeCurrency: {
-                    name: 'HYP',
-                    symbol: 'HYP',
+                    name: 'tMETIS',
+                    symbol: 'tMETIS',
                     decimals: 18
                 },
-                rpcUrls: ['https://testnet-rpc.hyperion.network'],
-                blockExplorerUrls: ['https://testnet-explorer.hyperion.network']
+                rpcUrls: ['https://hyperion-testnet.metisdevops.link'],
+                blockExplorerUrls: ['https://hyperion-testnet-explorer.metisdevops.link']
             }
         };
 
@@ -232,8 +232,8 @@
                     networkName = 'Metis Hyperion Testnet (Chain ID: 2001)';
                     statusClass = 'status-success';
                     statusText = '✅ Connected to Metis Hyperion! Your contracts should work.';
-                } else if (chainId === '0x12BB') {
-                    networkName = 'Hyperion Testnet (Chain ID: 4795)';
+                } else if (chainId === '0x20A55') {
+                    networkName = 'Hyperion Testnet (Chain ID: 133717)';
                     statusClass = 'status-warning';
                     statusText = '⚠️ Connected to different Hyperion network. Contracts are on Chain ID 2001.';
                 } else {
@@ -361,24 +361,24 @@
             const resultEl = document.getElementById('result-status');
             resultEl.className = 'status status-warning';
             resultEl.innerHTML = `
-                <h4>🚀 Deploy to Current Network (Chain ID: 4795)</h4>
+                <h4>🚀 Deploy to Current Network (Chain ID: 133717)</h4>
                 <p>To use your current network, you'll need to:</p>
                 <ol>
-                    <li>Redeploy your smart contract to Chain ID 4795</li>
+                    <li>Redeploy your smart contract to Chain ID 133717</li>
                     <li>Update your web3-config.js with the new contract address</li>
-                    <li>Change the expected chain ID to 4795</li>
+                    <li>Change the expected chain ID to 133717</li>
                 </ol>
                 <p><strong>Contract deployment steps:</strong></p>
                 <div class="network-details">
 // In your deployment script, use these settings:<br>
 const network = {<br>
-&nbsp;&nbsp;chainId: 4795,<br>
-&nbsp;&nbsp;rpc: 'https://testnet-rpc.hyperion.network'<br>
+&nbsp;&nbsp;chainId: 133717,<br>
+&nbsp;&nbsp;rpc: 'https://hyperion-testnet.metisdevops.link'<br>
 };<br><br>
 // Then update CONTRACT_ADDRESS in web3-config.js<br>
 const CONTRACT_ADDRESS = 'YOUR_NEW_CONTRACT_ADDRESS';
                 </div>
-                <p>Would you like me to create the updated configuration for Chain ID 4795?</p>
+                <p>Would you like me to create the updated configuration for Chain ID 133717?</p>
             `;
         }
 
@@ -407,7 +407,7 @@ const CONTRACT_ADDRESS = 'YOUR_NEW_CONTRACT_ADDRESS';
             const rpcTests = [
                 { name: 'Metis Hyperion', url: 'https://hyperion-testnet.metis.io' },
                 { name: 'Alternative Metis', url: 'https://testnet.metis.io' },
-                { name: 'Current Hyperion', url: 'https://testnet-rpc.hyperion.network' }
+                { name: 'Current Hyperion', url: 'https://hyperion-testnet.metisdevops.link' }
             ];
 
             for (const rpc of rpcTests) {
