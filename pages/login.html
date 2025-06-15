@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - HyperMind AI</title>
+    <title>Connect Wallet - HyperMind AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Web3Modal and WalletConnect -->
+    <script src="https://unpkg.com/@web3modal/ethereum@2.7.1/dist/index.js"></script>
+    <script src="https://unpkg.com/@web3modal/html@2.7.1/dist/index.js"></script>
+    <script src="https://unpkg.com/viem@1.10.9/dist/index.js"></script>
     <style>
         .glass-card {
             background: rgba(17, 24, 39, 0.8);
@@ -37,17 +41,34 @@
         .btn-secondary:hover {
             background: rgba(75, 85, 99, 0.8);
             color: white;
+            transform: translateY(-1px);
         }
-        .input-field {
-            background: rgba(55, 65, 81, 0.5);
+        .wallet-button {
+            background: rgba(55, 65, 81, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .input-field:focus {
+        .wallet-button:hover {
+            background: rgba(75, 85, 99, 0.8);
             border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+        .wallet-button:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            animation: shimmer 1s ease-in-out;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
         .login-bg {
             background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 50%),
@@ -90,6 +111,42 @@
             70% { transform: scale(0.9); }
             100% { transform: scale(1); opacity: 1; }
         }
+        .connected-wallet {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .wallet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .chain-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #a855f7;
+        }
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .loading-dots div {
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: loading-dots 1.4s ease-in-out infinite both;
+        }
+        .loading-dots div:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots div:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes loading-dots {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="login-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
@@ -99,7 +156,7 @@
     <div class="floating-particle w-1 h-1 bottom-32 left-40 animation-delay-2000"></div>
     <div class="floating-particle w-2 h-2 bottom-20 right-20 animation-delay-3000"></div>
 
-    <div class="w-full max-w-md relative z-10">
+    <div class="w-full max-w-lg relative z-10">
         <!-- Header -->
         <div class="text-center mb-8">
             <div class="flex justify-center mb-6">
@@ -109,125 +166,183 @@
             </div>
             <h1 class="text-4xl font-bold text-gradient mb-2">HyperMind AI</h1>
             <p class="text-gray-300 text-lg">Neural Trading Intelligence</p>
-            <p class="text-gray-400 text-sm mt-2">Access your AI-powered trading dashboard</p>
+            <p class="text-gray-400 text-sm mt-2">Connect your Web3 wallet to access the dashboard</p>
+            <div class="mt-3">
+                <span class="chain-indicator">
+                    <i data-lucide="link" class="w-3 h-3 mr-1"></i>
+                    Multi-Chain Support
+                </span>
+            </div>
         </div>
 
-        <!-- Login Form -->
-        <div class="glass-card p-8 rounded-2xl mb-6">
-            <form id="loginForm" class="space-y-6">
-                <!-- Email Field -->
-                <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-300 mb-2">
-                        <i data-lucide="mail" class="w-4 h-4 inline mr-2"></i>
-                        Email Address
-                    </label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        class="input-field w-full px-4 py-3 rounded-xl" 
-                        placeholder="Enter your email address"
-                        value="demo@hypermind.ai"
-                    >
-                </div>
-
-                <!-- Password Field -->
-                <div>
-                    <label for="password" class="block text-sm font-semibold text-gray-300 mb-2">
-                        <i data-lucide="lock" class="w-4 h-4 inline mr-2"></i>
-                        Password
-                    </label>
-                    <div class="relative">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            required 
-                            class="input-field w-full px-4 py-3 rounded-xl pr-12" 
-                            placeholder="Enter your password"
-                            value="demo123"
-                        >
-                        <button 
-                            type="button" 
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                            onclick="togglePassword()"
-                        >
-                            <i data-lucide="eye" id="passwordToggle" class="w-5 h-5"></i>
-                        </button>
+        <!-- Connection Status -->
+        <div id="connectionStatus" class="glass-card p-4 rounded-xl mb-6 hidden">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-green-400">Wallet Connected</p>
+                        <p id="connectedAddress" class="text-xs text-gray-300"></p>
                     </div>
                 </div>
-
-                <!-- Remember Me & Forgot Password -->
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="rounded bg-gray-700 border-gray-600 text-purple-600">
-                        <span class="text-sm text-gray-300">Remember me</span>
-                    </label>
-                    <a href="#" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                        Forgot password?
-                    </a>
-                </div>
-
-                <!-- Login Button -->
-                <button 
-                    type="submit" 
-                    class="w-full btn-primary py-4 rounded-xl font-semibold text-lg glow-purple"
-                    id="loginBtn"
-                >
-                    <i data-lucide="log-in" class="w-5 h-5 inline mr-2"></i>
-                    Sign In to Dashboard
+                <button onclick="disconnect()" class="text-red-400 hover:text-red-300 text-sm">
+                    Disconnect
                 </button>
-
-                <!-- Divider -->
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-600"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-gray-900 text-gray-400">Or continue with</span>
-                    </div>
-                </div>
-
-                <!-- Social Login -->
-                <div class="grid grid-cols-2 gap-4">
-                    <button type="button" class="btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        Google
-                    </button>
-                    <button type="button" class="btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.024-.105-.949-.199-2.403.041-3.439.219-.937 1.404-5.965 1.404-5.965s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.221.083.343-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.758-1.378l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
-                        </svg>
-                        GitHub
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Demo Credentials -->
-        <div class="glass-card p-4 rounded-xl mb-6 border border-blue-500/30">
-            <div class="flex items-center space-x-2 mb-2">
-                <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
-                <span class="text-sm font-semibold text-blue-400">Demo Credentials</span>
-            </div>
-            <div class="text-xs text-gray-300 space-y-1">
-                <div>Email: <span class="text-blue-400">demo@hypermind.ai</span></div>
-                <div>Password: <span class="text-blue-400">demo123</span></div>
             </div>
         </div>
 
-        <!-- Sign Up Link -->
+        <!-- Wallet Connection -->
+        <div class="glass-card p-8 rounded-2xl mb-6">
+            <!-- Primary Connection Button -->
+            <button 
+                id="connectWalletBtn"
+                onclick="connectWallet()"
+                class="w-full btn-primary py-4 rounded-xl font-semibold text-lg glow-purple mb-6 flex items-center justify-center"
+            >
+                <i data-lucide="wallet" class="w-5 h-5 mr-2"></i>
+                <span id="connectBtnText">Connect Wallet</span>
+                <div id="connectLoader" class="loading-dots ml-2 hidden">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </button>
+
+            <!-- Wallet Options -->
+            <div class="space-y-4">
+                <div class="text-center">
+                    <span class="text-sm text-gray-400">Choose your preferred wallet</span>
+                </div>
+                
+                <div class="wallet-grid">
+                    <!-- MetaMask -->
+                    <button 
+                        onclick="connectSpecificWallet('metamask')"
+                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                    >
+                        <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="white">
+                                <path d="M22.05 5.74L13.54.32a2 2 0 00-3.08 0L1.95 5.74A2 2 0 001 7.5v9a2 2 0 00.95 1.76l8.51 5.42a2 2 0 003.08 0l8.51-5.42A2 2 0 0023 16.5v-9a2 2 0 00-.95-1.76z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-white">MetaMask</p>
+                            <p class="text-xs text-gray-400">Most popular browser wallet</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                    </button>
+
+                    <!-- WalletConnect -->
+                    <button 
+                        onclick="connectSpecificWallet('walletconnect')"
+                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                    >
+                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-white">WalletConnect</p>
+                            <p class="text-xs text-gray-400">Connect mobile wallets</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                    </button>
+
+                    <!-- Coinbase Wallet -->
+                    <button 
+                        onclick="connectSpecificWallet('coinbase')"
+                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                    >
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="white">
+                                <circle cx="12" cy="12" r="10"/>
+                                <rect x="9" y="9" width="6" height="6" rx="1" fill="#0052FF"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-white">Coinbase Wallet</p>
+                            <p class="text-xs text-gray-400">Self-custody wallet</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                    </button>
+
+                    <!-- Trust Wallet -->
+                    <button 
+                        onclick="connectSpecificWallet('trust')"
+                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                    >
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-white">Trust Wallet</p>
+                            <p class="text-xs text-gray-400">Multi-chain mobile wallet</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- More Wallets -->
+            <div class="mt-6">
+                <button 
+                    onclick="showMoreWallets()"
+                    class="w-full btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center"
+                >
+                    <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                    More Wallets
+                </button>
+            </div>
+        </div>
+
+        <!-- Network Info -->
+        <div class="glass-card p-4 rounded-xl mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="network" class="w-4 h-4 text-blue-400"></i>
+                    <span class="text-sm font-semibold text-blue-400">Supported Networks</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-3 text-xs text-gray-300">
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span>Ethereum</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span>BNB Chain</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-purple-600 rounded-full"></div>
+                    <span>Polygon</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>Arbitrum</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="glass-card p-4 rounded-xl mb-6 border border-yellow-500/30">
+            <div class="flex items-start space-x-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-yellow-400 mt-0.5"></i>
+                <div>
+                    <span class="text-sm font-semibold text-yellow-400">Security Notice</span>
+                    <p class="text-xs text-gray-300 mt-1">
+                        Only connect wallets you trust. HyperMind AI will never ask for your private keys or seed phrases.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- New to Web3 -->
         <div class="text-center">
-            <p class="text-gray-400">
-                Don't have an account? 
+            <p class="text-gray-400 text-sm">
+                New to Web3? 
                 <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
-                    Sign up for free
+                    Learn how to get started
                 </a>
             </p>
         </div>
@@ -249,7 +364,7 @@
             <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i data-lucide="check" class="w-8 h-8 text-white"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Login Successful!</h3>
+            <h3 class="text-xl font-bold text-white mb-2">Wallet Connected!</h3>
             <p class="text-gray-300 mb-4">Redirecting to your AI dashboard...</p>
             <div class="flex justify-center">
                 <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500"></div>
@@ -258,21 +373,174 @@
     </div>
 
     <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.getElementById('passwordToggle');
+        // Web3 Configuration
+        let web3Modal;
+        let provider;
+        let account;
+        let isConnected = false;
+
+        // Initialize Web3Modal
+        function initWeb3Modal() {
+            const projectId = 'your-walletconnect-project-id'; // Replace with your actual project ID
             
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.setAttribute('data-lucide', 'eye');
-            }
-            
-            lucide.createIcons();
+            web3Modal = new Web3Modal.Web3Modal({
+                projectId,
+                chains: [
+                    {
+                        chainId: 1,
+                        name: 'Ethereum',
+                        currency: 'ETH',
+                        explorerUrl: 'https://etherscan.io',
+                        rpcUrl: 'https://cloudflare-eth.com'
+                    },
+                    {
+                        chainId: 56,
+                        name: 'BNB Smart Chain',
+                        currency: 'BNB',
+                        explorerUrl: 'https://bscscan.com',
+                        rpcUrl: 'https://bsc-dataseed.binance.org'
+                    },
+                    {
+                        chainId: 137,
+                        name: 'Polygon',
+                        currency: 'MATIC',
+                        explorerUrl: 'https://polygonscan.com',
+                        rpcUrl: 'https://polygon-rpc.com'
+                    }
+                ],
+                wallets: [
+                    'metamask',
+                    'walletconnect',
+                    'coinbase',
+                    'trust',
+                    'rainbow',
+                    'ledger'
+                ]
+            });
         }
 
+        // Connect Wallet Function
+        async function connectWallet() {
+            const connectBtn = document.getElementById('connectWalletBtn');
+            const connectBtnText = document.getElementById('connectBtnText');
+            const connectLoader = document.getElementById('connectLoader');
+            
+            try {
+                // Show loading state
+                connectBtnText.textContent = 'Connecting';
+                connectLoader.classList.remove('hidden');
+                connectBtn.disabled = true;
+                
+                // Simulate Web3 connection (replace with actual Web3Modal logic)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulate successful connection
+                account = '0x742...1234'; // This would be the actual connected address
+                isConnected = true;
+                
+                updateConnectionStatus();
+                showSuccessModal();
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Connection failed:', error);
+                alert('Failed to connect wallet. Please try again.');
+                
+                // Reset button state
+                connectBtnText.textContent = 'Connect Wallet';
+                connectLoader.classList.add('hidden');
+                connectBtn.disabled = false;
+            }
+        }
+
+        // Connect Specific Wallet
+        async function connectSpecificWallet(walletType) {
+            console.log(`Connecting to ${walletType} wallet...`);
+            
+            // Add specific wallet connection logic here
+            switch(walletType) {
+                case 'metamask':
+                    if (typeof window.ethereum !== 'undefined') {
+                        try {
+                            const accounts = await window.ethereum.request({ 
+                                method: 'eth_requestAccounts' 
+                            });
+                            account = accounts[0];
+                            isConnected = true;
+                            updateConnectionStatus();
+                            showSuccessModal();
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 2000);
+                        } catch (error) {
+                            console.error('MetaMask connection failed:', error);
+                            alert('MetaMask connection failed. Please try again.');
+                        }
+                    } else {
+                        alert('MetaMask is not installed. Please install MetaMask and try again.');
+                        window.open('https://metamask.io/', '_blank');
+                    }
+                    break;
+                    
+                case 'walletconnect':
+                case 'coinbase':
+                case 'trust':
+                default:
+                    // Use Web3Modal for other wallets
+                    connectWallet();
+                    break;
+            }
+        }
+
+        // Update Connection Status
+        function updateConnectionStatus() {
+            const statusDiv = document.getElementById('connectionStatus');
+            const addressSpan = document.getElementById('connectedAddress');
+            
+            if (isConnected && account) {
+                statusDiv.classList.remove('hidden');
+                addressSpan.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
+            } else {
+                statusDiv.classList.add('hidden');
+            }
+        }
+
+        // Disconnect Wallet
+        async function disconnect() {
+            try {
+                if (web3Modal) {
+                    await web3Modal.disconnect();
+                }
+                
+                account = null;
+                isConnected = false;
+                provider = null;
+                
+                updateConnectionStatus();
+                
+                // Reset button state
+                const connectBtnText = document.getElementById('connectBtnText');
+                const connectLoader = document.getElementById('connectLoader');
+                connectBtnText.textContent = 'Connect Wallet';
+                connectLoader.classList.add('hidden');
+                document.getElementById('connectWalletBtn').disabled = false;
+                
+            } catch (error) {
+                console.error('Disconnect failed:', error);
+            }
+        }
+
+        // Show More Wallets
+        function showMoreWallets() {
+            // This would open Web3Modal with all supported wallets
+            connectWallet();
+        }
+
+        // Show Success Modal
         function showSuccessModal() {
             const modal = document.getElementById('successModal');
             const content = modal.querySelector('.glass-card');
@@ -286,6 +554,7 @@
             }, 100);
         }
 
+        // Hide Success Modal
         function hideSuccessModal() {
             const modal = document.getElementById('successModal');
             const content = modal.querySelector('.glass-card');
@@ -295,47 +564,33 @@
             modal.classList.remove('flex');
         }
 
-        // Handle form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Basic validation
-            if (!email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // Show loading state
-            loginBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 inline mr-2 animate-spin"></i>Signing In...';
-            loginBtn.disabled = true;
-            
-            // Simulate authentication
-            setTimeout(() => {
-                if (email === 'demo@hypermind.ai' && password === 'demo123') {
-                    // Success
-                    showSuccessModal();
-                    
-                    // Redirect after delay
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2000);
-                } else {
-                    // Error
-                    alert('Invalid credentials. Please use demo@hypermind.ai / demo123');
-                    loginBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5 inline mr-2"></i>Sign In to Dashboard';
-                    loginBtn.disabled = false;
-                    lucide.createIcons();
+        // Check if wallet is already connected on page load
+        async function checkExistingConnection() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_accounts' 
+                    });
+                    if (accounts.length > 0) {
+                        account = accounts[0];
+                        isConnected = true;
+                        updateConnectionStatus();
+                    }
+                } catch (error) {
+                    console.error('Failed to check existing connection:', error);
                 }
-            }, 1500);
-        });
+            }
+        }
 
-        // Initialize animations
+        // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
+            
+            // Initialize Web3Modal (commented out for demo)
+            // initWeb3Modal();
+            
+            // Check for existing connections
+            checkExistingConnection();
             
             // Add staggered animation to floating particles
             const particles = document.querySelectorAll('.floating-particle');
@@ -343,27 +598,48 @@
                 particle.style.animationDelay = `${index * 1000}ms`;
             });
             
-            // Add some interactive effects
-            const inputs = document.querySelectorAll('.input-field');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('transform', 'scale-105');
+            // Add wallet button hover effects
+            const walletButtons = document.querySelectorAll('.wallet-button');
+            walletButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
                 });
                 
-                input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('transform', 'scale-105');
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
                 });
             });
         });
 
+        // Listen for account changes
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length === 0) {
+                    disconnect();
+                } else {
+                    account = accounts[0];
+                    updateConnectionStatus();
+                }
+            });
+
+            window.ethereum.on('chainChanged', function (chainId) {
+                // Handle chain changes
+                console.log('Chain changed to:', chainId);
+            });
+        }
+
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Enter key to submit form
+            // Enter key to connect wallet
             if (e.key === 'Enter' && !e.shiftKey) {
-                const activeElement = document.activeElement;
-                if (activeElement.tagName === 'INPUT') {
-                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+                if (!isConnected) {
+                    connectWallet();
                 }
+            }
+            
+            // Escape key to close modal
+            if (e.key === 'Escape') {
+                hideSuccessModal();
             }
         });
     </script>

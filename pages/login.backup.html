@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HyperMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(55, 65, 81, 0.8);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(75, 85, 99, 0.8);
+            color: white;
+        }
+        .input-field {
+            background: rgba(55, 65, 81, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            outline: none;
+        }
+        .login-bg {
+            background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 50%),
+                       radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1), transparent 50%),
+                       linear-gradient(135deg, #000000, #111827);
+        }
+        .neural-pulse {
+            animation: neural-pulse 3s ease-in-out infinite;
+        }
+        @keyframes neural-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+            }
+        }
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        .floating-particle {
+            position: absolute;
+            background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(-10px) rotate(240deg); }
+        }
+        .success-animation {
+            animation: success-bounce 0.6s ease-out;
+        }
+        @keyframes success-bounce {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="login-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="floating-particle w-2 h-2 top-20 left-20 animation-delay-0"></div>
+    <div class="floating-particle w-3 h-3 top-40 right-32 animation-delay-1000"></div>
+    <div class="floating-particle w-1 h-1 bottom-32 left-40 animation-delay-2000"></div>
+    <div class="floating-particle w-2 h-2 bottom-20 right-20 animation-delay-3000"></div>
+
+    <div class="w-full max-w-md relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center mb-6">
+                <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center glow-purple neural-pulse">
+                    <i data-lucide="brain" class="w-10 h-10 text-white"></i>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold text-gradient mb-2">HyperMind AI</h1>
+            <p class="text-gray-300 text-lg">Neural Trading Intelligence</p>
+            <p class="text-gray-400 text-sm mt-2">Access your AI-powered trading dashboard</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-card p-8 rounded-2xl mb-6">
+            <form id="loginForm" class="space-y-6">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="mail" class="w-4 h-4 inline mr-2"></i>
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        class="input-field w-full px-4 py-3 rounded-xl" 
+                        placeholder="Enter your email address"
+                        value="demo@hypermind.ai"
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-300 mb-2">
+                        <i data-lucide="lock" class="w-4 h-4 inline mr-2"></i>
+                        Password
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required 
+                            class="input-field w-full px-4 py-3 rounded-xl pr-12" 
+                            placeholder="Enter your password"
+                            value="demo123"
+                        >
+                        <button 
+                            type="button" 
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                            onclick="togglePassword()"
+                        >
+                            <i data-lucide="eye" id="passwordToggle" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" class="rounded bg-gray-700 border-gray-600 text-purple-600">
+                        <span class="text-sm text-gray-300">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit" 
+                    class="w-full btn-primary py-4 rounded-xl font-semibold text-lg glow-purple"
+                    id="loginBtn"
+                >
+                    <i data-lucide="log-in" class="w-5 h-5 inline mr-2"></i>
+                    Sign In to Dashboard
+                </button>
+
+                <!-- Divider -->
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-600"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-gray-900 text-gray-400">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button" class="btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Google
+                    </button>
+                    <button type="button" class="btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.024-.105-.949-.199-2.403.041-3.439.219-.937 1.404-5.965 1.404-5.965s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.221.083.343-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.758-1.378l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                        </svg>
+                        GitHub
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="glass-card p-4 rounded-xl mb-6 border border-blue-500/30">
+            <div class="flex items-center space-x-2 mb-2">
+                <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
+                <span class="text-sm font-semibold text-blue-400">Demo Credentials</span>
+            </div>
+            <div class="text-xs text-gray-300 space-y-1">
+                <div>Email: <span class="text-blue-400">demo@hypermind.ai</span></div>
+                <div>Password: <span class="text-blue-400">demo123</span></div>
+            </div>
+        </div>
+
+        <!-- Sign Up Link -->
+        <div class="text-center">
+            <p class="text-gray-400">
+                Don't have an account? 
+                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
+                    Sign up for free
+                </a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-xs text-gray-500">
+            <p>© 2024 HyperMind AI. All rights reserved.</p>
+            <div class="flex justify-center space-x-4 mt-2">
+                <a href="#" class="hover:text-gray-300 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-300 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-gray-300 transition-colors">Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass-card p-8 rounded-2xl max-w-sm w-full mx-4 text-center success-animation" style="display: none;">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="check" class="w-8 h-8 text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Login Successful!</h3>
+            <p class="text-gray-300 mb-4">Redirecting to your AI dashboard...</p>
+            <div class="flex justify-center">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggle');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.setAttribute('data-lucide', 'eye');
+            }
+            
+            lucide.createIcons();
+        }
+
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            const content = modal.querySelector('.glass-card');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.style.display = 'block';
+                content.classList.add('success-animation');
+            }, 100);
+        }
+
+        function hideSuccessModal() {
+            const modal = document.getElementById('successModal');
+            const content = modal.querySelector('.glass-card');
+            
+            content.style.display = 'none';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Show loading state
+            loginBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 inline mr-2 animate-spin"></i>Signing In...';
+            loginBtn.disabled = true;
+            
+            // Simulate authentication
+            setTimeout(() => {
+                if (email === 'demo@hypermind.ai' && password === 'demo123') {
+                    // Success
+                    showSuccessModal();
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    // Error
+                    alert('Invalid credentials. Please use demo@hypermind.ai / demo123');
+                    loginBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5 inline mr-2"></i>Sign In to Dashboard';
+                    loginBtn.disabled = false;
+                    lucide.createIcons();
+                }
+            }, 1500);
+        });
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // Add staggered animation to floating particles
+            const particles = document.querySelectorAll('.floating-particle');
+            particles.forEach((particle, index) => {
+                particle.style.animationDelay = `${index * 1000}ms`;
+            });
+            
+            // Add some interactive effects
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('transform', 'scale-105');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('transform', 'scale-105');
+                });
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Enter key to submit form
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const activeElement = document.activeElement;
+                if (activeElement.tagName === 'INPUT') {
+                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+    </script>
+</body>
+</html>

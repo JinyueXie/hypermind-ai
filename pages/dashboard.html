@@ -9,6 +9,20 @@
    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
    <link rel="stylesheet" href="../assets/css/styles.css">
    <style>
+       .hyperion-glow {
+           animation: hyperionPulse 2s ease-in-out infinite;
+       }
+       @keyframes hyperionPulse {
+           0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+           50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+       }
+       .ai-brain-animation {
+           animation: brainPulse 1.5s ease-in-out infinite;
+       }
+       @keyframes brainPulse {
+           0%, 100% { opacity: 0.8; filter: brightness(1); }
+           50% { opacity: 1; filter: brightness(1.2); }
+       }
        .glass-card {
            background: rgba(17, 24, 39, 0.8);
            backdrop-filter: blur(16px);
@@ -159,16 +173,16 @@
        <div class="flex justify-between items-center">
            <!-- Logo & Title -->
            <div class="flex items-center space-x-4">
-               <a href="../index.html" class="flex items-center space-x-3 hover-lift">
-                   <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center glow-purple neural-pulse">
-                       <i data-lucide="brain" class="w-5 h-5 text-white"></i>
-                   </div>
-                   <div>
-                       <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
-                       <p class="text-sm text-purple-400">Neural Trading Terminal</p>
-                   </div>
-               </a>
-           </div>
+              <a href="../index.html" class="flex items-center space-x-3 hover-lift">
+                 <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center hyperion-glow">
+                     <i data-lucide="brain" class="w-5 h-5 text-white ai-brain-animation"></i>
+                 </div>
+                 <div>
+                     <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                     <p class="text-sm text-purple-400">Powered by Hyperion Alith</p>
+                 </div>
+              </a>
+           </div>           
            
            <!-- Navigation -->
            <div class="hidden md:flex items-center space-x-6">

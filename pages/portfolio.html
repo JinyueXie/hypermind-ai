@@ -3,141 +3,876 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - HyperMind AI</title>
+    <title>Portfolio Performance - HyperMind AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { 
-            background: linear-gradient(135deg, #0c1426 0%, #1a1f3a 50%, #2d1b69 100%);
-            background-attachment: fixed;
+        .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .portfolio-bg {
-            background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1920&h=1080&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-blend-mode: overlay;
+        .glass-nav {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .performance-bg {
-            background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=600&fit=crop');
-            background-size: cover;
-            background-blend-mode: overlay;
+        .text-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        .glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+        .glow-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        .glow-yellow {
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+        .glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(55, 65, 81, 0.8);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(75, 85, 99, 0.8);
+            color: white;
+        }
+        .nav-item {
+            color: #9ca3af;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .nav-item:hover {
+            color: white;
+            background: rgba(139, 92, 246, 0.2);
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: white;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        }
+        .sidebar {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+        }
+        .neural-activity {
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+            animation: neuralPulse 3s ease-in-out infinite;
+        }
+        @keyframes neuralPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); }
+        }
+        .alith-thinking {
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981, #3b82f6, #8b5cf6);
+            background-size: 200% 100%;
+            animation: alithThought 2s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @keyframes alithThought {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hyperion-glow {
+            animation: hyperionPulse 2s ease-in-out infinite;
+        }
+        @keyframes hyperionPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+        }
+        .ai-brain-animation {
+            animation: brainPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes brainPulse {
+            0%, 100% { opacity: 0.8; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.2); }
+        }
+        .allocation-bar {
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(55, 65, 81, 0.5);
+        }
+        .performance-chart {
+            background: rgba(17, 24, 39, 0.8);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        .asset-row {
+            transition: all 0.3s ease;
+        }
+        .asset-row:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateX(4px);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-black text-white min-h-screen">
     <!-- Header -->
-    <nav class="fixed w-full top-0 z-50 glass-nav">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
-                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+    <header class="glass-nav fixed w-full top-0 z-50 p-4">
+        <div class="flex justify-between items-center">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-4">
+                <a href="../index.html" class="flex items-center space-x-3 hover-lift">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center hyperion-glow">
+                        <i data-lucide="brain" class="w-5 h-5 text-white ai-brain-animation"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">HyperMind AI</h1>
-                        <p class="text-xs text-gray-400">Portfolio Analytics</p>
+                        <h1 class="text-xl font-bold text-gradient">HyperMind AI</h1>
+                        <p class="text-sm text-purple-400">Portfolio Analytics</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                <a href="signals.html" class="text-gray-300 hover:text-white transition-colors">AI Signals</a>
+                <a href="portfolio.html" class="text-purple-400 font-semibold">Portfolio</a>
+                <a href="login.html" class="text-gray-300 hover:text-white transition-colors">
+                    <i data-lucide="user" class="w-4 h-4 inline mr-1"></i>Account
+                </a>
+            </div>
+            
+            <!-- Portfolio Summary -->
+            <div class="flex items-center space-x-6">
+                <!-- AI Status -->
+                <div class="glass-card px-4 py-2 rounded-xl glow-green neural-activity">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></div>
+                        <div>
+                            <div class="text-sm font-semibold text-green-400">Alith AI: ACTIVE</div>
+                            <div class="text-xs alith-thinking" id="alithStatus">Portfolio Optimization...</div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6">
-                    <button onclick="navigateTo('dashboard')" class="text-gray-300 hover:text-white transition-colors">Dashboard</button>
-                    <button onclick="navigateTo('signals')" class="text-gray-300 hover:text-white transition-colors">AI Signals</button>
-                    <button class="text-purple-400 font-semibold">Portfolio</button>
+                
+                <!-- Portfolio Value -->
+                <div class="text-right">
+                    <div class="text-sm text-gray-400">Total Portfolio</div>
+                    <div class="text-2xl font-bold text-gradient" id="portfolioValue">$127,834.92</div>
+                    <div class="text-sm text-green-400 flex items-center justify-end">
+                        <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>
+                        <span id="portfolioGain">+$8,247.34 (6.89%)</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <div class="pt-24 min-h-screen">
-        <!-- Portfolio Header -->
-        <div class="portfolio-bg relative">
-            <div class="absolute inset-0 bg-black/60"></div>
-            <div class="relative container mx-auto px-6 py-16">
-                <div class="text-center">
-                    <h1 class="text-5xl font-bold mb-4">Portfolio Performance</h1>
-                    <p class="text-xl text-gray-300 mb-8">AI-Powered Asset Management Dashboard</p>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                        <div class="glass-card p-6 text-center">
-                            <div class="text-3xl font-bold text-green-400" id="total-value">$127,834.92</div>
+    <div class="flex pt-20">
+        <!-- Enhanced Sidebar -->
+        <aside class="sidebar w-64 min-h-screen p-6 border-r border-white/10">
+            <nav class="space-y-3">
+                <a href="dashboard.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="signals.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    <span>AI Signals</span>
+                </a>
+                <a href="portfolio.html" class="nav-item active flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold">
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                    <span>Portfolio</span>
+                </a>
+                <a href="../index.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Home</span>
+                </a>
+                <a href="login.html" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Account</span>
+                </a>
+            </nav>
+            
+            <!-- Portfolio Actions -->
+            <div class="mt-8 space-y-4">
+                <h3 class="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-4 flex items-center">
+                    <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                    Portfolio Actions
+                </h3>
+                
+                <button class="w-full btn-primary py-3 rounded-xl font-semibold hover-lift" onclick="rebalancePortfolio()">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                    AI Rebalance
+                </button>
+                
+                <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift" onclick="optimizeAllocations()">
+                    <i data-lucide="brain" class="w-4 h-4 inline mr-2"></i>
+                    Optimize
+                </button>
+                
+                <button class="w-full btn-secondary py-3 rounded-xl font-semibold hover-lift" onclick="exportData()">
+                    <i data-lucide="download" class="w-4 h-4 inline mr-2"></i>
+                    Export Data
+                </button>
+            </div>
+            
+            <!-- Risk Analysis -->
+            <div class="mt-8 glass-card p-4 rounded-xl">
+                <h4 class="text-sm font-semibold text-purple-400 mb-3 flex items-center">
+                    <i data-lucide="shield" class="w-4 h-4 mr-2"></i>
+                    AI Risk Analysis
+                </h4>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-300">Portfolio Risk</span>
+                        <span class="text-sm font-semibold text-yellow-400">Medium</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-300">Sharpe Ratio</span>
+                        <span class="text-sm font-semibold text-blue-400">2.34</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-300">Max Drawdown</span>
+                        <span class="text-sm font-semibold text-red-400">-8.2%</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-300">Volatility</span>
+                        <span class="text-sm font-semibold text-purple-400">12.7%</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 space-y-6">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-gradient mb-2">Portfolio Performance</h1>
+                    <p class="text-gray-300 text-lg">AI-Powered Asset Management Dashboard</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select class="glass-card px-4 py-2 rounded-xl bg-transparent text-white border-none" id="timeframe">
+                        <option value="24h">24 Hours</option>
+                        <option value="7d">7 Days</option>
+                        <option value="30d" selected>30 Days</option>
+                        <option value="90d">90 Days</option>
+                        <option value="1y">1 Year</option>
+                    </select>
+                    <button class="btn-primary px-6 py-2 rounded-xl font-semibold hover-lift" onclick="refreshPortfolio()">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Portfolio Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass-card p-6 hover-lift glow-green">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-green-400" id="totalValue">$127,834.92</div>
                             <div class="text-sm text-gray-400">Total Portfolio</div>
+                            <div class="text-xs text-green-300 mt-1">Last updated: 2 min ago</div>
                         </div>
-                        <div class="glass-card p-6 text-center">
-                            <div class="text-3xl font-bold text-blue-400" id="daily-pnl">+$8,247</div>
+                        <i data-lucide="dollar-sign" class="w-8 h-8 text-green-400"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-blue">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-blue-400" id="dailyPnL">+$8,247</div>
                             <div class="text-sm text-gray-400">24h P&L</div>
+                            <div class="text-xs text-blue-300 mt-1">+6.89% gain</div>
                         </div>
-                        <div class="glass-card p-6 text-center">
-                            <div class="text-3xl font-bold text-purple-400">94.7%</div>
-                            <div class="text-sm text-gray-400">AI Win Rate</div>
+                        <i data-lucide="trending-up" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-purple">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-purple-400" id="monthlyReturn">+34.7%</div>
+                            <div class="text-sm text-gray-400">30D Return</div>
+                            <div class="text-xs text-purple-300 mt-1">AI-optimized</div>
                         </div>
-                        <div class="glass-card p-6 text-center">
-                            <div class="text-3xl font-bold text-yellow-400">17</div>
+                        <i data-lucide="brain" class="w-8 h-8 text-purple-400 ai-brain-animation"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover-lift glow-yellow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-400" id="activePositions">17</div>
                             <div class="text-sm text-gray-400">Active Positions</div>
+                            <div class="text-xs text-yellow-300 mt-1">5 new this week</div>
+                        </div>
+                        <i data-lucide="layers" class="w-8 h-8 text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Performance Chart -->
+            <div class="glass-card p-6 hover-lift">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gradient">Performance Chart</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            <span class="text-sm text-gray-400">Portfolio Value</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span class="text-sm text-gray-400">Benchmark</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="performance-chart">
+                    <canvas id="performanceChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Current Holdings & Asset Allocation -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Current Holdings -->
+                <div class="glass-card p-6 hover-lift">
+                    <h2 class="text-2xl font-bold text-gradient mb-6 flex items-center">
+                        <i data-lucide="wallet" class="w-6 h-6 mr-3"></i>
+                        Current Holdings
+                    </h2>
+                    <div class="space-y-4" id="holdingsContainer">
+                        <!-- ETH -->
+                        <div class="asset-row flex items-center justify-between p-4 rounded-xl glass-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">ETH</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-white">Ethereum</div>
+                                    <div class="text-sm text-gray-400">15.47 ETH</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-white">$45,892.34</div>
+                                <div class="text-sm text-green-400">+$2,134.56 (+4.87%)</div>
+                            </div>
+                        </div>
+
+                        <!-- BTC -->
+                        <div class="asset-row flex items-center justify-between p-4 rounded-xl glass-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">BTC</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-white">Bitcoin</div>
+                                    <div class="text-sm text-gray-400">0.89 BTC</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-white">$39,954.12</div>
+                                <div class="text-sm text-green-400">+$1,876.23 (+4.92%)</div>
+                            </div>
+                        </div>
+
+                        <!-- USDC -->
+                        <div class="asset-row flex items-center justify-between p-4 rounded-xl glass-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">USDC</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-white">USD Coin</div>
+                                    <div class="text-sm text-gray-400">25,847.89 USDC</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-white">$25,847.89</div>
+                                <div class="text-sm text-gray-400">+$0.00 (0.00%)</div>
+                            </div>
+                        </div>
+
+                        <!-- SOL -->
+                        <div class="asset-row flex items-center justify-between p-4 rounded-xl glass-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-sm">SOL</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-white">Solana</div>
+                                    <div class="text-sm text-gray-400">187.45 SOL</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-white">$16,140.67</div>
+                                <div class="text-sm text-red-400">-$234.12 (-1.43%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Asset Allocation -->
+                <div class="glass-card p-6 hover-lift">
+                    <h2 class="text-2xl font-bold text-gradient mb-6 flex items-center">
+                        <i data-lucide="pie-chart" class="w-6 h-6 mr-3"></i>
+                        Asset Allocation
+                    </h2>
+                    <div class="space-y-6">
+                        <!-- ETH Allocation -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-white font-semibold">Ethereum (ETH)</span>
+                                <span class="text-blue-400 font-bold">35.9%</span>
+                            </div>
+                            <div class="allocation-bar">
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-400 h-full" style="width: 35.9%"></div>
+                            </div>
+                        </div>
+
+                        <!-- BTC Allocation -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-white font-semibold">Bitcoin (BTC)</span>
+                                <span class="text-orange-400 font-bold">31.3%</span>
+                            </div>
+                            <div class="allocation-bar">
+                                <div class="bg-gradient-to-r from-orange-500 to-orange-400 h-full" style="width: 31.3%"></div>
+                            </div>
+                        </div>
+
+                        <!-- USDC Allocation -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-white font-semibold">USD Coin (USDC)</span>
+                                <span class="text-green-400 font-bold">20.2%</span>
+                            </div>
+                            <div class="allocation-bar">
+                                <div class="bg-gradient-to-r from-green-500 to-green-400 h-full" style="width: 20.2%"></div>
+                            </div>
+                        </div>
+
+                        <!-- SOL Allocation -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-white font-semibold">Solana (SOL)</span>
+                                <span class="text-purple-400 font-bold">12.6%</span>
+                            </div>
+                            <div class="allocation-bar">
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-400 h-full" style="width: 12.6%"></div>
+                            </div>
+                        </div>
+
+                        <!-- AI Recommendation -->
+                        <div class="mt-6 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <i data-lucide="brain" class="w-5 h-5 text-purple-400 ai-brain-animation"></i>
+                                <span class="text-purple-400 font-semibold">Alith AI Recommendation</span>
+                            </div>
+                            <p class="text-sm text-gray-300">
+                                Consider rebalancing towards more ETH exposure. Current market conditions favor layer-1 tokens with strong ecosystem growth.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Portfolio Details -->
-        <div class="container mx-auto px-6 py-12">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Holdings -->
-                <div class="lg:col-span-2">
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-bold mb-6">Current Holdings</h2>
-                        <div class="space-y-4" id="portfolio-holdings">
-                            <!-- Holdings will be populated by JS -->
-                        </div>
+            <!-- Performance Metrics -->
+            <div class="glass-card p-6 hover-lift">
+                <h2 class="text-2xl font-bold text-gradient mb-6 flex items-center">
+                    <i data-lucide="trending-up" class="w-6 h-6 mr-3"></i>
+                    Performance Metrics
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-green-400 mb-2">+23.7%</div>
+                        <div class="text-sm text-gray-400">30D Return</div>
+                        <div class="text-xs text-green-300 mt-1">Outperforming S&P by 15.2%</div>
                     </div>
-                </div>
-
-                <!-- AI Insights -->
-                <div class="space-y-6">
-                    <div class="glass-card p-6 rounded-xl">
-                        <h3 class="text-xl font-bold mb-4">AI Risk Analysis</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span>Portfolio Risk</span>
-                                <span class="text-yellow-400 font-semibold">Medium</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>Sharpe Ratio</span>
-                                <span class="text-green-400 font-semibold">2.34</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>Max Drawdown</span>
-                                <span class="text-red-400 font-semibold">-8.2%</span>
-                            </div>
-                        </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-blue-400 mb-2">+57.9%</div>
+                        <div class="text-sm text-gray-400">90D Return</div>
+                        <div class="text-xs text-blue-300 mt-1">AI-optimized growth</div>
                     </div>
-
-                    <div class="glass-card p-6 rounded-xl performance-bg">
-                        <div class="absolute inset-0 bg-black/70 rounded-xl"></div>
-                        <div class="relative">
-                            <h3 class="text-xl font-bold mb-4">Performance Metrics</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between">
-                                    <span>30D Return</span>
-                                    <span class="text-green-400">+23.7%</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>90D Return</span>
-                                    <span class="text-green-400">+57.9%</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>AI Contribution</span>
-                                    <span class="text-purple-400">+34.2%</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-400 mb-2">+342%</div>
+                        <div class="text-sm text-gray-400">AI Contribution</div>
+                        <div class="text-xs text-purple-300 mt-1">Alith enhancement factor</div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/portfolio.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Portfolio data
+        const portfolioData = {
+            totalValue: 127834.92,
+            dailyChange: 8247.34,
+            dailyChangePercent: 6.89,
+            monthlyReturn: 34.7,
+            activePositions: 17
+        };
+
+        // Alith status messages
+        const alithMessages = [
+            "Portfolio Optimization...",
+            "Risk Assessment Active...",
+            "Rebalancing Analysis...",
+            "Market Correlation Study...",
+            "Asset Performance Review...",
+            "Yield Optimization..."
+        ];
+        let messageIndex = 0;
+
+        // Initialize performance chart
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // Generate sample data
+            const days = 30;
+            const portfolioData = [];
+            const benchmarkData = [];
+            const labels = [];
+            
+            let portfolioValue = 95000;
+            let benchmarkValue = 95000;
+            
+            for (let i = 0; i < days; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - (days - i));
+                labels.push(date.toLocaleDateString());
+                
+                // Portfolio grows faster with more volatility
+                portfolioValue += (Math.random() - 0.3) * 2000 + 1200;
+                benchmarkValue += (Math.random() - 0.4) * 800 + 400;
+                
+                portfolioData.push(portfolioValue);
+                benchmarkData.push(benchmarkValue);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: portfolioData,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Benchmark',
+                        data: benchmarkData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#d1d5db'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9ca3af'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9ca3af',
+                                callback: function(value) {
+                                    return '
+                 + (value / 1000).toFixed(0) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Portfolio management functions
+        function rebalancePortfolio() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Rebalancing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Rebalanced';
+                btn.classList.add('bg-green-500');
+                
+                showNotification(
+                    'Portfolio Rebalanced',
+                    'Alith AI has optimized your asset allocation',
+                    'success'
+                );
+                
+                // Update some values
+                updatePortfolioMetrics();
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('bg-green-500');
+                }, 3000);
+            }, 2500);
+        }
+
+        function optimizeAllocations() {
+            showNotification(
+                'Optimization Started',
+                'Alith AI is analyzing optimal allocations...',
+                'info'
+            );
+            
+            setTimeout(() => {
+                showNotification(
+                    'Optimization Complete',
+                    'Recommended adjustments available in portfolio view',
+                    'success'
+                );
+            }, 3000);
+        }
+
+        function exportData() {
+            const data = {
+                portfolio: portfolioData,
+                timestamp: new Date().toISOString(),
+                holdings: [
+                    { symbol: 'ETH', amount: 15.47, value: 45892.34 },
+                    { symbol: 'BTC', amount: 0.89, value: 39954.12 },
+                    { symbol: 'USDC', amount: 25847.89, value: 25847.89 },
+                    { symbol: 'SOL', amount: 187.45, value: 16140.67 }
+                ]
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hypermind-portfolio-export.json';
+            a.click();
+            
+            showNotification(
+                'Data Exported',
+                'Portfolio data downloaded successfully',
+                'success'
+            );
+        }
+
+        function refreshPortfolio() {
+            const btn = event.target;
+            const icon = btn.querySelector('i');
+            
+            if (icon) {
+                icon.classList.add('animate-spin');
+            }
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                updatePortfolioMetrics();
+                updateHoldings();
+                
+                if (icon) {
+                    icon.classList.remove('animate-spin');
+                }
+                btn.disabled = false;
+                
+                showNotification(
+                    'Portfolio Updated',
+                    'Latest market data synchronized',
+                    'success'
+                );
+            }, 2000);
+        }
+
+        function updatePortfolioMetrics() {
+            const totalValueEl = document.getElementById('totalValue');
+            const dailyPnLEl = document.getElementById('dailyPnL');
+            const monthlyReturnEl = document.getElementById('monthlyReturn');
+            const activePositionsEl = document.getElementById('activePositions');
+            
+            // Simulate slight changes
+            const newValue = portfolioData.totalValue + (Math.random() - 0.5) * 2000;
+            const newDailyChange = portfolioData.dailyChange + (Math.random() - 0.5) * 500;
+            const newMonthlyReturn = portfolioData.monthlyReturn + (Math.random() - 0.5) * 2;
+            
+            if (totalValueEl) totalValueEl.textContent = '
+                 + newValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (dailyPnLEl) dailyPnLEl.textContent = '+
+                 + newDailyChange.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            if (monthlyReturnEl) monthlyReturnEl.textContent = '+' + newMonthlyReturn.toFixed(1) + '%';
+            if (activePositionsEl) activePositionsEl.textContent = portfolioData.activePositions + Math.floor(Math.random() * 3);
+            
+            // Update header portfolio value too
+            const headerValueEl = document.getElementById('portfolioValue');
+            if (headerValueEl) headerValueEl.textContent = '
+                 + newValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updateHoldings() {
+            // Add subtle animations to holdings
+            const assetRows = document.querySelectorAll('.asset-row');
+            assetRows.forEach((row, index) => {
+                setTimeout(() => {
+                    row.style.transform = 'translateX(-10px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(0)';
+                    }, 200);
+                }, index * 100);
+            });
+        }
+
+        function updateAlithStatus() {
+            const alithStatusEl = document.getElementById('alithStatus');
+            if (alithStatusEl) {
+                alithStatusEl.textContent = alithMessages[messageIndex];
+                messageIndex = (messageIndex + 1) % alithMessages.length;
+            }
+        }
+
+        function showNotification(title, message, type) {
+            const colors = {
+                success: 'green',
+                info: 'blue',
+                warning: 'yellow',
+                error: 'red'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-6 bg-${colors[type]}-500/20 border border-${colors[type]}-500/50 rounded-xl p-4 max-w-sm z-50 transform translate-x-full transition-transform duration-300`;
+            notification.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <i data-lucide="brain" class="w-5 h-5 text-${colors[type]}-400 mt-0.5 ai-brain-animation"></i>
+                    <div>
+                        <div class="font-semibold text-${colors[type]}-400">${title}</div>
+                        <div class="text-sm text-gray-300 mt-1">${message}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Initialize chart
+            initializeChart();
+            
+            // Start Alith status updates
+            updateAlithStatus();
+            setInterval(updateAlithStatus, 5000);
+            
+            // Periodic portfolio updates
+            setInterval(updatePortfolioMetrics, 30000);
+            
+            // Show welcome message
+            setTimeout(() => {
+                showNotification(
+                    'Portfolio Loaded',
+                    'Alith AI portfolio analytics ready',
+                    'success'
+                );
+            }, 1500);
+        });
+
+        // Handle timeframe changes
+        document.getElementById('timeframe').addEventListener('change', function() {
+            const timeframe = this.value;
+            showNotification(
+                'Timeframe Updated',
+                `Portfolio view changed to ${timeframe}`,
+                'info'
+            );
+            
+            // In a real app, this would update the chart with new data
+            setTimeout(() => {
+                updatePortfolioMetrics();
+            }, 1000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshPortfolio();
+                        break;
+                    case '1':
+                        e.preventDefault();
+                        rebalancePortfolio();
+                        break;
+                }
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.warn('Non-critical error handled:', e.message);
+        });
+    </script>
 </body>
 </html>
