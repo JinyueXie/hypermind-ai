@@ -5,35 +5,34 @@
 // 🔥 YOUR DEPLOYED CONTRACT ADDRESS 🔥
 const CONTRACT_ADDRESS = '0x8Df0c84d9E56ADCf0C8e4555839127cC3C5ef48f';
 
-// Fixed Hyperion Testnet Configuration
+// ⚡ CORRECT Hyperion Testnet Configuration for Metis Hackathon
 const HYPERION_TESTNET_CONFIG = {
-    chainId: '0x7D1', // 2001 in decimal
+    chainId: '0x12BB', // 4795 in decimal - MATCHES YOUR METAMASK
     chainName: 'Hyperion Testnet',
     nativeCurrency: {
-        name: 'HYP', // Changed from METIS to HYP
-        symbol: 'HYP', // Changed from METIS to HYP  
+        name: 'HYP',
+        symbol: 'HYP',
+        decimals: 18
+    },
+    rpcUrls: [
+        'https://testnet-rpc.hyperion.network', // MATCHES YOUR METAMASK
+        'https://hyperion-testnet.metis.io'     // Backup RPC
+    ],
+    blockExplorerUrls: ['https://testnet-explorer.hyperion.network'] // MATCHES YOUR METAMASK
+};
+
+// Alternative config in case the primary fails
+const HYPERION_TESTNET_CONFIG_ALT = {
+    chainId: '0x7D1', // 2001 in decimal - Original Metis config
+    chainName: 'Hyperion Testnet (Metis)',
+    nativeCurrency: {
+        name: 'METIS',
+        symbol: 'METIS',
         decimals: 18
     },
     rpcUrls: ['https://hyperion-testnet.metis.io'],
     blockExplorerUrls: ['https://hyperion-explorer.metis.io']
 };
-
-// Alternative config if the above doesn't work
-const HYPERION_TESTNET_CONFIG_ALT = {
-    chainId: '0x7D1',
-    chainName: 'Hyperion Testnet',
-    nativeCurrency: {
-        name: 'Hyperion',
-        symbol: 'HYP',
-        decimals: 18
-    },
-    rpcUrls: [
-        'https://hyperion-testnet.metis.io',
-        'https://rpc.hyperion-testnet.metis.io' // Alternative RPC
-    ],
-    blockExplorerUrls: ['https://hyperion-explorer.metis.io']
-};
-
 const CONTRACT_ABI = [
 		{
 			"inputs": [],
@@ -866,9 +865,462 @@ const CONTRACT_ABI = [
 			"type": "function"
 		}
 	]
+// =========================================
+// HyperMind AI - Metis Hackathon Configuration
+// =========================================
 
-/ =========================================
-// Enhanced Wallet Connection Class
+// 🔥 YOUR DEPLOYED CONTRACT ADDRESS 🔥
+const CONTRACT_ADDRESS = '0x8Df0c84d9E56ADCf0C8e4555839127cC3C5ef48f';
+
+// ⚡ CORRECT Hyperion Testnet Configuration for Metis Hackathon
+const HYPERION_TESTNET_CONFIG = {
+    chainId: '0x12BB', // 4795 in decimal - MATCHES YOUR METAMASK
+    chainName: 'Hyperion Testnet',
+    nativeCurrency: {
+        name: 'HYP',
+        symbol: 'HYP',
+        decimals: 18
+    },
+    rpcUrls: [
+        'https://testnet-rpc.hyperion.network', // MATCHES YOUR METAMASK
+        'https://hyperion-testnet.metis.io'     // Backup RPC
+    ],
+    blockExplorerUrls: ['https://testnet-explorer.hyperion.network'] // MATCHES YOUR METAMASK
+};
+
+// Alternative config in case the primary fails
+const HYPERION_TESTNET_CONFIG_ALT = {
+    chainId: '0x7D1', // 2001 in decimal - Original Metis config
+    chainName: 'Hyperion Testnet (Metis)',
+    nativeCurrency: {
+        name: 'METIS',
+        symbol: 'METIS',
+        decimals: 18
+    },
+    rpcUrls: ['https://hyperion-testnet.metis.io'],
+    blockExplorerUrls: ['https://hyperion-explorer.metis.io']
+};
+
+// Contract ABI (keeping the same)
+const CONTRACT_ABI = [
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "trader",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "pair",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "signalType",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "confidence",
+                "type": "uint256"
+            }
+        ],
+        "name": "SignalCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "trader",
+                "type": "address"
+            }
+        ],
+        "name": "SignalExecuted",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_pair",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_signalType",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_entryPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_targetPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_stopLoss",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_confidence",
+                "type": "uint256"
+            }
+        ],
+        "name": "createSignal",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_signalId",
+                "type": "uint256"
+            }
+        ],
+        "name": "executeSignal",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "getPortfolio",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "totalValue",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalPnL",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalTrades",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "activeTrades",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_signalId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSignal",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "pair",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "signalType",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "entryPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "targetPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "stopLoss",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "confidence",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "trader",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "executed",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getSignalCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "getUserSignals",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "portfolios",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "totalValue",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalPnL",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalTrades",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "activeTrades",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "signalCounter",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "signals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "pair",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "signalType",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "entryPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "targetPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "stopLoss",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "confidence",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "trader",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "executed",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_trader",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_totalValue",
+                "type": "uint256"
+            }
+        ],
+        "name": "updatePortfolioValue",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "userSignals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
+
+// =========================================
+// Enhanced Wallet Connection for Metis Hackathon
 // =========================================
 class WalletConnection {
     constructor() {
@@ -877,20 +1329,20 @@ class WalletConnection {
         this.contract = null;
         this.userAddress = null;
         this.isConnected = false;
-        this.currentChainId = null;
+        this.networkConfig = HYPERION_TESTNET_CONFIG; // Start with the correct config
     }
 
     async connectWallet() {
         try {
             if (!window.ethereum) {
-                throw new Error('MetaMask not detected. Please install MetaMask to use HyperMind AI.');
+                throw new Error('🦊 MetaMask not detected! Please install MetaMask for Metis Hackathon.');
             }
 
-            console.log('🔗 Connecting to wallet...');
+            console.log('🚀 Connecting to Metis Hyperion Testnet...');
 
-            // Check current chain
-            this.currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-            console.log('Current chain ID:', this.currentChainId);
+            // Check current network
+            const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+            console.log('Current Chain ID:', currentChainId);
 
             // Request account access
             const accounts = await window.ethereum.request({
@@ -898,43 +1350,45 @@ class WalletConnection {
             });
 
             if (accounts.length === 0) {
-                throw new Error('No accounts found. Please unlock MetaMask and try again.');
+                throw new Error('No accounts found. Please unlock MetaMask.');
             }
 
-            console.log('📝 Accounts found:', accounts);
-
-            // Try to switch to Hyperion Testnet
-            await this.switchToHyperionTestnet();
+            // Try to connect to the network that matches your MetaMask
+            await this.ensureCorrectNetwork();
 
             // Setup provider and signer
             this.provider = new ethers.providers.Web3Provider(window.ethereum);
             this.signer = this.provider.getSigner();
             this.userAddress = accounts[0];
-            this.isConnected = true;
 
-            // Initialize contract
-            this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.signer);
+            // Verify network
+            const network = await this.provider.getNetwork();
+            console.log('🌐 Connected to network:', network);
 
-            console.log('🚀 Wallet connected successfully!');
-            console.log('👤 Address:', this.userAddress);
-            console.log('📄 Contract:', CONTRACT_ADDRESS);
-            console.log('⛓️ Chain ID:', await this.provider.getNetwork().then(n => n.chainId));
-            
+            // Check if we're on the right network (either 4795 or 2001)
+            if (network.chainId === 4795 || network.chainId === 2001) {
+                this.isConnected = true;
+                this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.signer);
+                console.log('✅ Successfully connected to Hyperion Testnet!');
+                console.log('📄 Contract:', CONTRACT_ADDRESS);
+                console.log('👤 Address:', this.userAddress);
+            } else {
+                throw new Error(`❌ Wrong network! Please switch to Hyperion Testnet (Chain ID: 4795 or 2001)`);
+            }
+
             this.updateUI();
-            
-            // Setup event listeners for account/chain changes
             this.setupEventListeners();
-            
+
             return {
                 success: true,
                 address: this.userAddress,
-                contractAddress: CONTRACT_ADDRESS,
-                chainId: await this.provider.getNetwork().then(n => n.chainId)
+                chainId: network.chainId,
+                networkName: network.name
             };
 
         } catch (error) {
             console.error('❌ Wallet connection failed:', error);
-            this.isConnected = false;
+            this.showError(error.message);
             return {
                 success: false,
                 error: error.message
@@ -942,147 +1396,72 @@ class WalletConnection {
         }
     }
 
-    async switchToHyperionTestnet() {
+    async ensureCorrectNetwork() {
         try {
-            console.log('🔄 Switching to Hyperion Testnet...');
+            const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
             
-            // Try to switch first
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: HYPERION_TESTNET_CONFIG.chainId }]
-            });
-            
-            console.log('✅ Successfully switched to Hyperion Testnet');
-            
-        } catch (switchError) {
-            console.log('⚠️ Switch failed, trying to add network...');
-            
-            if (switchError.code === 4902) {
-                // Network not added yet, try to add it
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [HYPERION_TESTNET_CONFIG]
-                    });
-                    console.log('✅ Hyperion Testnet added successfully');
-                } catch (addError) {
-                    console.log('⚠️ Primary config failed, trying alternative...');
-                    // Try alternative config
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [HYPERION_TESTNET_CONFIG_ALT]
-                    });
-                    console.log('✅ Hyperion Testnet added with alternative config');
-                }
-            } else {
-                throw switchError;
+            // If already on correct network, return
+            if (currentChainId === '0x12BB' || currentChainId === '0x7D1') {
+                console.log('✅ Already on correct Hyperion network');
+                return;
             }
-        }
-    }
 
-    setupEventListeners() {
-        if (window.ethereum) {
-            // Handle account changes
-            window.ethereum.on('accountsChanged', (accounts) => {
-                console.log('👤 Account changed:', accounts);
-                if (accounts.length === 0) {
-                    this.disconnect();
+            // Try to switch to the network that matches your MetaMask (4795)
+            console.log('🔄 Switching to Hyperion Testnet (Chain ID: 4795)...');
+            
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x12BB' }] // 4795 in hex
+                });
+                console.log('✅ Switched to Hyperion Testnet (4795)');
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    // Network not added, try to add it
+                    console.log('📡 Adding Hyperion Testnet to MetaMask...');
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [this.networkConfig]
+                    });
+                    console.log('✅ Hyperion Testnet added successfully!');
                 } else {
-                    this.userAddress = accounts[0];
-                    this.updateUI();
+                    throw switchError;
                 }
-            });
-
-            // Handle chain changes
-            window.ethereum.on('chainChanged', (chainId) => {
-                console.log('⛓️ Chain changed:', chainId);
-                this.currentChainId = chainId;
-                // Reload page to ensure clean state
-                window.location.reload();
-            });
-
-            // Handle disconnect
-            window.ethereum.on('disconnect', () => {
-                console.log('🔌 Wallet disconnected');
-                this.disconnect();
-            });
-        }
-    }
-
-    disconnect() {
-        this.provider = null;
-        this.signer = null;
-        this.contract = null;
-        this.userAddress = null;
-        this.isConnected = false;
-        this.currentChainId = null;
-        this.updateUI();
-    }
-
-    updateUI() {
-        const connectButton = document.getElementById('connect-wallet-btn');
-        const addressElement = document.getElementById('wallet-address');
-        
-        if (this.isConnected && this.userAddress) {
-            if (connectButton) {
-                connectButton.textContent = '✅ Connected';
-                connectButton.style.background = 'linear-gradient(135deg, #00ff88, #00cc69)';
-                connectButton.disabled = true;
             }
-            if (addressElement) {
-                addressElement.textContent = `${this.userAddress.slice(0, 6)}...${this.userAddress.slice(-4)}`;
+
+        } catch (error) {
+            console.error('❌ Network setup failed:', error);
+            // Try alternative config
+            console.log('🔄 Trying alternative network config...');
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [HYPERION_TESTNET_CONFIG_ALT]
+                });
+            } catch (altError) {
+                throw new Error('Unable to add Hyperion Testnet. Please add it manually in MetaMask.');
             }
-            
-            // Update any status indicators
-            const statusElements = document.querySelectorAll('.wallet-status');
-            statusElements.forEach(el => {
-                el.textContent = 'Connected to Hyperion';
-                el.className = 'wallet-status text-green-400';
-            });
-            
-        } else {
-            if (connectButton) {
-                connectButton.textContent = 'Connect Wallet';
-                connectButton.style.background = 'linear-gradient(135deg, #8b5cf6, #3b82f6)';
-                connectButton.disabled = false;
-            }
-            if (addressElement) {
-                addressElement.textContent = 'Not Connected';
-            }
-            
-            // Update status indicators
-            const statusElements = document.querySelectorAll('.wallet-status');
-            statusElements.forEach(el => {
-                el.textContent = 'Wallet Not Connected';
-                el.className = 'wallet-status text-red-400';
-            });
         }
     }
 
     async createSignal(signalData) {
         if (!this.isConnected || !this.contract) {
-            throw new Error('Wallet not connected. Please connect your wallet first.');
+            throw new Error('❌ Wallet not connected to Hyperion Testnet');
         }
 
         try {
-            console.log('🤖 Creating signal on Hyperion blockchain:', signalData);
+            console.log('🤖 Creating AI signal on Hyperion blockchain:', signalData);
 
             // Validate network
             const network = await this.provider.getNetwork();
-            if (network.chainId !== 2001) {
-                throw new Error('Please switch to Hyperion Testnet (Chain ID: 2001)');
+            if (network.chainId !== 4795 && network.chainId !== 2001) {
+                throw new Error('❌ Please switch to Hyperion Testnet');
             }
 
-            // Convert prices to wei (multiply by 1e18 for precision)
+            // Convert prices to wei
             const entryPrice = ethers.utils.parseEther(signalData.entryPrice.toString());
             const targetPrice = ethers.utils.parseEther(signalData.targetPrice.toString());
             const stopLoss = ethers.utils.parseEther(signalData.stopLoss.toString());
-
-            console.log('💰 Prices converted:', {
-                entry: entryPrice.toString(),
-                target: targetPrice.toString(),
-                stop: stopLoss.toString()
-            });
 
             // Estimate gas
             const gasEstimate = await this.contract.estimateGas.createSignal(
@@ -1096,7 +1475,7 @@ class WalletConnection {
 
             console.log('⛽ Gas estimate:', gasEstimate.toString());
 
-            // Send transaction with gas limit
+            // Send transaction
             const tx = await this.contract.createSignal(
                 signalData.pair,
                 signalData.signalType,
@@ -1110,13 +1489,14 @@ class WalletConnection {
             );
 
             console.log('📋 Transaction sent:', tx.hash);
-            console.log('⏳ Waiting for confirmation...');
-            
+            this.showSuccess(`🚀 Signal transaction sent! Hash: ${tx.hash.slice(0, 10)}...`);
+
             // Wait for confirmation
             const receipt = await tx.wait();
             console.log('✅ Signal created successfully!');
-            console.log('📦 Block number:', receipt.blockNumber);
-            console.log('🔗 Transaction hash:', receipt.transactionHash);
+            console.log('📦 Block:', receipt.blockNumber);
+
+            this.showSuccess('✅ AI Signal created on Hyperion blockchain!');
 
             return {
                 success: true,
@@ -1128,19 +1508,16 @@ class WalletConnection {
         } catch (error) {
             console.error('❌ Signal creation failed:', error);
             
-            // Handle specific error types
             let errorMessage = 'Transaction failed: ';
             if (error.code === 4001) {
                 errorMessage = 'Transaction cancelled by user';
-            } else if (error.code === -32603) {
-                errorMessage = 'Internal JSON-RPC error. Please try again.';
             } else if (error.message.includes('insufficient funds')) {
                 errorMessage = 'Insufficient HYP tokens for gas fee';
-            } else if (error.message.includes('network')) {
-                errorMessage = 'Network error. Please check your connection.';
             } else {
                 errorMessage += error.message;
             }
+            
+            this.showError(errorMessage);
             
             return {
                 success: false,
@@ -1149,264 +1526,65 @@ class WalletConnection {
         }
     }
 
-    async executeSignal(signalId) {
-        if (!this.isConnected || !this.contract) {
-            throw new Error('Wallet not connected');
-        }
-
-        try {
-            console.log('⚡ Executing signal:', signalId);
-            
-            // Validate network
-            const network = await this.provider.getNetwork();
-            if (network.chainId !== 2001) {
-                throw new Error('Please switch to Hyperion Testnet');
-            }
-            
-            const tx = await this.contract.executeSignal(signalId);
-            console.log('📋 Execution transaction sent:', tx.hash);
-            
-            const receipt = await tx.wait();
-            console.log('✅ Signal executed successfully:', receipt);
-
-            return {
-                success: true,
-                txHash: tx.hash,
-                blockNumber: receipt.blockNumber
-            };
-
-        } catch (error) {
-            console.error('❌ Execution failed:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Helper method to get network info
-    async getNetworkInfo() {
-        if (this.provider) {
-            const network = await this.provider.getNetwork();
-            const balance = await this.provider.getBalance(this.userAddress);
-            return {
-                chainId: network.chainId,
-                name: network.name,
-                balance: ethers.utils.formatEther(balance),
-                blockNumber: await this.provider.getBlockNumber()
-            };
-        }
-        return null;
-    }
-}
-
-// =========================================
-// Enhanced Application Class
-// =========================================
-class HyperMindApp {
-    constructor() {
-        this.wallet = new WalletConnection();
-        this.signalInterval = null;
-        this.signals = [];
-        this.isInitialized = false;
-    }
-
-    async init() {
-        console.log('🚀 Initializing HyperMind AI...');
+    updateUI() {
+        const connectButton = document.getElementById('connect-wallet-btn');
+        const addressElement = document.getElementById('wallet-address');
         
-        try {
-            // Setup event listeners
-            this.setupEventListeners();
-            
-            // Start AI signal generation
-            this.startSignalGeneration();
-            
-            // Check if wallet was previously connected
-            await this.checkPreviousConnection();
-            
-            this.isInitialized = true;
-            console.log('✅ HyperMind AI initialized successfully');
-            
-        } catch (error) {
-            console.error('❌ Initialization failed:', error);
-        }
-    }
-
-    async checkPreviousConnection() {
-        if (window.ethereum) {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts.length > 0) {
-                    console.log('🔄 Previous wallet connection detected, reconnecting...');
-                    await this.connectWallet();
-                }
-            } catch (error) {
-                console.log('ℹ️ No previous connection found');
+        if (this.isConnected) {
+            if (connectButton) {
+                connectButton.textContent = '✅ Connected to Hyperion';
+                connectButton.style.background = 'linear-gradient(135deg, #00ff88, #00cc69)';
+                connectButton.disabled = true;
+            }
+            if (addressElement) {
+                addressElement.textContent = `${this.userAddress.slice(0, 6)}...${this.userAddress.slice(-4)}`;
+            }
+        } else {
+            if (connectButton) {
+                connectButton.textContent = 'Connect to Hyperion';
+                connectButton.style.background = 'linear-gradient(135deg, #8b5cf6, #3b82f6)';
+                connectButton.disabled = false;
             }
         }
     }
 
     setupEventListeners() {
-        // Connect Wallet Button
-        const connectBtn = document.getElementById('connect-wallet-btn');
-        if (connectBtn) {
-            connectBtn.addEventListener('click', () => this.connectWallet());
-        }
-
-        // Execute All Signals button  
-        const executeAllBtn = document.getElementById('execute-all-btn');
-        if (executeAllBtn) {
-            executeAllBtn.addEventListener('click', () => this.executeAllSignals());
-        }
-
-        // Emergency stop
-        const emergencyBtn = document.getElementById('emergency-btn');
-        if (emergencyBtn) {
-            emergencyBtn.addEventListener('click', () => this.emergencyStop());
-        }
-    }
-
-    async connectWallet() {
-        console.log('🔗 Attempting wallet connection...');
-        
-        const result = await this.wallet.connectWallet();
-        
-        if (result.success) {
-            this.showNotification('✅ Wallet connected to Hyperion Testnet!', 'success');
-            console.log('🎉 Connection successful:', result);
-            
-            // Show network info
-            const networkInfo = await this.wallet.getNetworkInfo();
-            if (networkInfo) {
-                console.log('🌐 Network info:', networkInfo);
-                this.showNotification(`💰 Balance: ${parseFloat(networkInfo.balance).toFixed(4)} HYP`, 'info');
-            }
-        } else {
-            this.showNotification(`❌ Connection failed: ${result.error}`, 'error');
-            console.error('💥 Connection failed:', result);
-        }
-    }
-
-    emergencyStop() {
-        console.log('🛑 Emergency stop activated');
-        this.showNotification('🛑 All AI operations stopped', 'warning');
-        
-        if (this.signalInterval) {
-            clearInterval(this.signalInterval);
-            this.signalInterval = null;
-        }
-    }
-
-    async executeAllSignals() {
-        if (!this.wallet.isConnected) {
-            this.showNotification('❌ Please connect wallet first', 'error');
-            return;
-        }
-
-        const btn = document.getElementById('execute-all-btn');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Processing...';
-            
-            try {
-                let executed = 0;
-                const highConfidenceSignals = this.signals.filter(s => s.confidence > 85 && !s.executed);
-                
-                for (let signal of highConfidenceSignals) {
-                    try {
-                        const result = await this.wallet.createSignal(signal);
-                        if (result.success) {
-                            signal.onChain = true;
-                            signal.txHash = result.txHash;
-                            executed++;
-                        }
-                        // Wait between signals to avoid nonce issues
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                    } catch (error) {
-                        console.error('Signal execution error:', error);
-                    }
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length === 0) {
+                    this.disconnect();
+                } else {
+                    this.userAddress = accounts[0];
+                    this.updateUI();
                 }
-                
-                this.showNotification(`✅ Successfully created ${executed} signals on-chain!`, 'success');
-                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Completed!';
-                
-            } catch (error) {
-                this.showNotification('❌ Execution failed: ' + error.message, 'error');
-                console.error('Execute all error:', error);
-            } finally {
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
-                    if (typeof lucide !== 'undefined') {
-                        lucide.createIcons();
-                    }
-                }, 3000);
-            }
+            });
+
+            window.ethereum.on('chainChanged', (chainId) => {
+                console.log('⛓️ Chain changed to:', chainId);
+                window.location.reload();
+            });
         }
     }
 
-    startSignalGeneration() {
-        // Generate signals every 15 seconds
-        this.signalInterval = setInterval(() => {
-            const signal = this.generateMockSignal();
-            this.handleNewSignal(signal);
-        }, 15000);
-        
-        // Generate initial signal
-        const initialSignal = this.generateMockSignal();
-        this.handleNewSignal(initialSignal);
+    disconnect() {
+        this.provider = null;
+        this.signer = null;
+        this.contract = null;
+        this.userAddress = null;
+        this.isConnected = false;
+        this.updateUI();
     }
 
-    generateMockSignal() {
-        const pairs = ['ETH/USDC', 'BTC/USDT', 'MATIC/USDC', 'LINK/ETH', 'AVAX/USDT'];
-        const types = ['STRONG_BUY', 'BUY', 'MONITOR', 'HOLD'];
-        const pair = pairs[Math.floor(Math.random() * pairs.length)];
-        const signalType = types[Math.floor(Math.random() * types.length)];
-        const basePrice = Math.random() * 3000 + 1000;
-        const confidence = Math.floor(Math.random() * 30) + 70;
-        
-        return {
-            pair: pair,
-            signalType: signalType,
-            entryPrice: Number(basePrice.toFixed(2)),
-            targetPrice: Number((basePrice * (1.05 + Math.random() * 0.1)).toFixed(2)),
-            stopLoss: Number((basePrice * (0.92 + Math.random() * 0.05)).toFixed(2)),
-            confidence: confidence,
-            analysis: `AI detected ${signalType} pattern with ${confidence}% confidence`,
-            timestamp: Date.now(),
-            id: Date.now()
-        };
+    showSuccess(message) {
+        this.showNotification(message, 'success');
     }
 
-    async handleNewSignal(signal) {
-        console.log('🤖 New AI signal generated:', signal);
-        
-        this.signals.unshift(signal);
-        if (this.signals.length > 20) {
-            this.signals = this.signals.slice(0, 20);
-        }
-        
-        // Auto-create very high confidence signals on-chain
-        if (this.wallet.isConnected && signal.confidence > 90) {
-            try {
-                const result = await this.wallet.createSignal(signal);
-                if (result.success) {
-                    signal.onChain = true;
-                    signal.txHash = result.txHash;
-                    this.showNotification(`🚀 Auto-executed high-confidence signal: ${signal.pair}`, 'success');
-                }
-            } catch (error) {
-                console.error('Auto-execution failed:', error);
-            }
-        }
+    showError(message) {
+        this.showNotification(message, 'error');
     }
 
     showNotification(message, type = 'info') {
         console.log(`${type.toUpperCase()}: ${message}`);
-        
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
         
         const colors = {
             'success': 'rgba(34, 197, 94, 0.9)',
@@ -1415,26 +1593,25 @@ class HyperMindApp {
             'info': 'rgba(59, 130, 246, 0.9)'
         };
         
+        const notification = document.createElement('div');
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${colors[type] || colors.info};
+            background: ${colors[type]};
             color: white;
             padding: 15px 20px;
             border-radius: 12px;
             z-index: 10000;
             max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         `;
-        notification.textContent = message;
         
+        notification.textContent = message;
         document.body.appendChild(notification);
         
-        // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.style.opacity = '0';
@@ -1451,15 +1628,162 @@ class HyperMindApp {
 }
 
 // =========================================
-// Initialize Application
+// Enhanced App for Metis Hackathon
+// =========================================
+class HyperMindApp {
+    constructor() {
+        this.wallet = new WalletConnection();
+        this.signalInterval = null;
+        this.signals = [];
+    }
+
+    async init() {
+        console.log('🚀 Initializing HyperMind AI for Metis Hackathon...');
+        
+        this.setupEventListeners();
+        this.startSignalGeneration();
+        
+        // Show hackathon welcome message
+        setTimeout(() => {
+            this.wallet.showNotification('🏆 Welcome to HyperMind AI - Metis Hackathon Edition!', 'info');
+        }, 1000);
+        
+        console.log('✅ HyperMind AI initialized for Metis Hackathon');
+    }
+
+    setupEventListeners() {
+        const connectBtn = document.getElementById('connect-wallet-btn');
+        if (connectBtn) {
+            connectBtn.addEventListener('click', () => this.connectWallet());
+        }
+
+        const executeAllBtn = document.getElementById('execute-all-btn');
+        if (executeAllBtn) {
+            executeAllBtn.addEventListener('click', () => this.executeAllSignals());
+        }
+    }
+
+    async connectWallet() {
+        const result = await this.wallet.connectWallet();
+        
+        if (result.success) {
+            this.wallet.showSuccess(`🎉 Connected to Hyperion Testnet! Chain ID: ${result.chainId}`);
+        } else {
+            this.wallet.showError(`❌ Connection failed: ${result.error}`);
+        }
+    }
+
+    async executeAllSignals() {
+        if (!this.wallet.isConnected) {
+            this.wallet.showError('❌ Please connect to Hyperion Testnet first');
+            return;
+        }
+
+        const btn = document.getElementById('execute-all-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 inline mr-2 animate-spin"></i>Executing on Hyperion...';
+            
+            try {
+                let executed = 0;
+                const highConfidenceSignals = this.signals.filter(s => s.confidence > 85 && !s.executed);
+                
+                for (let signal of highConfidenceSignals) {
+                    try {
+                        const result = await this.wallet.createSignal(signal);
+                        if (result.success) {
+                            signal.onChain = true;
+                            signal.txHash = result.txHash;
+                            executed++;
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } catch (error) {
+                        console.error('Signal execution error:', error);
+                    }
+                }
+                
+                this.wallet.showSuccess(`🚀 Successfully created ${executed} signals on Hyperion blockchain!`);
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 inline mr-2"></i>Completed!';
+                
+            } catch (error) {
+                this.wallet.showError('❌ Execution failed: ' + error.message);
+            } finally {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Execute All Signals';
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 3000);
+            }
+        }
+    }
+
+    startSignalGeneration() {
+        this.signalInterval = setInterval(() => {
+            const signal = this.generateMockSignal();
+            this.handleNewSignal(signal);
+        }, 10000); // Every 10 seconds for demo
+        
+        const initialSignal = this.generateMockSignal();
+        this.handleNewSignal(initialSignal);
+    }
+
+    generateMockSignal() {
+        const pairs = ['ETH/USDC', 'BTC/USDT', 'METIS/USDC', 'LINK/ETH', 'AVAX/USDT'];
+        const types = ['STRONG_BUY', 'BUY', 'MONITOR', 'HOLD'];
+        const pair = pairs[Math.floor(Math.random() * pairs.length)];
+        const signalType = types[Math.floor(Math.random() * types.length)];
+        const basePrice = Math.random() * 3000 + 1000;
+        const confidence = Math.floor(Math.random() * 30) + 70;
+        
+        return {
+            pair: pair,
+            signalType: signalType,
+            entryPrice: Number(basePrice.toFixed(2)),
+            targetPrice: Number((basePrice * (1.05 + Math.random() * 0.1)).toFixed(2)),
+            stopLoss: Number((basePrice * (0.92 + Math.random() * 0.05)).toFixed(2)),
+            confidence: confidence,
+            analysis: `Hyperion AI detected ${signalType} pattern with ${confidence}% confidence`,
+            timestamp: Date.now(),
+            id: Date.now()
+        };
+    }
+
+    async handleNewSignal(signal) {
+        console.log('🤖 New Hyperion AI signal:', signal);
+        
+        this.signals.unshift(signal);
+        if (this.signals.length > 20) {
+            this.signals = this.signals.slice(0, 20);
+        }
+        
+        // Auto-execute very high confidence signals for demo
+        if (this.wallet.isConnected && signal.confidence > 92) {
+            try {
+                const result = await this.wallet.createSignal(signal);
+                if (result.success) {
+                    signal.onChain = true;
+                    signal.txHash = result.txHash;
+                    this.wallet.showSuccess(`🚀 Auto-executed signal: ${signal.pair} on Hyperion!`);
+                }
+            } catch (error) {
+                console.error('Auto-execution failed:', error);
+            }
+        }
+    }
+}
+
+// =========================================
+// Initialize for Metis Hackathon
 // =========================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📱 DOM loaded, initializing HyperMind AI...');
+    console.log('🏆 Loading HyperMind AI for Metis Hackathon...');
     window.hyperMindApp = new HyperMindApp();
     window.hyperMindApp.init();
 });
 
-// Global functions for button handlers
+// Global functions
 window.executeAllSignals = () => {
     if (window.hyperMindApp) {
         window.hyperMindApp.executeAllSignals();
@@ -1472,5 +1796,6 @@ window.connectWallet = () => {
     }
 };
 
-console.log('🔥 HyperMind AI Web3 Integration Enhanced & Fixed!');
-console.log('🌐 Ready for Hyperion Testnet connection...');
+console.log('🔥 HyperMind AI - Metis Hackathon Edition Loaded!');
+console.log('🌐 Ready for Hyperion Testnet (Chain ID: 4795)');
+console.log('🏆 Built for Metis Hackathon 2024');
