@@ -569,11 +569,421 @@
 
        const CONTRACT_ADDRESS = '0x4bF9Ff46CD70D7A28169bC028A822Df95bF4A049';
        const CONTRACT_ABI = [
-           "function createSignal(string pair, string signalType, uint256 entryPrice, uint256 targetPrice, uint256 stopLoss, uint256 confidence) external",
-           "function executeSignal(uint256 signalId) external",
-           "function getSignalCount() external view returns (uint256)",
-           "event SignalCreated(uint256 indexed signalId, address indexed trader, string pair, string signalType)"
-       ];
+		{
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "uint256",
+					"name": "id",
+					"type": "uint256"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "trader",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "string",
+					"name": "pair",
+					"type": "string"
+				},
+				{
+					"indexed": false,
+					"internalType": "string",
+					"name": "signalType",
+					"type": "string"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "confidence",
+					"type": "uint256"
+				}
+			],
+			"name": "SignalCreated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "uint256",
+					"name": "id",
+					"type": "uint256"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "trader",
+					"type": "address"
+				}
+			],
+			"name": "SignalExecuted",
+			"type": "event"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "_pair",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "_signalType",
+					"type": "string"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_entryPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_targetPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_stopLoss",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_confidence",
+					"type": "uint256"
+				}
+			],
+			"name": "createSignal",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_signalId",
+					"type": "uint256"
+				}
+			],
+			"name": "executeSignal",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_user",
+					"type": "address"
+				}
+			],
+			"name": "getPortfolio",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "totalValue",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "totalPnL",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "totalTrades",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "activeTrades",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_signalId",
+					"type": "uint256"
+				}
+			],
+			"name": "getSignal",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "id",
+					"type": "uint256"
+				},
+				{
+					"internalType": "string",
+					"name": "pair",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "signalType",
+					"type": "string"
+				},
+				{
+					"internalType": "uint256",
+					"name": "entryPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "targetPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "stopLoss",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "confidence",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "timestamp",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "trader",
+					"type": "address"
+				},
+				{
+					"internalType": "bool",
+					"name": "executed",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getSignalCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_user",
+					"type": "address"
+				}
+			],
+			"name": "getUserSignals",
+			"outputs": [
+				{
+					"internalType": "uint256[]",
+					"name": "",
+					"type": "uint256[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "owner",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "portfolios",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "totalValue",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "totalPnL",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "totalTrades",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "activeTrades",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "signalCounter",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "signals",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "id",
+					"type": "uint256"
+				},
+				{
+					"internalType": "string",
+					"name": "pair",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "signalType",
+					"type": "string"
+				},
+				{
+					"internalType": "uint256",
+					"name": "entryPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "targetPrice",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "stopLoss",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "confidence",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "timestamp",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "trader",
+					"type": "address"
+				},
+				{
+					"internalType": "bool",
+					"name": "executed",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_trader",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_totalValue",
+					"type": "uint256"
+				}
+			],
+			"name": "updatePortfolioValue",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "userSignals",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
 
        // =========================================
        // Wallet Connection Class
