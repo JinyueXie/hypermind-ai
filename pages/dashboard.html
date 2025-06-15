@@ -556,18 +556,18 @@
    <script>
        // Hyperion Testnet Configuration
        const HYPERION_TESTNET_CONFIG = {
-           chainId: '0x12BB',
+           chainId: '0x20A55',
            chainName: 'Hyperion Testnet',
            nativeCurrency: {
-               name: 'Hyperion',
-               symbol: 'HYP',
+               name: 'tMETIS',
+               symbol: 'tMETIS',
                decimals: 18
            },
            rpcUrls: ['https://testnet-rpc.hyperion.network'],
            blockExplorerUrls: ['https://testnet-explorer.hyperion.network']
        };
 
-       const CONTRACT_ADDRESS = '0x742d35Cc6634C0532925a3b8d1eb3c51c0f2';
+       const CONTRACT_ADDRESS = '0x4bF9Ff46CD70D7A28169bC028A822Df95bF4A049';
        const CONTRACT_ABI = [
            "function createSignal(string pair, string signalType, uint256 entryPrice, uint256 targetPrice, uint256 stopLoss, uint256 confidence) external",
            "function executeSignal(uint256 signalId) external",
