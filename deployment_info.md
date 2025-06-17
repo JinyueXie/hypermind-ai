@@ -4,7 +4,7 @@
 
 - **Contract Name**: `HyperMindSignals`
 - **Deployed To**: Hyperion Testnet
-- **Contract Address**: `0x8Df0c84d9E56ADCf0C8e4555839127cC3C5ef48f`
+- **Contract Address**: `0x35b000dfCa31Aca7374A0D03EFA7dE6Da03bF23e`
 - **Deployed By (Wallet)**: `0xa4606FB1B115031aa2CbD71d69E1C08E02FE614a`
 - **Date of Deployment**: June 15, 2025
 - **Solidity Version**: 0.8.19
