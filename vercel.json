@@ -3,7 +3,6 @@
   "outputDirectory": ".",
   "installCommand": "echo 'No dependencies'",
   "framework": null,
-  "functions": {},
   "routes": [
     {
       "src": "/(.*)",
