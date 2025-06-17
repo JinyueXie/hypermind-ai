@@ -8,7 +8,7 @@
 
 **Revolutionary DeFi trading intelligence powered by Hyperion's Alith AI**
 
-[🚀 Live Demo](https://www.youtube.com/watch?v=TVCFpXDk1e4) | [📊 Dashboard](https://hypermind-k3jae29wk-jinyuexies-projects.vercel.app/pages/dashboard.html) | [🧠 AI Signals](https://hypermind-k3jae29wk-jinyuexies-projects.vercel.app/pages/signals.html)
+[🚀 Live Demo](https://www.youtube.com/watch?v=TVCFpXDk1e4) | [📊 Dashboard](https://hypermind-ai.vercel.app/pages/dashboard.html) | [🧠 AI Signals](https://hypermind-ai.vercel.app/pages/signals.html)
 
 </div>
 
@@ -54,7 +54,7 @@ HyperMind AI showcases the full potential of Hyperion's Alith co-agent in revolu
 ## 🚀 Quick Start
 
 ### 🌐 Live Version
-> [https://hypermind-k3jae29wk-jinyuexies-projects.vercel.app/](https://hypermind-k3jae29wk-jinyuexies-projects.vercel.app/)
+> [https://hypermind-ai.vercel.app/](https://hypermind-ai.vercel.app/)
 
 ### 🧪 Local Dev
 ```bash
@@ -136,7 +136,7 @@ Inspired by the potential of AI-driven DeFi intelligence.
 ## 🔗 Useful Links
 
 - 🔴 GitHub Repo: [github.com/JinyueXie/hypermind-ai](https://github.com/JinyueXie/hypermind-ai)
-- 🌐 Live Site: [jinyuexie.github.io/hypermind-ai](https://hypermind-k3jae29wk-jinyuexies-projects.vercel.app/)
+- 🌐 Live Site: [jinyuexie.github.io/hypermind-ai](https://hypermind-ai.vercel.app/)
 - 🔧 Smart Contract: `contracts/HyperMindSignals.sol`
 - 🎥 Demo Video: https://www.youtube.com/watch?v=TVCFpXDk1e4
 
