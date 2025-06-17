@@ -13,9 +13,9 @@
 ## 🌐 Network Info
 
 - **Network Name**: Hyperion Testnet
-- **Chain ID**: `2001`
-- **RPC URL**: `https://hyperion-testnet.metis.io`
-- **Explorer**: [Hyperion Explorer](https://hyperion-explorer.metis.io)
+- **Chain ID**: `133717`
+- **RPC URL**: `https://hyperion-testnet.metisdevops.link`
+- **Explorer**: [Hyperion Explorer](https://hyperion-testnet-explorer.metisdevops.link)
 
 ## 📦 ABI + Web3 Integration
 
