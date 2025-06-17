@@ -5,3 +5,4 @@ artifacts/build-info/
 .DS_Store
 *.log
 dist/
+.vercel
