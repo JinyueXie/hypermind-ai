@@ -6,11 +6,7 @@
     <title>Connect Wallet - HyperMind AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Web3Modal and WalletConnect -->
-    <script src="https://unpkg.com/@web3modal/ethereum@2.7.1/dist/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>    
-    <script src="https://unpkg.com/@web3modal/html@2.7.1/dist/index.js"></script>
-    <script src="https://unpkg.com/viem@1.10.9/dist/index.js"></script>
     <style>
         .glass-card {
             background: rgba(17, 24, 39, 0.8);
@@ -57,20 +53,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
         }
-        .wallet-button:hover::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
-            animation: shimmer 1s ease-in-out;
-        }
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
         .login-bg {
             background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 50%),
                        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1), transparent 50%),
@@ -112,25 +94,6 @@
             70% { transform: scale(0.9); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .connected-wallet {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-        .wallet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-        .chain-indicator {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 12px;
-            color: #a855f7;
-        }
         .loading-dots {
             display: inline-flex;
             gap: 4px;
@@ -148,14 +111,24 @@
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1); }
         }
+        .chain-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #a855f7;
+        }
     </style>
 </head>
 <body class="login-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
     <!-- Floating Particles -->
-    <div class="floating-particle w-2 h-2 top-20 left-20 animation-delay-0"></div>
-    <div class="floating-particle w-3 h-3 top-40 right-32 animation-delay-1000"></div>
-    <div class="floating-particle w-1 h-1 bottom-32 left-40 animation-delay-2000"></div>
-    <div class="floating-particle w-2 h-2 bottom-20 right-20 animation-delay-3000"></div>
+    <div class="floating-particle w-2 h-2 top-20 left-20"></div>
+    <div class="floating-particle w-3 h-3 top-40 right-32"></div>
+    <div class="floating-particle w-1 h-1 bottom-32 left-40"></div>
+    <div class="floating-particle w-2 h-2 bottom-20 right-20"></div>
 
     <div class="w-full max-w-lg relative z-10">
         <!-- Header -->
@@ -171,7 +144,7 @@
             <div class="mt-3">
                 <span class="chain-indicator">
                     <i data-lucide="link" class="w-3 h-3 mr-1"></i>
-                    Multi-Chain Support
+                    Hyperion Testnet Ready
                 </span>
             </div>
         </div>
@@ -186,6 +159,7 @@
                     <div>
                         <p class="text-sm font-semibold text-green-400">Wallet Connected</p>
                         <p id="connectedAddress" class="text-xs text-gray-300"></p>
+                        <p id="connectedNetwork" class="text-xs text-blue-400"></p>
                     </div>
                 </div>
                 <button onclick="disconnect()" class="text-red-400 hover:text-red-300 text-sm">
@@ -199,11 +173,11 @@
             <!-- Primary Connection Button -->
             <button 
                 id="connectWalletBtn"
-                onclick="connectWallet()"
+                onclick="connectToHyperion()"
                 class="w-full btn-primary py-4 rounded-xl font-semibold text-lg glow-purple mb-6 flex items-center justify-center"
             >
                 <i data-lucide="wallet" class="w-5 h-5 mr-2"></i>
-                <span id="connectBtnText">Connect Wallet</span>
+                <span id="connectBtnText">Connect to Hyperion</span>
                 <div id="connectLoader" class="loading-dots ml-2 hidden">
                     <div></div>
                     <div></div>
@@ -217,11 +191,11 @@
                     <span class="text-sm text-gray-400">Choose your preferred wallet</span>
                 </div>
                 
-                <div class="wallet-grid">
+                <div class="space-y-3">
                     <!-- MetaMask -->
                     <button 
-                        onclick="connectSpecificWallet('metamask')"
-                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                        onclick="connectMetaMask()"
+                        class="wallet-button w-full p-4 rounded-xl flex items-center space-x-3 text-left"
                     >
                         <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="white">
@@ -230,97 +204,53 @@
                         </div>
                         <div class="flex-1">
                             <p class="font-semibold text-white">MetaMask</p>
-                            <p class="text-xs text-gray-400">Most popular browser wallet</p>
+                            <p class="text-xs text-gray-400">Connect to Hyperion Testnet</p>
                         </div>
                         <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
                     </button>
 
-                    <!-- WalletConnect -->
+                    <!-- Other wallets placeholder -->
                     <button 
-                        onclick="connectSpecificWallet('walletconnect')"
-                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
+                        onclick="showComingSoon()"
+                        class="wallet-button w-full p-4 rounded-xl flex items-center space-x-3 text-left opacity-60"
                     >
                         <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                             <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
                         </div>
                         <div class="flex-1">
-                            <p class="font-semibold text-white">WalletConnect</p>
-                            <p class="text-xs text-gray-400">Connect mobile wallets</p>
+                            <p class="font-semibold text-white">Other Wallets</p>
+                            <p class="text-xs text-gray-400">Coming soon...</p>
                         </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                    </button>
-
-                    <!-- Coinbase Wallet -->
-                    <button 
-                        onclick="connectSpecificWallet('coinbase')"
-                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
-                    >
-                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="white">
-                                <circle cx="12" cy="12" r="10"/>
-                                <rect x="9" y="9" width="6" height="6" rx="1" fill="#0052FF"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-semibold text-white">Coinbase Wallet</p>
-                            <p class="text-xs text-gray-400">Self-custody wallet</p>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                    </button>
-
-                    <!-- Trust Wallet -->
-                    <button 
-                        onclick="connectSpecificWallet('trust')"
-                        class="wallet-button p-4 rounded-xl flex items-center space-x-3 text-left"
-                    >
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
-                            <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-semibold text-white">Trust Wallet</p>
-                            <p class="text-xs text-gray-400">Multi-chain mobile wallet</p>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                        <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
                     </button>
                 </div>
-            </div>
-
-            <!-- More Wallets -->
-            <div class="mt-6">
-                <button 
-                    onclick="showMoreWallets()"
-                    class="w-full btn-secondary py-3 rounded-xl font-semibold flex items-center justify-center"
-                >
-                    <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
-                    More Wallets
-                </button>
             </div>
         </div>
 
         <!-- Network Info -->
         <div class="glass-card p-4 rounded-xl mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="network" class="w-4 h-4 text-blue-400"></i>
-                    <span class="text-sm font-semibold text-blue-400">Supported Networks</span>
+                    <span class="text-sm font-semibold text-blue-400">Target Network</span>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 mt-3 text-xs text-gray-300">
-                <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <span>Ethereum</span>
+            <div class="text-sm text-gray-300">
+                <div class="flex items-center justify-between py-2">
+                    <span>Network:</span>
+                    <span class="text-purple-400">Hyperion Testnet</span>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span>BNB Chain</span>
+                <div class="flex items-center justify-between py-2">
+                    <span>Chain ID:</span>
+                    <span class="text-purple-400">133717</span>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 bg-purple-600 rounded-full"></div>
-                    <span>Polygon</span>
+                <div class="flex items-center justify-between py-2">
+                    <span>Currency:</span>
+                    <span class="text-purple-400">tMETIS</span>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span>Arbitrum</span>
+                <div class="flex items-center justify-between py-2">
+                    <span>Contract:</span>
+                    <span class="text-purple-400 text-xs" id="contractAddress">0x35b0...F23e</span>
                 </div>
             </div>
         </div>
@@ -341,31 +271,21 @@
         <!-- New to Web3 -->
         <div class="text-center">
             <p class="text-gray-400 text-sm">
-                New to Web3? 
-                <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
-                    Learn how to get started
+                New to Hyperion? 
+                <a href="https://hyperion-testnet-explorer.metisdevops.link" target="_blank" class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
+                    Get testnet tokens
                 </a>
             </p>
-        </div>
-
-        <!-- Footer -->
-        <div class="text-center mt-8 text-xs text-gray-500">
-            <p>© 2024 HyperMind AI. All rights reserved.</p>
-            <div class="flex justify-center space-x-4 mt-2">
-                <a href="#" class="hover:text-gray-300 transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-gray-300 transition-colors">Terms of Service</a>
-                <a href="#" class="hover:text-gray-300 transition-colors">Support</a>
-            </div>
         </div>
     </div>
 
     <!-- Success Modal -->
     <div id="successModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
-        <div class="glass-card p-8 rounded-2xl max-w-sm w-full mx-4 text-center success-animation" style="display: none;">
+        <div class="glass-card p-8 rounded-2xl max-w-sm w-full mx-4 text-center success-animation">
             <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i data-lucide="check" class="w-8 h-8 text-white"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Wallet Connected!</h3>
+            <h3 class="text-xl font-bold text-white mb-2">Connected to Hyperion!</h3>
             <p class="text-gray-300 mb-4">Redirecting to your AI dashboard...</p>
             <div class="flex justify-center">
                 <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500"></div>
@@ -373,199 +293,188 @@
         </div>
     </div>
 
+    <!-- Load web3-config.js first -->
+    <script src="../components/web3-config.js"></script>
+    
     <script>
-        // Web3 Configuration
-        let web3Modal;
-        let provider;
-        let account;
+        // Global variables
         let isConnected = false;
+        let userAccount = null;
+        let provider = null;
 
-        // Initialize Web3Modal
-        function initWeb3Modal() {
-            const projectId = 'your-walletconnect-project-id'; // Replace with your actual project ID
-            
-            web3Modal = new Web3Modal.Web3Modal({
-                projectId,
-                chains: [
-                    {
-                        chainId: 1,
-                        name: 'Ethereum',
-                        currency: 'ETH',
-                        explorerUrl: 'https://etherscan.io',
-                        rpcUrl: 'https://cloudflare-eth.com'
-                    },
-                    {
-                        chainId: 56,
-                        name: 'BNB Smart Chain',
-                        currency: 'BNB',
-                        explorerUrl: 'https://bscscan.com',
-                        rpcUrl: 'https://bsc-dataseed.binance.org'
-                    },
-                    {
-                        chainId: 137,
-                        name: 'Polygon',
-                        currency: 'MATIC',
-                        explorerUrl: 'https://polygonscan.com',
-                        rpcUrl: 'https://polygon-rpc.com'
-                    }
-                ],
-                wallets: [
-                    'metamask',
-                    'walletconnect',
-                    'coinbase',
-                    'trust',
-                    'rainbow',
-                    'ledger'
-                ]
-            });
-        }
-
-        // Connect Wallet Function
-        async function connectWallet() {
-            const connectBtn = document.getElementById('connectWalletBtn');
-            const connectBtnText = document.getElementById('connectBtnText');
-            const connectLoader = document.getElementById('connectLoader');
-            
+        // Connect to Hyperion via MetaMask
+        async function connectMetaMask() {
             try {
-                // Show loading state
-                connectBtnText.textContent = 'Connecting';
-                connectLoader.classList.remove('hidden');
-                connectBtn.disabled = true;
+                if (!window.ethereum) {
+                    alert('MetaMask not detected! Please install MetaMask.');
+                    window.open('https://metamask.io/', '_blank');
+                    return;
+                }
+
+                showLoading('Connecting to MetaMask...');
+
+                // Request account access
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+
+                if (accounts.length === 0) {
+                    throw new Error('No accounts found');
+                }
+
+                // Check if on Hyperion network
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                console.log('Current chain:', chainId);
+
+                if (chainId !== '0x20a55' && chainId !== '0x20A55') {
+                    showLoading('Adding Hyperion network...');
+                    await addHyperionNetwork();
+                }
+
+                // Setup provider
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                const network = await provider.getNetwork();
                 
-                // Simulate Web3 connection (replace with actual Web3Modal logic)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Simulate successful connection
-                account = '0x742...1234'; // This would be the actual connected address
+                userAccount = accounts[0];
                 isConnected = true;
-                
+
+                console.log('✅ Connected to Hyperion!');
+                console.log('Account:', userAccount);
+                console.log('Network:', network);
+
                 updateConnectionStatus();
                 showSuccessModal();
-                
+
+                // Test contract connection
+                if (window.CONTRACT_ADDRESS && window.CONTRACT_ABI) {
+                    try {
+                        const contract = new ethers.Contract(
+                            window.CONTRACT_ADDRESS, 
+                            window.CONTRACT_ABI, 
+                            provider
+                        );
+                        const signalCount = await contract.getSignalCount();
+                        console.log('📄 Contract connected! Signals:', signalCount.toString());
+                    } catch (error) {
+                        console.warn('⚠️ Contract test failed:', error);
+                    }
+                }
+
                 // Redirect after delay
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
-                }, 2000);
-                
+                }, 2500);
+
             } catch (error) {
-                console.error('Connection failed:', error);
-                alert('Failed to connect wallet. Please try again.');
+                console.error('❌ Connection failed:', error);
+                hideLoading();
                 
-                // Reset button state
-                connectBtnText.textContent = 'Connect Wallet';
-                connectLoader.classList.add('hidden');
-                connectBtn.disabled = false;
+                let errorMessage = 'Connection failed: ';
+                if (error.code === 4001) {
+                    errorMessage = 'Connection rejected by user';
+                } else if (error.message.includes('network')) {
+                    errorMessage = 'Network configuration failed';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                alert(errorMessage);
             }
         }
 
-        // Connect Specific Wallet
-        async function connectSpecificWallet(walletType) {
-            console.log(`Connecting to ${walletType} wallet...`);
-            
-            // Add specific wallet connection logic here
-            switch(walletType) {
-                case 'metamask':
-                    if (typeof window.ethereum !== 'undefined') {
-                        try {
-                            const accounts = await window.ethereum.request({ 
-                                method: 'eth_requestAccounts' 
-                            });
-                            account = accounts[0];
-                            isConnected = true;
-                            updateConnectionStatus();
-                            showSuccessModal();
-                            setTimeout(() => {
-                                window.location.href = 'dashboard.html';
-                            }, 2000);
-                        } catch (error) {
-                            console.error('MetaMask connection failed:', error);
-                            alert('MetaMask connection failed. Please try again.');
-                        }
-                    } else {
-                        alert('MetaMask is not installed. Please install MetaMask and try again.');
-                        window.open('https://metamask.io/', '_blank');
-                    }
-                    break;
-                    
-                case 'walletconnect':
-                case 'coinbase':
-                case 'trust':
-                default:
-                    // Use Web3Modal for other wallets
-                    connectWallet();
-                    break;
+        // Add Hyperion network to MetaMask
+        async function addHyperionNetwork() {
+            if (!window.HYPERION_TESTNET_CONFIG) {
+                console.error('❌ Hyperion config not loaded');
+                return;
+            }
+
+            try {
+                // First try to switch
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: window.HYPERION_TESTNET_CONFIG.chainId }]
+                });
+                console.log('✅ Switched to Hyperion');
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    // Network not added, add it
+                    console.log('📡 Adding Hyperion network...');
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [window.HYPERION_TESTNET_CONFIG]
+                    });
+                    console.log('✅ Hyperion network added!');
+                } else {
+                    throw switchError;
+                }
             }
         }
 
-        // Update Connection Status
+        // Main connection function
+        async function connectToHyperion() {
+            await connectMetaMask();
+        }
+
+        // Update connection status UI
         function updateConnectionStatus() {
             const statusDiv = document.getElementById('connectionStatus');
             const addressSpan = document.getElementById('connectedAddress');
+            const networkSpan = document.getElementById('connectedNetwork');
             
-            if (isConnected && account) {
+            if (isConnected && userAccount) {
                 statusDiv.classList.remove('hidden');
-                addressSpan.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
+                addressSpan.textContent = `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
+                networkSpan.textContent = 'Hyperion Testnet (133717)';
             } else {
                 statusDiv.classList.add('hidden');
             }
         }
 
-        // Disconnect Wallet
-        async function disconnect() {
-            try {
-                if (web3Modal) {
-                    await web3Modal.disconnect();
-                }
-                
-                account = null;
-                isConnected = false;
-                provider = null;
-                
-                updateConnectionStatus();
-                
-                // Reset button state
-                const connectBtnText = document.getElementById('connectBtnText');
-                const connectLoader = document.getElementById('connectLoader');
-                connectBtnText.textContent = 'Connect Wallet';
-                connectLoader.classList.add('hidden');
-                document.getElementById('connectWalletBtn').disabled = false;
-                
-            } catch (error) {
-                console.error('Disconnect failed:', error);
-            }
+        // Show loading state
+        function showLoading(message) {
+            const connectBtnText = document.getElementById('connectBtnText');
+            const connectLoader = document.getElementById('connectLoader');
+            const connectBtn = document.getElementById('connectWalletBtn');
+            
+            connectBtnText.textContent = message;
+            connectLoader.classList.remove('hidden');
+            connectBtn.disabled = true;
         }
 
-        // Show More Wallets
-        function showMoreWallets() {
-            // This would open Web3Modal with all supported wallets
-            connectWallet();
+        // Hide loading state
+        function hideLoading() {
+            const connectBtnText = document.getElementById('connectBtnText');
+            const connectLoader = document.getElementById('connectLoader');
+            const connectBtn = document.getElementById('connectWalletBtn');
+            
+            connectBtnText.textContent = 'Connect to Hyperion';
+            connectLoader.classList.add('hidden');
+            connectBtn.disabled = false;
         }
 
-        // Show Success Modal
+        // Show success modal
         function showSuccessModal() {
             const modal = document.getElementById('successModal');
-            const content = modal.querySelector('.glass-card');
-            
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
-            setTimeout(() => {
-                content.style.display = 'block';
-                content.classList.add('success-animation');
-            }, 100);
         }
 
-        // Hide Success Modal
-        function hideSuccessModal() {
-            const modal = document.getElementById('successModal');
-            const content = modal.querySelector('.glass-card');
-            
-            content.style.display = 'none';
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+        // Disconnect wallet
+        async function disconnect() {
+            userAccount = null;
+            isConnected = false;
+            provider = null;
+            updateConnectionStatus();
+            hideLoading();
         }
 
-        // Check if wallet is already connected on page load
+        // Show coming soon message
+        function showComingSoon() {
+            alert('Other wallet connections coming soon! Use MetaMask for now.');
+        }
+
+        // Check existing connection on load
         async function checkExistingConnection() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
@@ -573,9 +482,13 @@
                         method: 'eth_accounts' 
                     });
                     if (accounts.length > 0) {
-                        account = accounts[0];
-                        isConnected = true;
-                        updateConnectionStatus();
+                        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                        if (chainId === '0x20a55' || chainId === '0x20A55') {
+                            userAccount = accounts[0];
+                            isConnected = true;
+                            provider = new ethers.providers.Web3Provider(window.ethereum);
+                            updateConnectionStatus();
+                        }
                     }
                 } catch (error) {
                     console.error('Failed to check existing connection:', error);
@@ -583,67 +496,63 @@
             }
         }
 
-        // Initialize everything
+        // Setup event listeners
+        function setupEventListeners() {
+            if (window.ethereum) {
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        disconnect();
+                    } else {
+                        userAccount = accounts[0];
+                        updateConnectionStatus();
+                    }
+                });
+
+                window.ethereum.on('chainChanged', (chainId) => {
+                    console.log('Chain changed to:', chainId);
+                    if (chainId !== '0x20a55' && chainId !== '0x20A55') {
+                        disconnect();
+                        alert('Please switch back to Hyperion Testnet (Chain ID: 133717)');
+                    }
+                });
+            }
+        }
+
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
             
-            // Initialize Web3Modal (commented out for demo)
-            // initWeb3Modal();
-            
-            // Check for existing connections
-            checkExistingConnection();
-            
-            // Add staggered animation to floating particles
-            const particles = document.querySelectorAll('.floating-particle');
-            particles.forEach((particle, index) => {
-                particle.style.animationDelay = `${index * 1000}ms`;
-            });
-            
-            // Add wallet button hover effects
-            const walletButtons = document.querySelectorAll('.wallet-button');
-            walletButtons.forEach(button => {
-                button.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
+            // Wait for web3-config.js to load
+            setTimeout(() => {
+                if (window.CONTRACT_ADDRESS) {
+                    document.getElementById('contractAddress').textContent = 
+                        `${window.CONTRACT_ADDRESS.slice(0, 6)}...${window.CONTRACT_ADDRESS.slice(-4)}`;
+                }
+                
+                checkExistingConnection();
+                setupEventListeners();
+                
+                // Add floating particle animations
+                const particles = document.querySelectorAll('.floating-particle');
+                particles.forEach((particle, index) => {
+                    particle.style.animationDelay = `${index * 1000}ms`;
                 });
                 
-                button.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
+                console.log('🚀 HyperMind AI Login ready for Hyperion Testnet');
+            }, 100);
         });
-
-        // Listen for account changes
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', function (accounts) {
-                if (accounts.length === 0) {
-                    disconnect();
-                } else {
-                    account = accounts[0];
-                    updateConnectionStatus();
-                }
-            });
-
-            window.ethereum.on('chainChanged', function (chainId) {
-                // Handle chain changes
-                console.log('Chain changed to:', chainId);
-            });
-        }
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Enter key to connect wallet
-            if (e.key === 'Enter' && !e.shiftKey) {
-                if (!isConnected) {
-                    connectWallet();
-                }
+            if (e.key === 'Enter' && !isConnected) {
+                connectToHyperion();
             }
-            
-            // Escape key to close modal
             if (e.key === 'Escape') {
-                hideSuccessModal();
+                const modal = document.getElementById('successModal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         });
     </script>
-    <script src="../components/web3-config.js"></script>
 </body>
 </html>

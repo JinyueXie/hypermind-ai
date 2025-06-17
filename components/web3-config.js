@@ -3,7 +3,7 @@
 // =========================================
 
 // 🔥 YOUR DEPLOYED CONTRACT ADDRESS 🔥
-const CONTRACT_ADDRESS = '0x4bF9Ff46CD70D7A28169bC028A822Df95bF4A049';
+const CONTRACT_ADDRESS = '0x35b000dfCa31Aca7374A0D03EFA7dE6Da03bF23e';
 // 🎯 CORRECT configuration for YOUR current network (Chain ID 133717)
 
 
