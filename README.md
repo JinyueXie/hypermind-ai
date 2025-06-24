@@ -138,7 +138,7 @@ Inspired by the potential of AI-driven DeFi intelligence.
 - 🔴 GitHub Repo: [github.com/JinyueXie/hypermind-ai](https://github.com/JinyueXie/hypermind-ai)
 - 🌐 Live Site: [jinyuexie.github.io/hypermind-ai](https://hypermind-ai.vercel.app/)
 - 🔧 Smart Contract: `contracts/HyperMindSignals.sol`
-- 🎥 Demo Video: https://www.youtube.com/watch?v=TVCFpXDk1e4
+- 🎥 Demo Video: https://www.youtube.com/watch?v=pby44gOctG4
 
 ---
 
