@@ -8,7 +8,7 @@
 
 **Revolutionary DeFi trading intelligence powered by Hyperion's Alith AI**
 
-[🚀 Live Demo](https://www.youtube.com/watch?v=TVCFpXDk1e4) | [📊 Dashboard](https://hypermind-ai.vercel.app/pages/dashboard.html) | [🧠 AI Signals](https://hypermind-ai.vercel.app/pages/signals.html)
+[🚀 Live Demo](https://www.youtube.com/watch?v=pby44gOctG4) | [📊 Dashboard](https://hypermind-ai.vercel.app/pages/dashboard.html) | [🧠 AI Signals](https://hypermind-ai.vercel.app/pages/signals.html)
 
 </div>
 
