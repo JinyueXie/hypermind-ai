@@ -1,8 +1,52 @@
-node_modules/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+fresh_venv/
 .env
-*.log
-artifacts/build-info/
-.DS_Store
-*.log
+*.egg-info/
 dist/
-.vercel
+build/
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# AI model files (if large)
+*.pkl
+*.model
+
+# Alith SDK binaries (large files)
+alith-main.zip
+alith-main/
+
+# Signal output files
+hypermind_signals_*.json
+
+# Backup files
+*.backup
+*.bak
+*.old
