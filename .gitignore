@@ -50,3 +50,5 @@ hypermind_signals_*.json
 *.backup
 *.bak
 *.old
+backend/agent/.env
+**/*.log
