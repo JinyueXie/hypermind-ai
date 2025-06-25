@@ -1,0 +1,192 @@
+#!/usr/bin/env python3
+"""
+HyperMind AI API Server
+Simple FastAPI server to serve trading signals to frontend
+"""
+
+import asyncio
+import json
+from datetime import datetime
+from typing import Dict, List, Optional
+from pathlib import Path
+import sys
+
+# Add current directory to Python path
+sys.path.append(str(Path(__file__).parent))
+
+try:
+    from fastapi import FastAPI, HTTPException
+    from fastapi.middleware.cors import CORSMiddleware
+    from pydantic import BaseModel
+    import uvicorn
+    FASTAPI_AVAILABLE = True
+except ImportError:
+    print("⚠️ FastAPI not available. Install with: pip install fastapi uvicorn")
+    FASTAPI_AVAILABLE = False
+
+from hypermind_ai import HyperMindAI
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="HyperMind AI API",
+    description="Advanced Trading Signal Generator API",
+    version="1.0.0"
+)
+
+# Enable CORS for frontend integration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Configure properly for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Global agent instance
+agent = None
+
+# Request/Response models
+class SignalRequest(BaseModel):
+    pair: str = "ETH/USDC"
+
+class BatchRequest(BaseModel):
+    pairs: List[str] = ["ETH/USDC", "BTC/USDT", "MATIC/USDC"]
+
+class SignalResponse(BaseModel):
+    success: bool
+    pair: str
+    signal: Optional[Dict] = None
+    analysis: Optional[str] = None
+    error: Optional[str] = None
+    timestamp: str
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize the AI agent on startup"""
+    global agent
+    print("🚀 Starting HyperMind AI API Server...")
+    agent = HyperMindAI()
+    print("✅ HyperMind AI Agent initialized")
+
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {
+        "message": "HyperMind AI API",
+        "version": "1.0.0",
+        "status": "active",
+        "endpoints": {
+            "generate_signal": "/signal",
+            "batch_analysis": "/batch",
+            "health": "/health"
+        }
+    }
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "agent_status": "ready" if agent else "not_initialized"
+    }
+
+@app.post("/signal", response_model=SignalResponse)
+async def generate_signal(request: SignalRequest):
+    """Generate trading signal for a single pair"""
+    if not agent:
+        raise HTTPException(status_code=500, detail="AI agent not initialized")
+    
+    try:
+        result = await agent.analyze_pair(request.pair)
+        
+        return SignalResponse(
+            success=result['success'],
+            pair=request.pair,
+            signal=result.get('signal'),
+            analysis=result.get('analysis'),
+            error=result.get('error'),
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+@app.post("/batch")
+async def batch_analysis(request: BatchRequest):
+    """Generate signals for multiple pairs"""
+    if not agent:
+        raise HTTPException(status_code=500, detail="AI agent not initialized")
+    
+    try:
+        results = await agent.batch_analysis(request.pairs)
+        
+        return {
+            "success": True,
+            "total_pairs": len(request.pairs),
+            "results": results,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Batch analysis failed: {str(e)}")
+
+@app.get("/pairs")
+async def get_supported_pairs():
+    """Get list of supported trading pairs"""
+    return {
+        "supported_pairs": [
+            "ETH/USDC",
+            "BTC/USDT", 
+            "MATIC/USDC",
+            "LINK/USDT",
+            "UNI/USDC",
+            "AAVE/USDT",
+            "SOL/USDC"
+        ],
+        "total": 7
+    }
+
+@app.get("/signals/latest")
+async def get_latest_signals():
+    """Get latest generated signals"""
+    # This would typically read from a database
+    # For now, generate fresh signals
+    if not agent:
+        raise HTTPException(status_code=500, detail="AI agent not initialized")
+    
+    pairs = ["ETH/USDC", "BTC/USDT", "MATIC/USDC"]
+    results = await agent.batch_analysis(pairs)
+    
+    latest_signals = []
+    for result in results:
+        if result['result']['success']:
+            latest_signals.append({
+                "pair": result['pair'],
+                "signal": result['result']['signal']['signal'],
+                "confidence": result['result']['signal']['confidence'],
+                "timestamp": result['result']['timestamp']
+            })
+    
+    return {
+        "signals": latest_signals,
+        "count": len(latest_signals),
+        "generated_at": datetime.now().isoformat()
+    }
+
+if __name__ == "__main__":
+    if not FASTAPI_AVAILABLE:
+        print("❌ FastAPI not available. Install dependencies:")
+        print("pip install fastapi uvicorn")
+        sys.exit(1)
+    
+    print("🌐 Starting HyperMind AI API Server on http://localhost:8000")
+    print("📚 API docs available at: http://localhost:8000/docs")
+    
+    uvicorn.run(
+        "api_server:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )

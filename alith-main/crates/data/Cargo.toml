@@ -1,0 +1,38 @@
+[package]
+name = "alith-data"
+description = "Alith Data package"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+
+[dependencies]
+alith-core.workspace = true
+url.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+uuid.workspace = true
+tokio.workspace = true
+rand.workspace = true
+rand_08.workspace = true
+bon.workspace = true
+bytesize.workspace = true
+reqwest = { workspace = true, features = ["json", "multipart"] }
+
+base64 = { workspace = true, optional = true }
+alloy = { workspace = true, optional = true }
+sequoia-openpgp = { workspace = true, optional = true }
+rsa = { workspace = true, features = ["pem"], optional = true }
+rand_core = { workspace = true, optional = true }
+
+[features]
+dropbox = []
+google-drive = []
+ipfs = []
+crypto = ["dep:sequoia-openpgp", "dep:rsa", "dep:rand_core", "dep:base64"]
+wallet = ["dep:alloy"]

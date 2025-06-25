@@ -1,0 +1,187 @@
+Metadata-Version: 2.1
+Name: pydantic-config
+Version: 0.3.0
+Summary: Support for Pydantic settings configuration file loading
+Author: Jordan Shaw
+Project-URL: Homepage, https://github.com/jordantshaw/pydantic-config
+Classifier: Natural Language :: English
+Classifier: Intended Audience :: Developers
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic-settings >=2.0.1
+Provides-Extra: all
+Requires-Dist: pyyaml >=5.1 ; extra == 'all'
+Requires-Dist: tomli >=2.0.0 ; extra == 'all'
+Provides-Extra: dev
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: twine ; extra == 'dev'
+Requires-Dist: build ; extra == 'dev'
+Requires-Dist: pyyaml >=5.1 ; extra == 'dev'
+Requires-Dist: python-dotenv >=0.15.0 ; extra == 'dev'
+Requires-Dist: tomli >=2.0.0 ; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pyyaml ==5.1 ; extra == 'test'
+Requires-Dist: python-dotenv >=0.15.0 ; extra == 'test'
+Requires-Dist: tomli >=2.0.0 ; extra == 'test'
+Provides-Extra: toml
+Requires-Dist: tomli >=2.0.0 ; extra == 'toml'
+Provides-Extra: yaml
+Requires-Dist: pyyaml >=5.1 ; extra == 'yaml'
+
+# Pydantic Config
+Support for Pydantic settings configuration file loading
+
+## Installation
+Pydantic Config can be installed via pip:
+
+`pip install pydantic-config`
+
+Pydantic Config is also available on conda under the conda-forge channel:
+
+`conda install pydantic-config -c conda-forge`
+
+
+
+### Optional Dependencies
+
+Pydantic-Config has the following optional dependencies:
+  - yaml - `pip install pydantic-config[yaml]`
+  - toml - `pip install pydantic-config[toml]` _Only for python<3.11_
+
+You can install all the optional dependencies with `pip install pydantic-config[all]`
+
+## Usage
+
+```toml
+# config.toml
+app_name = "Python Application"
+description = "Test application description"
+```
+
+```python
+from pydantic_config import SettingsModel, SettingsConfig
+
+
+class Settings(SettingsModel):
+    app_id: str = 1
+    app_name: str = None
+    description: str = None
+    log_level: str = 'INFO'
+    
+    model_config = SettingsConfig(
+        config_file='config.toml',
+    )
+
+
+settings = Settings()
+print(settings)
+# app_id='1' app_name='Python Application' description='Test application description' log_level='INFO'
+
+```
+
+## Using multiple config files
+Multiple config files can be loaded by passing a `list` of file names. Files will be loaded in the order they are listed.
+Meaning later files in the `list` will take priority over earlier files.
+
+```toml
+# config.toml
+app_name = "Python Application"
+description = "Test application description"
+```
+
+
+```json
+// config.json
+{
+  "description": "Description from JSON file",
+  "log_level": "WARNING"
+}
+```
+
+```python
+from pydantic_config import SettingsModel, SettingsConfig
+
+
+class Settings(SettingsModel):
+    app_id: str = 1
+    app_name: str = 'App Name'
+    description: str = None
+    log_level: str = 'INFO'
+    
+    model_config = SettingsConfig(
+        config_file=['config.toml', 'config.json']  # The config.json file will take priority over config.toml
+    )
+
+settings = Settings()
+print(settings)
+# app_id='1' app_name='Python Application' description='Description from JSON file' log_level='WARNING'
+```
+
+## Supported file formats
+Currently, the following file formats are supported:
+  - `.yaml` _Requires `pyyaml` package_
+  - `.toml` _Requires `tomli` package for python<3.11_
+  - `.json`
+  - `.ini`
+
+## Requiring config files to load
+Config files will attempt to be loaded from the specified file path. By default, if no file is found the file 
+will simply not be loaded (no error occurs). This may be useful if you want to specify config files that 
+may or may not exist. For example, you may have different config files for per 
+environment: `config-prod.toml` and `config-dev.toml`.
+
+To disable this behavior set `config_file_required=True`. This will cause an error to be raised
+if the specified config file(s) do not exist. Setting this to `True` will also prohibit the `config_file`
+parameter from being set to `None` or empty `[]`.
+
+
+## Merging
+If your configurations have existing `list` or `dict` variables the contents will be merged by default. To disable
+this behavior and override the contents instead you can set the `config_merge` option to `False` in the settings 
+`Config` class.
+
+
+
+```toml
+# config.toml
+[foo]
+item1 = "value1"
+```
+```toml
+# config2.toml
+[foo]
+item2 = "value2"
+```
+
+```python
+from pydantic_config import SettingsModel, SettingsConfig
+
+
+class Settings(SettingsModel):
+    foo: dict = {}
+    
+    model_config = SettingsConfig(
+        config_file=['config.toml', 'config2.toml'],
+        config_merge= True,
+    )
+
+
+settings = Settings()
+print(settings)
+# foo={'item1': 'value1', 'item2': 'value2'}
+
+# If config_merge=False then config2.toml would override the values from config.toml
+# foo={'item2': 'value2'}
+```
+
+## Duplicate items in merged lists
+By default, __all__ `list` items will be merged into a single list regardless of duplicated items. To only keep
+unique list items, set `config_merge_unique=True`. This will only keep unique items in within a list.
+
+

@@ -1,0 +1,25 @@
+/target
+/dist
+.DS_store
+.vscode
+llm_logs
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Next.js
+next-env.d.ts
+# TypeScript
+tsconfig.json
+
+
+# DEV
+scripts/dev_*
+# Node log
+node.log

@@ -1,0 +1,350 @@
+import { Tabs } from "nextra/components";
+
+# Trusted Execution Environment (TEE)
+
+Alith supports Trusted Execution Environment (TEE) features and provides
+foundational capabilities for agents operating within a TEE. It enables
+agents to perform remote attestation to prove their execution within a
+secure enclave, manage cryptographic keys securely and generate proof.
+
+## Requirements
+
+A TEE-enabled environment is required (e.g., Intel TDX) use
+[Phala Cloud](https://cloud.phala.network/) for easy deployment.
+
+Of course, Alith supports multiple TEE providers, all of which support
+managing keys and generating proofs within TEE.
+
+<Tabs items={['Rust', 'Python', 'Node.js']}>
+  <Tabs.Tab>
+
+### Phala Cloud
+
+> Note: we need to enable the `phala` feature in the `alith` crate to use this example.
+
+For the deplopment environment, set the environment variable `DSTACK_SIMULATOR_ENDPOINT` with the
+simulator: https://github.com/Leechael/tappd-simulator/releases
+
+In production environments, mount the socket file in your docker container:
+
+```yaml
+volumes:
+  - /var/run/tappd.sock:/var/run/tappd.sock
+```
+
+```rust
+use alith::tee::phala::DstackClient;
+
+#[tokio::main]
+async fn main() -> Result<(), anyhow::Error> {
+    let client = DstackClient::default();
+    // Derive a key from a key path
+    // Returns a key and a certificate chain
+    println!(
+        "Derive key: {:?}",
+        client.derive_key(Some("test"), None, None).await?
+    );
+    // Get a TDX quote
+    println!(
+        "Generate report: {:?}",
+        client.tdx_quote("test", Default::default()).await?
+    );
+    Ok(())
+}
+```
+
+### Marlin
+
+> Note: we need to enable the `marlin` feature in the `alith` crate to use this example.
+
+Alith Marlin TEE Integration & SDK. This SDK provides a Rust client for communicating with the attestation server.
+
+For local development and testing without TDX devices, you can use the simulator available for download here:
+https://github.com/marlinprotocol/oyster-monorepo/tree/master/attestation/server-custom-mock and then set the
+environment variable `MARLIN_ATTESTATION_ENDPOINT` (Optional, default is http://127.0.0.1:1350)
+
+- From Source
+
+```shell
+git clone https://github.com/marlinprotocol/oyster-monorepo
+cd oyster-monorepo/attestation/server-custom-mock
+
+# Listens on 127.0.0.1:1350 by default
+cargo run -r
+
+# To customize listening interface and port
+cargo run -r --ip-addr <ip>:<port>
+```
+
+- From Docker
+
+```shell
+# The server runs on 1350 inside Docker, can remap to any interface and port
+docker run --init -p 127.0.0.1:1350:1350 marlinorg/attestation-server-custom-mock
+```
+
+```rust
+use alith::tee::marlin::{AttestationRequest, MarlinClient};
+
+#[tokio::main]
+async fn main() -> Result<(), anyhow::Error> {
+    let client = MarlinClient::default();
+    println!(
+        "Generate the attestation with the hex string format: {:?}",
+        client
+            .attestation_hex(AttestationRequest {
+                user_data: Some("test".as_bytes().to_vec()),
+                ..Default::default()
+            })
+            .await?
+    );
+    Ok(())
+}
+```
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+### Phala Cloud
+
+For the deplopment environment, set the environment variable `DSTACK_SIMULATOR_ENDPOINT` with the
+simulator: https://github.com/Leechael/tappd-simulator/releases
+
+In production environments, mount the socket file in your docker container:
+
+```yaml
+volumes:
+  - /var/run/tappd.sock:/var/run/tappd.sock
+```
+
+```python
+from alith.tee.phala import TappdClient, AsyncTappdClient
+
+# Synchronous client
+client = TappdClient()
+async_client = AsyncTappdClient()
+
+# Get the information of the Base Image.
+info = client.info()  # or await async_client.info()
+print(info.app_id)  # Application ID
+print(info.tcb_info.mrtd)  # Access TCB info directly
+print(info.tcb_info.event_log[0].event)  # Access event log entries
+
+# Derive a key with optional path and subject
+key_result = client.derive_key(
+    "<unique-id>"
+)  # or await async_client.derive_key('<unique-id>')
+print(key_result.key)  # X.509 private key in PEM format
+print(key_result.certificate_chain)  # Certificate chain
+key_bytes = key_result.toBytes()  # Get key as bytes
+
+# Generate TDX quote
+quote_result = client.tdx_quote(
+    report_data="some-data"
+)  # or await async_client.tdx_quote(report_data='some-data')
+print(quote_result.quote)  # TDX quote in hex format
+print(quote_result.event_log)  # Event log
+rtmrs = quote_result.replay_rtmrs()  # Replay RTMRs
+```
+
+### Marlin
+
+Alith Marlin TEE Integration & SDK. This SDK provides a Rust client for communicating with the attestation server.
+
+For local development and testing without TDX devices, you can use the simulator available for download here:
+https://github.com/marlinprotocol/oyster-monorepo/tree/master/attestation/server-custom-mock and then set the
+environment variable `MARLIN_ATTESTATION_ENDPOINT` (Optional, default is http://127.0.0.1:1350)
+
+- From Source
+
+```shell
+git clone https://github.com/marlinprotocol/oyster-monorepo
+cd oyster-monorepo/attestation/server-custom-mock
+
+# Listens on 127.0.0.1:1350 by default
+cargo run -r
+
+# To customize listening interface and port
+cargo run -r --ip-addr <ip>:<port>
+```
+
+- From Docker
+
+```shell
+# The server runs on 1350 inside Docker, can remap to any interface and port
+docker run --init -p 127.0.0.1:1350:1350 marlinorg/attestation-server-custom-mock
+```
+
+```python
+from alith.tee.marlin import MarlinClient, AttestationRequest, MarlinError
+
+# Initialize default client
+client = MarlinClient.default()
+
+# Create attestation request with sample data
+request = AttestationRequest(
+    public_key=b"test_public_key_bytes",
+    user_data=b"test_user_data_bytes",
+    nonce=b"test_nonce_bytes",
+)
+
+# Fetch attestation result
+try:
+    result = client.attestation_hex(request)
+    print(f"Attestation result: {result[:64]}...")  # Truncate for readability
+except MarlinError as e:
+    print(f"Operation failed: {str(e)}")
+```
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+### Phala Cloud
+
+For the deplopment environment, set the environment variable `DSTACK_SIMULATOR_ENDPOINT` with the
+simulator: https://github.com/Leechael/tappd-simulator/releases
+
+In production environments, mount the socket file in your docker container:
+
+```yaml
+volumes:
+  - /var/run/tappd.sock:/var/run/tappd.sock
+```
+
+```typescript
+import { TEEClient, type TEEConfig } from "alith/tee/phala";
+
+/**
+ * Example demonstrating Phala TEE integration with Alith agents
+ * This shows how to create secure AI agents with hardware-level security guarantees
+ */
+
+async function main() {
+  console.log("🔒 Phala TEE Integration Example for Alith Agents");
+  console.log("--------------------------------------------------");
+
+  // 1. Basic TEE Client Usage
+  console.log("\n📋 1. Setting up TEE Client...");
+
+  const teeConfig: TEEConfig = {
+    endpoint: "http://localhost:8090", // Phala TEE endpoint
+    enableAttestation: true,
+    enableKeyDerivation: true,
+    enableSignatures: true,
+    timeout: 30000,
+  };
+
+  const teeClient = new TEEClient(teeConfig);
+
+  try {
+    // Check TEE status
+    const status = await teeClient.getStatus();
+    console.log("TEE Status:", status);
+
+    // Generate attestation proof
+    console.log("\n🔐 2. Generating TEE Attestation...");
+    const attestation = await teeClient.generateAttestation("alith-demo");
+    console.log("Attestation generated:", {
+      verified: attestation.verified,
+      timestamp: attestation.timestamp,
+      quoteLength: attestation.quote.length,
+    });
+
+    // Derive a secure key
+    console.log("\n🔑 3. Deriving TEE Key...");
+    const derivedKey = await teeClient.deriveKey(
+      "/demo/agent",
+      "alith-agent-key"
+    );
+    console.log("Derived key:", derivedKey);
+  } catch (error) {
+    console.log(
+      "⚠️  TEE not available (likely running without Phala TEE environment)"
+    );
+    console.log("Error:", error.message);
+    console.log(
+      "📝 To test with real TEE, run this in a Phala TEE environment"
+    );
+  }
+
+  console.log("\n✅ TEE Integration Example Complete!");
+  console.log("\n📋 Summary of TEE Features:");
+  console.log("   • Hardware-verified execution environment");
+  console.log("   • Remote attestation with cryptographic proofs");
+  console.log("   • Secure key derivation within TEE");
+  console.log("   • Encrypted communication channels");
+  console.log("   • Tamper-proof AI operation results");
+  console.log("   • End-to-end privacy preservation");
+
+  console.log("\n🚀 To use with real TEE:");
+  console.log("   1. Deploy to Phala Network or compatible TEE environment");
+  console.log("   2. Configure endpoint to your TEE instance");
+  console.log("   3. All operations will have hardware security guarantees");
+}
+
+await main();
+```
+
+### Marlin
+
+Alith Marlin TEE Integration & SDK. This SDK provides a Rust client for communicating with the attestation server.
+
+For local development and testing without TDX devices, you can use the simulator available for download here:
+https://github.com/marlinprotocol/oyster-monorepo/tree/master/attestation/server-custom-mock and then set the
+environment variable `MARLIN_ATTESTATION_ENDPOINT` (Optional, default is http://127.0.0.1:1350)
+
+- From Source
+
+```shell
+git clone https://github.com/marlinprotocol/oyster-monorepo
+cd oyster-monorepo/attestation/server-custom-mock
+
+# Listens on 127.0.0.1:1350 by default
+cargo run -r
+
+# To customize listening interface and port
+cargo run -r --ip-addr <ip>:<port>
+```
+
+- From Docker
+
+```shell
+# The server runs on 1350 inside Docker, can remap to any interface and port
+docker run --init -p 127.0.0.1:1350:1350 marlinorg/attestation-server-custom-mock
+```
+
+```typescript
+import {
+  AttestationRequest,
+  MarlinClient,
+  MarlinError,
+} from "alith/tee/marlin";
+
+async function main() {
+  const client = new MarlinClient();
+  const request = new AttestationRequest(
+    Uint8Array.from("test_public_key_bytes"),
+    Uint8Array.from("test_user_data_bytes"),
+    Uint8Array.from("test_nonce_bytes")
+  );
+  try {
+    // Fetch attestation result
+    const result = await client.attestationHex(request);
+    console.log("Attestation result:", result);
+  } catch (error) {
+    if (error instanceof MarlinError) {
+      console.error(`Error type: ${error.type}`);
+      console.error(`Error message: ${error.message}`);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+  }
+}
+
+await main();
+```
+
+</Tabs.Tab>
+</Tabs>

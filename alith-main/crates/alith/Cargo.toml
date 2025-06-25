@@ -1,0 +1,221 @@
+[package]
+name = "alith"
+description = "Alith AI Framework"
+edition.workspace = true
+homepage.workspace = true
+version.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+keywords = ["ai", "agent", "data", "model"]
+
+[dependencies]
+alith-core.workspace = true
+alith-knowledge.workspace = true
+alith-data.workspace = true
+alith-store.workspace = true
+alith-inference.workspace = true
+alith-tools.workspace = true
+alith-client.workspace = true
+alith-models.workspace = true
+alith-interface.workspace = true
+alith-prompt.workspace = true
+alith-devices.workspace = true
+alith-tee.workspace = true
+alith-lazai = { workspace = true, optional = true }
+
+async-trait.workspace = true
+tokio.workspace = true
+serde.workspace = true
+anyhow.workspace = true
+schemars.workspace = true
+reqwest.workspace = true
+url.workspace = true
+rand.workspace = true
+rand_08.workspace = true
+hex.workspace = true
+
+sqlx = { workspace = true, optional = true }
+
+[features]
+# Default features
+default = []
+
+# Inference features
+fastembed = ["alith-core/fastembed"]
+ort = ["alith-inference/ort"]
+llamacpp = ["alith-inference/llamacpp"]
+mistralrs = ["alith-inference/mistralrs"]
+python = ["alith-inference/python"]
+sglang = ["alith-inference/sglang"]
+trtllm = ["alith-inference/trtllm"]
+vllm = ["alith-inference/vllm"]
+
+# Store features
+qdrant = ["alith-store/qdrant"]
+pgvector = ["alith-store/pgvector", "dep:sqlx"]
+milvus = ["alith-store/milvus"]
+chromadb = ["alith-store/chromadb"]
+
+# TEE fearures
+aws-tee = ["alith-tee/aws-tee"]
+azure-tee = ["alith-tee/azure-tee"]
+marlin = ["alith-tee/marlin"]
+phala = ["alith-tee/phala"]
+
+# Crypto features
+crypto = ["alith-data/crypto"]
+
+# Wallet features
+wallet = ["alith-data/wallet"]
+
+# Data Availability (DA)
+ipfs = ["alith-data/ipfs"]
+dropbox = ["alith-data/dropbox"]
+google-drive = ["alith-data/google-drive"]
+
+# LazAI features
+lazai = ["dep:alith-lazai"]
+
+[[example]]
+name = "agent"
+
+[[example]]
+name = "agent_deepseek"
+
+[[example]]
+name = "agent_siliconflow"
+
+[[example]]
+name = "agent_grok"
+
+[[example]]
+name = "agent_claude"
+
+[[example]]
+name = "agent_with_tools"
+
+[[example]]
+name = "agent_with_mcp"
+
+[[example]]
+name = "agent_with_extractor"
+
+[[example]]
+name = "agent_with_search_tool"
+
+[[example]]
+name = "agent_with_store"
+
+[[example]]
+name = "agent_with_knowledge"
+
+[[example]]
+name = "agent_with_memory"
+
+[[example]]
+name = "agent_with_embeddings"
+
+[[example]]
+name = "agent_with_rag"
+
+[[example]]
+name = "agent_with_pgvector"
+required-features = ["pgvector"]
+
+[[example]]
+name = "agent_with_qdrant"
+required-features = ["qdrant"]
+
+[[example]]
+name = "agent_with_milvus"
+required-features = ["milvus"]
+
+[[example]]
+name = "agent_with_chromadb"
+required-features = ["chromadb"]
+
+[[example]]
+name = "agent_with_cot"
+
+[[example]]
+name = "agent_with_decision"
+
+[[example]]
+name = "agent_with_llamacpp"
+required-features = ["llamacpp"]
+
+[[example]]
+name = "agent_with_mistralrs"
+required-features = ["mistralrs"]
+
+[[example]]
+name = "agent_with_ort"
+required-features = ["ort"]
+
+[[example]]
+name = "agent_with_llamacpp_server"
+required-features = ["llamacpp"]
+
+[[example]]
+name = "agent_with_phala_tee"
+required-features = ["phala"]
+
+[[example]]
+name = "agent_with_marlin_tee"
+required-features = ["marlin"]
+
+[[example]]
+name = "rsa"
+required-features = ["crypto"]
+
+[[example]]
+name = "agent_with_privacy_data"
+required-features = ["crypto", "marlin", "wallet"]
+
+[[example]]
+name = "agent_with_google_drive"
+required-features = ["google-drive"]
+
+[[example]]
+name = "agent_with_dropbox"
+required-features = ["dropbox"]
+
+[[example]]
+name = "agent_with_pinata_ipfs"
+required-features = ["ipfs"]
+
+[[example]]
+name = "agent_with_lazai"
+required-features = ["lazai"]
+
+[[example]]
+name = "agent_with_lazai_dat"
+required-features = ["lazai"]
+
+[[example]]
+name = "agent_with_lazai_privacy_data"
+required-features = ["lazai", "crypto"]
+
+[[example]]
+name = "lazai_data_contribution_and_reward"
+required-features = ["lazai", "crypto", "wallet", "ipfs"]
+
+[[example]]
+name = "lazai_settlement"
+required-features = ["lazai", "crypto", "wallet"]
+
+[[example]]
+name = "hf_loader"
+
+[[example]]
+name = "gguf_loader"
+
+[[example]]
+name = "chat_template"
+
+[[example]]
+name = "tokenizer"
+
+[[example]]
+name = "device"

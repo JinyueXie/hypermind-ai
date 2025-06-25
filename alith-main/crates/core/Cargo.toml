@@ -1,0 +1,43 @@
+[package]
+name = "alith-core"
+description = "Alith core package"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+
+[dependencies]
+alith-client.workspace = true
+alith-models.workspace = true
+alith-interface.workspace = true
+
+anyhow.workspace = true
+async-trait.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+dagrs.workspace = true
+regex.workspace = true
+futures.workspace = true
+hnsw_rs.workspace = true
+mcp-client.workspace = true
+tracing-subscriber.workspace = true
+html2text.workspace = true
+rayon.workspace = true
+unicode-properties.workspace = true
+unicode-segmentation.workspace = true
+url.workspace = true
+text-splitter.workspace = true
+bon.workspace = true
+reqwest.workspace = true
+
+# Fastembed
+fastembed = { workspace = true, optional = true }
+
+[features]
+fastembed = ["dep:fastembed"]

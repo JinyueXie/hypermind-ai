@@ -7,6 +7,7 @@
    <script src="https://cdn.tailwindcss.com"></script>
    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>   
+   <script src="../assets/js/api.js"></script>   
    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
    <style>
        .hyperion-glow {
@@ -335,7 +336,7 @@
                </button>
            </div>
 
-           <!-- AI Status Panel -->
+          <!-- AI Status Panel -->
            <div class="mt-8 glass-card p-4 rounded-xl">
                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Hyperion Alith Status</h3>
                <div class="space-y-3">
@@ -547,6 +548,27 @@
                            </div>
                        </div>
                    </div>
+                  
+	 	       <div class="api-controls">
+			   <h2>🤖 Live AI Signal Generator</h2>
+			    
+			   <div class="signal-generator">
+			       <select id="pair-select">
+			           <option value="ETH/USDC">ETH/USDC</option>
+		                   <option value="BTC/USDT">BTC/USDT</option>
+		                   <option value="MATIC/USDC">MATIC/USDC</option>
+		               </select>
+			       <button onclick="generateSingleSignal()">Generate Signal</button>
+			   </div>
+			    
+			   <div id="signal-output"></div>
+			    
+			   <button onclick="generateBatchSignals()">Generate Batch Analysis</button>
+			   <div id="batch-output"></div>
+			    
+	         	   <div id="signals-dashboard"></div>
+	           </div>
+
                </div>
            </div>
        </main>

@@ -1,0 +1,12 @@
+alith>=0.1.0
+pandas>=1.5.0
+numpy>=1.24.0
+requests>=2.31.0
+web3>=6.0.0
+python-dotenv>=1.0.0
+asyncio
+aiohttp>=3.8.0
+scikit-learn>=1.3.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0

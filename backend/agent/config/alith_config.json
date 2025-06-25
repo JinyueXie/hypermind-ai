@@ -1,0 +1,20 @@
+{
+  "model": {
+    "provider": "openai",
+    "name": "gpt-4",
+    "temperature": 0.1
+  },
+  "tools": {
+    "enable_web3": true,
+    "enable_trading": true,
+    "enable_blockchain_submission": true
+  },
+  "memory": {
+    "type": "vector_store",
+    "persist": true
+  },
+  "verification": {
+    "enable_alith_proofs": true,
+    "confidence_threshold": 0.8
+  }
+}

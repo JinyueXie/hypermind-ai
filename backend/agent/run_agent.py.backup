@@ -1,0 +1,374 @@
+#!/usr/bin/env python3
+"""
+HyperMind AI - Advanced Trading Signal Generator with Alith Integration
+Fixed version for correct imports
+"""
+
+import os
+import sys
+import json
+import asyncio
+import logging
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+from datetime import datetime, timezone
+import pandas as pd
+import numpy as np
+from dotenv import load_dotenv
+
+# Add the Alith SDK to Python path
+alith_path = Path(__file__).parent.parent.parent / "alith-main" / "sdks" / "python"
+sys.path.insert(0, str(alith_path))
+
+try:
+    # Import Alith SDK - using only what's available
+    from alith import Agent
+    ALITH_AVAILABLE = True
+    print("✅ Alith SDK imported successfully")
+except ImportError as e:
+    print(f"⚠️ Alith SDK import error: {e}")
+    print("🔄 Running without Alith SDK...")
+    ALITH_AVAILABLE = False
+
+# Load environment variables
+load_dotenv()
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('hypermind_ai.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+class MockLLM:
+    """Mock LLM class for when Alith is not available"""
+    def __init__(self, config: Dict):
+        self.config = config
+        self.model_name = config.get("model", {}).get("name", "gpt-4")
+        
+    async def complete(self, prompt: str, **kwargs) -> Dict[str, Any]:
+        """Mock completion - returns a realistic trading analysis"""
+        return {
+            "choices": [{
+                "message": {
+                    "content": f"""Based on current market conditions, here's my analysis:
+
+TECHNICAL ANALYSIS:
+- Price action shows bullish momentum with higher lows forming
+- RSI is at 65, indicating room for upward movement
+- Moving averages suggest a potential breakout above resistance
+- Volume profile supports the upward trend
+
+MARKET SENTIMENT:
+- Overall market sentiment is cautiously optimistic
+- Recent news flow has been positive for crypto markets
+- Institutional interest continues to grow
+
+RECOMMENDATION:
+- Signal: BULLISH
+- Entry: Current market price
+- Target: +15% from current levels
+- Stop Loss: -8% from entry
+- Confidence: 78%
+
+Risk Assessment: Medium - Market volatility remains elevated but technical indicators align favorably."""
+                }
+            }],
+            "usage": {"total_tokens": 150}
+        }
+
+class TradingTools:
+    """Advanced trading analysis tools"""
+    
+    @staticmethod
+    def calculate_rsi(prices: List[float], period: int = 14) -> float:
+        """Calculate RSI indicator"""
+        if len(prices) < period + 1:
+            return 50.0
+            
+        deltas = np.diff(prices)
+        gains = np.where(deltas > 0, deltas, 0)
+        losses = np.where(deltas < 0, -deltas, 0)
+        
+        avg_gain = np.mean(gains[-period:])
+        avg_loss = np.mean(losses[-period:])
+        
+        if avg_loss == 0:
+            return 100.0
+            
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+        return rsi
+    
+    @staticmethod
+    def detect_patterns(prices: List[float]) -> List[str]:
+        """Detect chart patterns"""
+        patterns = []
+        
+        if len(prices) < 10:
+            return patterns
+            
+        # Simple pattern detection
+        recent_prices = prices[-10:]
+        
+        # Bullish trend
+        if recent_prices[-1] > recent_prices[0] * 1.05:
+            patterns.append("BULLISH_TREND")
+            
+        # Support level
+        min_price = min(recent_prices)
+        if abs(recent_prices[-1] - min_price) / min_price < 0.02:
+            patterns.append("SUPPORT_LEVEL")
+            
+        # Resistance level  
+        max_price = max(recent_prices)
+        if abs(recent_prices[-1] - max_price) / max_price < 0.02:
+            patterns.append("RESISTANCE_LEVEL")
+            
+        return patterns
+
+class Web3Integration:
+    """Web3 and blockchain integration"""
+    
+    def __init__(self):
+        self.rpc_url = os.getenv("METIS_RPC_URL", "https://andromeda.metis.io/?owner=1088")
+        self.contract_address = os.getenv("CONTRACT_ADDRESS")
+        
+    async def submit_signal(self, signal_data: Dict) -> bool:
+        """Submit trading signal to blockchain"""
+        try:
+            # Mock blockchain submission
+            logger.info(f"📤 Submitting signal to blockchain: {signal_data['pair']}")
+            
+            # Simulate blockchain transaction
+            await asyncio.sleep(0.5)
+            
+            tx_hash = f"0x{''.join([hex(ord(c))[2:] for c in signal_data['pair'][:8]])}"
+            logger.info(f"✅ Signal submitted! TX: {tx_hash}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Blockchain submission failed: {e}")
+            return False
+
+class HyperMindAI:
+    """Main HyperMind AI Trading Agent"""
+    
+    def __init__(self):
+        """Initialize the AI agent"""
+        self.config = self._load_config()
+        self.tools = TradingTools()
+        self.web3 = Web3Integration()
+        
+        # Initialize LLM
+        if ALITH_AVAILABLE:
+            try:
+                self.agent = Agent(config_path=self.config['config_path'])
+                self.llm = self.agent.llm if hasattr(self.agent, 'llm') else MockLLM(self.config)
+            except Exception as e:
+                logger.warning(f"Failed to initialize Alith Agent: {e}")
+                self.llm = MockLLM(self.config)
+        else:
+            self.llm = MockLLM(self.config)
+            
+        logger.info("🤖 HyperMind AI initialized successfully")
+    
+    def _load_config(self) -> Dict:
+        """Load configuration"""
+        config_path = os.getenv("ALITH_CONFIG_PATH", "./config/alith_config.json")
+        
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+            config['config_path'] = config_path
+            return config
+        except FileNotFoundError:
+            logger.warning(f"Config file not found: {config_path}")
+            return {
+                "model": {"provider": "openai", "name": "gpt-4", "temperature": 0.1},
+                "tools": {"enable_web3": True, "enable_trading": True},
+                "config_path": config_path
+            }
+    
+    async def analyze_pair(self, pair: str) -> Dict[str, Any]:
+        """Analyze a trading pair"""
+        try:
+            logger.info(f"🔍 Analyzing pair: {pair}")
+            
+            # Generate mock market data
+            market_data = self._generate_market_data(pair)
+            
+            # Perform technical analysis
+            technical_analysis = self._perform_technical_analysis(market_data)
+            
+            # Generate AI analysis
+            ai_analysis = await self._generate_ai_analysis(pair, market_data, technical_analysis)
+            
+            # Create trading signal
+            signal = self._create_trading_signal(pair, ai_analysis, technical_analysis)
+            
+            # Submit to blockchain
+            blockchain_submitted = await self.web3.submit_signal(signal)
+            
+            return {
+                "success": True,
+                "pair": pair,
+                "signal": signal,
+                "technical_analysis": technical_analysis,
+                "analysis": ai_analysis,
+                "blockchain_submitted": blockchain_submitted,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error analyzing {pair}: {e}")
+            return {
+                "success": False,
+                "pair": pair,
+                "error": str(e),
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+    
+    def _generate_market_data(self, pair: str) -> Dict:
+        """Generate realistic market data for analysis"""
+        # Base price varies by pair
+        base_prices = {
+            "ETH/USDC": 2000,
+            "BTC/USDT": 45000,
+            "MATIC/USDC": 0.8
+        }
+        
+        base_price = base_prices.get(pair, 100)
+        
+        # Generate price history (last 50 periods)
+        prices = []
+        current_price = base_price
+        
+        for i in range(50):
+            # Random walk with slight upward bias
+            change = np.random.normal(0.001, 0.02)  # 0.1% drift, 2% volatility
+            current_price *= (1 + change)
+            prices.append(current_price)
+        
+        return {
+            "pair": pair,
+            "current_price": prices[-1],
+            "price_history": prices,
+            "volume": np.random.uniform(1000000, 10000000),
+            "24h_change": (prices[-1] - prices[-24]) / prices[-24] * 100
+        }
+    
+    def _perform_technical_analysis(self, market_data: Dict) -> Dict:
+        """Perform technical analysis"""
+        prices = market_data["price_history"]
+        
+        return {
+            "rsi": self.tools.calculate_rsi(prices),
+            "patterns": self.tools.detect_patterns(prices),
+            "trend": "BULLISH" if prices[-1] > prices[-10] else "BEARISH",
+            "support_level": min(prices[-20:]),
+            "resistance_level": max(prices[-20:]),
+            "volatility": np.std(prices[-10:]) / np.mean(prices[-10:]) * 100
+        }
+    
+    async def _generate_ai_analysis(self, pair: str, market_data: Dict, technical_analysis: Dict) -> str:
+        """Generate AI-powered market analysis"""
+        try:
+            prompt = f"""
+            Analyze the trading pair {pair} based on the following data:
+            
+            Current Price: ${market_data['current_price']:.4f}
+            24h Change: {market_data['24h_change']:.2f}%
+            RSI: {technical_analysis['rsi']:.2f}
+            Trend: {technical_analysis['trend']}
+            Patterns: {', '.join(technical_analysis['patterns'])}
+            
+            Provide a comprehensive trading analysis including:
+            1. Technical analysis summary
+            2. Market sentiment assessment
+            3. Risk factors
+            4. Trading recommendation with confidence level
+            """
+            
+            response = await self.llm.complete(prompt)
+            
+            if hasattr(response, 'choices') and response.choices:
+                return response.choices[0].message.content
+            else:
+                return str(response)
+                
+        except Exception as e:
+            logger.error(f"AI analysis error: {e}")
+            return f"Technical analysis for {pair}: RSI at {technical_analysis['rsi']:.1f}, trend is {technical_analysis['trend']}. Recommend careful monitoring."
+    
+    def _create_trading_signal(self, pair: str, ai_analysis: str, technical_analysis: Dict) -> Dict:
+        """Create structured trading signal"""
+        # Determine signal strength based on technical indicators
+        rsi = technical_analysis['rsi']
+        trend = technical_analysis['trend']
+        
+        if rsi > 70:
+            signal_type = "SELL"
+            confidence = 0.8
+        elif rsi < 30:
+            signal_type = "BUY"
+            confidence = 0.8
+        elif trend == "BULLISH" and 40 < rsi < 60:
+            signal_type = "BUY"
+            confidence = 0.7
+        elif trend == "BEARISH" and 40 < rsi < 60:
+            signal_type = "SELL"
+            confidence = 0.7
+        else:
+            signal_type = "HOLD"
+            confidence = 0.6
+        
+        return {
+            "pair": pair,
+            "signal": signal_type,
+            "confidence": confidence,
+            "entry_price": technical_analysis.get("current_price"),
+            "target_price": None,
+            "stop_loss": None,
+            "analysis_summary": ai_analysis[:200] + "..." if len(ai_analysis) > 200 else ai_analysis,
+            "technical_indicators": technical_analysis,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    
+    async def batch_analysis(self, pairs: List[str]) -> List[Dict]:
+        """Analyze multiple trading pairs"""
+        logger.info(f"🔄 Starting batch analysis for {len(pairs)} pairs")
+        
+        results = []
+        for pair in pairs:
+            result = await self.analyze_pair(pair)
+            results.append({
+                "pair": pair,
+                "result": result
+            })
+            
+            # Small delay between analyses
+            await asyncio.sleep(0.5)
+        
+        logger.info(f"✅ Batch analysis complete for {len(pairs)} pairs")
+        return results
+
+# CLI interface for testing
+if __name__ == "__main__":
+    async def main():
+        print("🚀 HyperMind AI - Direct Test Run")
+        
+        agent = HyperMindAI()
+        result = await agent.analyze_pair("ETH/USDC")
+        
+        print("\n" + "="*50)
+        print("📊 ANALYSIS RESULT")
+        print("="*50)
+        print(json.dumps(result, indent=2, default=str))
+    
+    asyncio.run(main())

@@ -1,0 +1,19 @@
+[package]
+name = "alith-knowledge"
+description = "Alith knowledge package"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+
+[dependencies]
+alith-core.workspace = true
+alith-client.workspace = true
+
+anyhow.workspace = true
+url.workspace = true
+lopdf.workspace = true
+readability.workspace = true
+html_to_markdown.workspace = true

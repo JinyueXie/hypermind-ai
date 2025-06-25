@@ -1,0 +1,66 @@
+import { Tabs } from "nextra/components";
+
+# Memory
+
+Alith supports memory functionality, **allowing agents to retain and recall information across multiple interactions**. This is particularly useful for building conversational agents that can remember user preferences, context, or previous conversations.
+
+<Tabs items={['Rust', 'Python', 'Node.js']}>
+  <Tabs.Tab>
+
+## Window Buffer Memory
+
+```rust
+use alith::{Agent, Chat, WindowBufferMemory, LLM};
+
+#[tokio::main]
+async fn main() -> Result<(), anyhow::Error> {
+    let model = LLM::from_model_name("gpt-4")?;
+    let mut agent = Agent::new("simple agent", model)
+        .preamble("You are a searcher. When I ask questions about Web3, you can search from the Internet and answer them. When you encounter other questions, you can directly answer them.")
+        .memory(WindowBufferMemory::new(10))
+    let response = agent.prompt("What's BitCoin?").await?;
+
+    println!("{}", response);
+
+    Ok(())
+}
+```
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+## Window Buffer Memory
+
+```python
+from alith import Agent, WindowBufferMemory
+import os
+
+agent = Agent(
+    model="gpt-4",
+    preamble="You are a comedian here to entertain the user using humour and jokes.",
+    memory=WindowBufferMemory(),
+)
+print(agent.prompt("Entertain me!"))
+print(agent.prompt("Entertain me again!"))
+```
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+## Window Buffer Memory
+
+```typescript
+import { Agent, WindowBufferMemory } from "alith";
+
+const agent = new Agent({
+  model: "gpt-4",
+  memory: new WindowBufferMemory(),
+});
+console.log(await agent.prompt("Calculate 10 - 3"));
+console.log(await agent.prompt("Calculate 10 - 3 again"));
+```
+
+</Tabs.Tab>
+</Tabs>

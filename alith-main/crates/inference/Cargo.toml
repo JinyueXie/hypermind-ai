@@ -1,0 +1,79 @@
+[package]
+name = "alith-inference"
+description = "Alith inference package"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+
+[dependencies]
+alith-core.workspace = true
+alith-models.workspace = true
+
+tokio.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand.workspace = true
+
+# Server
+
+reqwest.workspace = true
+tokio-util.workspace = true
+tokio-graceful.workspace = true
+tokio-stream.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+futures-util.workspace = true
+http.workspace = true
+http-body-util.workspace = true
+
+# ONNX Runtime
+ort = { "git" = "https://github.com/pykeio/ort.git", default-features = false, features = [
+  "ndarray",
+  "fetch-models",
+], optional = true }
+
+# mistralrs
+indexmap.workspace = true
+mistralrs = { git = "https://github.com/EricLBuehler/mistral.rs.git", rev = "aaafc2ef", optional = true }
+
+# vLLM
+
+# sglang
+
+# Python
+pythonize = { version = "0.23", optional = true }
+either.workspace = true
+async-stream.workspace = true
+encoding_rs.workspace = true
+bytes.workspace = true
+chrono.workspace = true
+
+[target.'cfg(not(windows))'.dependencies]
+# llamacpp
+llama-cpp-2 = { version = "0.1.108", optional = true }
+
+[features]
+ort = ["dep:ort"]
+llamacpp = ["dep:llama-cpp-2"]
+mistralrs = ["dep:mistralrs"]
+sglang = []
+trt = ["ort/tensorrt"]
+trtllm = []
+vllm = []
+python = ["dep:pythonize"]
+wasm = []
+
+# Need to install CUDA toolkit for developping including nvcc, cudnn, cublas, etc.
+# Commnent this line to prevent lint errors.
+# cuda = ["ort/cuda", "mistralrs/cuda", "llama-cpp-2/cuda"]
+# metal = ["mistralrs/metal", "llama-cpp-2/metal"]
+# vulkan = ["llama-cpp-2/vulkan"]
+cuda = ["ort/cuda"]
+metal = []
+vulkan = []

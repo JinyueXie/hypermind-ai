@@ -1,0 +1,104 @@
+[
+  {
+    "pair": "ETH/USDC",
+    "signal": "HOLD",
+    "confidence": 0.6,
+    "entry_price": null,
+    "target_price": null,
+    "stop_loss": null,
+    "analysis_summary": "Based on current market conditions, here's my analysis:\n\nTECHNICAL ANALYSIS:\n- Price action shows bullish momentum with higher lows forming\n- RSI is at 65, indicating room for upward movement\n- Moving...",
+    "technical_indicators": {
+      "rsi": 37.03769953315711,
+      "patterns": [
+        "SUPPORT_LEVEL"
+      ],
+      "trend": "BEARISH",
+      "support_level": 1687.9785061816774,
+      "resistance_level": 1890.433852668337,
+      "volatility": 2.5198831595560347
+    },
+    "timestamp": "2025-06-25T03:31:22.755489+00:00"
+  },
+  {
+    "pair": "BTC/USDT",
+    "signal": "HOLD",
+    "confidence": 0.6,
+    "entry_price": null,
+    "target_price": null,
+    "stop_loss": null,
+    "analysis_summary": "Based on current market conditions, here's my analysis:\n\nTECHNICAL ANALYSIS:\n- Price action shows bullish momentum with higher lows forming\n- RSI is at 65, indicating room for upward movement\n- Moving...",
+    "technical_indicators": {
+      "rsi": 35.66913847588144,
+      "patterns": [
+        "SUPPORT_LEVEL"
+      ],
+      "trend": "BEARISH",
+      "support_level": 45667.53234431852,
+      "resistance_level": 49872.93752941359,
+      "volatility": 2.688068290208091
+    },
+    "timestamp": "2025-06-25T03:31:23.257044+00:00"
+  },
+  {
+    "pair": "MATIC/USDC",
+    "signal": "HOLD",
+    "confidence": 0.6,
+    "entry_price": null,
+    "target_price": null,
+    "stop_loss": null,
+    "analysis_summary": "Based on current market conditions, here's my analysis:\n\nTECHNICAL ANALYSIS:\n- Price action shows bullish momentum with higher lows forming\n- RSI is at 65, indicating room for upward movement\n- Moving...",
+    "technical_indicators": {
+      "rsi": 63.86704382382517,
+      "patterns": [
+        "BULLISH_TREND",
+        "RESISTANCE_LEVEL"
+      ],
+      "trend": "BULLISH",
+      "support_level": 0.8708615546743161,
+      "resistance_level": 0.9482690890792955,
+      "volatility": 1.9115845756501164
+    },
+    "timestamp": "2025-06-25T03:31:23.758624+00:00"
+  },
+  {
+    "pair": "LINK/USDT",
+    "signal": "SELL",
+    "confidence": 0.8,
+    "entry_price": null,
+    "target_price": null,
+    "stop_loss": null,
+    "analysis_summary": "Based on current market conditions, here's my analysis:\n\nTECHNICAL ANALYSIS:\n- Price action shows bullish momentum with higher lows forming\n- RSI is at 65, indicating room for upward movement\n- Moving...",
+    "technical_indicators": {
+      "rsi": 74.3271196643854,
+      "patterns": [
+        "BULLISH_TREND",
+        "RESISTANCE_LEVEL"
+      ],
+      "trend": "BULLISH",
+      "support_level": 96.94466996077853,
+      "resistance_level": 110.75029661065994,
+      "volatility": 4.0675037606299425
+    },
+    "timestamp": "2025-06-25T03:31:24.259923+00:00"
+  },
+  {
+    "pair": "UNI/USDC",
+    "signal": "SELL",
+    "confidence": 0.7,
+    "entry_price": null,
+    "target_price": null,
+    "stop_loss": null,
+    "analysis_summary": "Based on current market conditions, here's my analysis:\n\nTECHNICAL ANALYSIS:\n- Price action shows bullish momentum with higher lows forming\n- RSI is at 65, indicating room for upward movement\n- Moving...",
+    "technical_indicators": {
+      "rsi": 40.08980645846151,
+      "patterns": [
+        "SUPPORT_LEVEL"
+      ],
+      "trend": "BEARISH",
+      "support_level": 80.47263072445436,
+      "resistance_level": 87.53313625042605,
+      "volatility": 2.6973359438374507
+    },
+    "timestamp": "2025-06-25T03:31:24.761810+00:00"
+  }
+]

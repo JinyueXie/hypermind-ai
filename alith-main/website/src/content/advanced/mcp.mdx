@@ -1,0 +1,197 @@
+import { Tabs } from "nextra/components";
+
+# Model Context Protocol (MCP)
+
+Alith supports Model Context Protocol (MCP), a technique that enables AI models to dynamically
+integrate external services and data sources during inference. This protocol acts as a bridge
+between LLMs and various tools/APIs, allowing models to:
+
+- Access real-time context from external systems (GitHub, databases, APIs, etc.).
+- Extend capabilities without retraining by connecting to specialized tools.
+- Maintain fresh knowledge through live data connections.
+- Execute complex workflows via chained service integrations.
+
+The protocol operates through lightweight server adapters defined in the configuration file. Each MCP server:
+
+- Runs as a separate process using native runtime (Node.js/Python).
+- Implements standardized interfaces for tool discovery and execution.
+- Can chain multiple services through semantic routing.
+- Maintains security through process isolation.
+
+<Tabs items={['Rust', 'Python', 'Node.js']}>
+  <Tabs.Tab>
+
+## Read MCP Servers from Config
+
+```rust
+use alith::{Agent, Chat, LLM};
+
+#[tokio::main]
+async fn main() -> Result<(), anyhow::Error> {
+    let model = LLM::from_model_name("gpt-4")?;
+    let agent = Agent::new("simple agent", model)
+        .preamble("You are a calculator here to help the user perform arithmetic operations. Use the tools provided to answer the user's question.")
+        .mcp_config_path("servers_config.json").await?;
+    let response = agent.prompt("Calculate 10 - 3").await?;
+    println!("{}", response);
+    Ok(())
+}
+```
+
+An example of MCP config servers is as follows
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  }
+}
+```
+
+> Note: Note that most MCP servers are written in Python or Node.js,
+> you need to install the Python package manage tool `uv` and the Node.js
+> package manage tool `npx`
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+## Read MCP Servers from Config
+
+```python
+from alith import Agent
+
+agent = Agent(
+    name="Calculator Agent",
+    model="gpt-4o-mini",
+    preamble="You are a calculator here to help the user perform arithmetic operations. Use the tools provided to answer the user's question.",
+    mcp_config_path="servers_config.json",
+)
+print(agent.prompt("Calculate 10 - 3"))
+```
+
+An example of MCP config servers is as follows
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  }
+}
+```
+
+> Note: Note that most MCP servers are written in Python or Node.js,
+> you need to install the Python package manage tool `uv` and the Node.js
+> package manage tool `npx`
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+## Read MCP Servers from Config
+
+```typescript
+import { Agent } from "alith";
+
+const agent = new Agent({
+  model: "gpt-4",
+  preamble:
+    "You are a calculator here to help the user perform arithmetic operations. Use the tools provided to answer the user question.",
+  mcpConfigPath: "servers_config.json",
+});
+console.log(await agent.prompt("Calculate 10 - 3"));
+```
+
+An example of MCP config servers is as follows
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  }
+}
+```
+
+> Note: Note that most MCP servers are written in Python or Node.js,
+> you need to install the Python package manage tool `uv` and the Node.js
+> package manage tool `npx`
+
+</Tabs.Tab>
+</Tabs>
+
+## Write an MCP Server
+
+Of course, writing an MCP Server is also easy. Here, we take using Python to write a simple Web3 interactive MCP Server as an example.
+
+- Install the `mcp` dependency.
+
+```shell
+python3 -m pip install mcp -U
+```
+
+- Write the MCP Server code named `mcp_server.py`.
+
+```python
+from mcp.server.fastmcp import FastMCP
+from web3 import Web3
+
+# Initialize the MCP server
+mcp = FastMCP("MetisBlockServer")
+
+# Connect to Metis mainnet
+w3 = Web3(Web3.HTTPProvider("https://andromeda.metis.io/?owner=1088"))
+
+
+# MCP Tool: Fetch Latest Block Number (already working)
+@mcp.tool()
+def get_latest_block() -> int:
+    """Fetches the latest block number from Metis mainnet."""
+    return w3.eth.block_number
+
+
+# MCP Tool: Fetch Previous Block Number (already working)
+@mcp.tool()
+def get_previous_block() -> int:
+    """Fetches the previous block number from Metis mainnet."""
+    latest_block = get_latest_block()
+    return latest_block - 1
+
+
+# Run the MCP server
+if __name__ == "__main__":
+    mcp.run()
+```
+
+Then you can append the following config to your MCP config file `servers_config.json`.
+
+```json
+{
+  "mcpServers": {
+    "metis": {
+      "command": "python3",
+      "args": ["mcp_server.py"]
+    }
+  }
+}
+```
+
+At last, you can run the Alith agent code.
+
+```python
+from alith import Agent
+
+agent = Agent(
+    model="gpt-4",
+    mcp_config_path="servers_config.json",
+)
+print(agent.prompt("What is the latest block number on Metis mainnet?"))
+```
